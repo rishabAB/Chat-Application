@@ -41,11 +41,49 @@ const registerUser = async(req,res) =>
         res.status(500).json(error);
     }
    
-    
-   
-
 }
 
+const loginUser= async(req,res) =>
+{
+    const {email,password}=req.body;
+
+    try{
+        let user=await userModel.findOne({email});
+
+        if(!user) return res.status(400).json("Invalid email or password");
+
+        const isValidPassword= await bcrypt.compare(password,user.password);
+
+        if(!isValidPassword) return res.status(400).json("Invalid email or password");
+
+        const token=createToken(user._id);
+    
+        res.status(200).json({_id:user._id,name:user.name,email,token});
+
+    }
+    catch(error)
+    {
+        console.error("An unknown error occurred",error);
+        return res.status(500).json(error);
+
+    }
+}
+
+const findUser = async(req,res) =>
+{
+    const userId = req.params.userId;
+
+    try{
+        const user= await userModel.findById(userId);
+        res.status(200).json(user);
+
+    }
+    catch(error)
+    {
+        console.error("An unknown error occured ",error);
+        res.status(500).json(error);
+    }
+} 
 
 
-module.exports={registerUser};
+module.exports={registerUser,loginUser,findUser};
