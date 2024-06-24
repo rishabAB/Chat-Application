@@ -19,9 +19,9 @@ const registerUser = async(req,res) =>
     
         if(!name || !email || !password) return res.status(400).json("All fields are required");
     
-        if(!validator.isEmail(email))  res.status(400).json("Email must be a valid email");
+        if(!validator.isEmail(email))  return res.status(400).json("Email must be a valid email");
     
-        if(!validator.isStrongPassword(password))  res.status(400).json("Password must be a strong password");
+        if(!validator.isStrongPassword(password))  return res.status(400).json("Password must be a strong password");
     
         user=new userModel({name,email,password});
         const salt=await bcrypt.genSalt(10);
