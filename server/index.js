@@ -7,10 +7,14 @@ const port = process.env.PORT || 5000;
 const uri=process.env.ATLAS_URI;
 
 const userRoute=require("./routes/userRoute");
+
+const chatRoute= require("./routes/chatRoute");
 app.use(express.json());
 app.use(cors());
 // Here when we are mounting the express.router in express instance before doing that it should 
 app.use("/api/users",userRoute);
+
+app.use("/api/chats",chatRoute);
 
 
 app.get("/",(req,res) =>
