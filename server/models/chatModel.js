@@ -1,10 +1,9 @@
-const monogoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const chatSchema = new mongoose.Schema({
     members:Array,
-    {
-        timestamps:true
-    }
+},{
+    timestamps:true
 });
 const chatModel= mongoose.model("chat",chatSchema);
 

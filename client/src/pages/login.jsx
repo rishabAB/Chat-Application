@@ -5,13 +5,7 @@ import {AuthContext} from "../context/authContext";
 const Login = () => {
     const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);
 
-    const test_user= (value1,value2) =>
-    {
-        console.log("Test value is ",value1);
-        console.log("test value 2 ",value2);
 
-    }
-    console.log("logininfo in login.jsx",loginInfo);
     return (
         <>
             <Form onSubmit={loginUser}>
@@ -25,8 +19,8 @@ const Login = () => {
                         <Stack gap={3}>
                             <h2>Login</h2>
                            
-                            <Form.Control type="email"  onChange={ (e) => test_user(loginInfo, e.target.value)} placeholder="Email"/>
-                            <Form.Control type="password" onChange={(e) => test_user(loginInfo, e.target.value)} placeholder="Password"/>
+                            <Form.Control type="email"  onChange={ (e) => updateLoginInfo({...loginInfo, email:e.target.value})} placeholder="Email"/>
+                            <Form.Control type="password" onChange={(e) => updateLoginInfo({...loginInfo, password:e.target.value})} placeholder="Password"/>
                             <Button varient="primary" type="submit">
                                 Login
                             </Button>

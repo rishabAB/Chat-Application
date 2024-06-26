@@ -22,10 +22,12 @@ export const AuthContextProvider = ({children}) =>
     
     const updateRegisterInfo = useCallback((info) =>
     {
-        console.log("info",info);
+        // console.log("info",info);
         setRegisterInfo(info)
     }, []);
     console.log("loginInfo",loginInfo);
+
+    console.log("Register",registerInfo);
 
     const updateLoginInfo = useCallback((info) =>
     {
@@ -96,6 +98,7 @@ export const AuthContextProvider = ({children}) =>
         isRegisterLoading,
         logoutUser,
         loginUser,
+        loginInfo,
         loginError,
         updateLoginInfo,
         isLoginLoading
