@@ -15,15 +15,20 @@ const NavBar = () => {
                 <h2>
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
-                <span className="text-warning">Logged in as {user?.name} </span>
+                {user && (<span className="text-warning">Logged in as {user?.name} </span>) }
                 <Nav>
                     <Stack direction="horizontal" gap="3">
                         {
-                            user && ( <><Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none">Logout</Link> </>)
+                            user && ( <Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none">Logout</Link> )
 
                         }
-                        <Link to="/login" className="link-light text-decoration-none">Login</Link>
+                        {
+                            !user && (<>
+                             <Link to="/login" className="link-light text-decoration-none">Login</Link>
                         <Link to="/register" className="link-light text-decoration-none">Register</Link>
+                        </>)
+                        }
+                      
                     </Stack>
                 </Nav>
             </Container>

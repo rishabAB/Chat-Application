@@ -5,6 +5,7 @@ import {AuthContext} from "../context/authContext";
 const Register = () => {
     const {user,registerInfo,updateRegisterInfo,registerUser,registerError,isRegisterLoading} = useContext(AuthContext);
     console.log(user);
+    console.log("tegister inof in register.jsx",registerInfo);
     return (
         <>
             <Form onSubmit = {registerUser}>
