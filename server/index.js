@@ -9,12 +9,16 @@ const uri=process.env.ATLAS_URI;
 const userRoute=require("./routes/userRoute");
 
 const chatRoute= require("./routes/chatRoute");
+
+const messageRoute = require("./routes/messageRoute");
 app.use(express.json());
 app.use(cors());
 // Here when we are mounting the express.router in express instance before doing that it should 
 app.use("/api/users",userRoute);
 
 app.use("/api/chats",chatRoute);
+
+app.use("/api/messages",messageRoute);
 
 
 app.get("/",(req,res) =>

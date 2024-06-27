@@ -26,7 +26,7 @@ const createChat = async(req,res) =>
 }
 
 
-const findUserChats = async() =>
+const findUserChats = async(req,res) =>
 {
     const userId = req.params.userId;
 

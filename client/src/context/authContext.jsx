@@ -7,6 +7,7 @@ import {postRequest,baseUrl} from "../utils/services";
 export const AuthContextProvider = ({children}) =>
 {
     const [user,setUser] = useState(null);
+    console.log("children ",children);
 
     const [registerError,setRegisterError]= useState(null);
 
@@ -47,7 +48,7 @@ export const AuthContextProvider = ({children}) =>
             return setRegisterError(response);
         }
        
-        localStorage.setItem("User",JSON.stringify(response));
+        localStorage.setItem("user",JSON.stringify(response));
         setUser(response);
         
 
@@ -55,8 +56,10 @@ export const AuthContextProvider = ({children}) =>
 
     useEffect( () =>
     {
+      
         const user=localStorage.getItem("user");
         setUser(JSON.parse(user));
+        console.log("THIS IS USE EFFECT AUTH CONTEXT",JSON.parse(user));
 
     },[])
 
@@ -81,7 +84,7 @@ export const AuthContextProvider = ({children}) =>
         {
            return setLoginError(response.error);
         }
-        localStorage.setItem("User",JSON.stringify(response));
+        localStorage.setItem("user",JSON.stringify(response));
         setUser(response);
 
     },[loginInfo]);

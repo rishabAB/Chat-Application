@@ -6,7 +6,7 @@ const {createChat,findUserChats,findChat} = require("../controllers/chatControll
 
 router.post("/createChat",createChat);
 
-router.get("/findUserChats:/userId",findUserChats);
+router.get("/findUserChats/:userId",findUserChats);
 
 router.get("/find/:firstId/:secondId",findChat);
 
