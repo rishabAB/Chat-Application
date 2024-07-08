@@ -7,8 +7,7 @@ import {postRequest,baseUrl} from "../utils/services";
 export const AuthContextProvider = ({children}) =>
 {
     const [user,setUser] = useState(null);
-    console.log("children ",children);
-
+   
     const [registerError,setRegisterError]= useState(null);
 
     const [isRegisterLoading,setIsRegisterLoading] = useState(false);
@@ -23,12 +22,10 @@ export const AuthContextProvider = ({children}) =>
     
     const updateRegisterInfo = useCallback((info) =>
     {
-        // console.log("info",info);
+      
         setRegisterInfo(info)
     }, []);
-    console.log("loginInfo",loginInfo);
-
-    console.log("Register",registerInfo);
+   
 
     const updateLoginInfo = useCallback((info) =>
     {
@@ -56,11 +53,10 @@ export const AuthContextProvider = ({children}) =>
 
     useEffect( () =>
     {
-      
+      console.log(" BEING CALLED")
         const user=localStorage.getItem("user");
         setUser(JSON.parse(user));
-        console.log("THIS IS USE EFFECT AUTH CONTEXT",JSON.parse(user));
-
+      
     },[])
 
     const logoutUser = useCallback((e)=>
@@ -73,7 +69,6 @@ export const AuthContextProvider = ({children}) =>
 
     const loginUser = useCallback(async (e) =>
     {
-        console.log("THIS IS LOGIN USER");
         e.preventDefault();
         setIsLoginLoading(true);
         setLoginError(null);
@@ -88,9 +83,9 @@ export const AuthContextProvider = ({children}) =>
         setUser(response);
 
     },[loginInfo]);
+    console.log(" user is ",user);
 
  
-   
     return (
     <AuthContext.Provider value={{
         user,

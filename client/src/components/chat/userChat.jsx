@@ -7,8 +7,6 @@ const UserChat = ({chat, user}) => {
     const {recipientUser} = useFetchRecipientUser(chat, user);
   
 
-    console.log("dsjd", recipientUser);
-
     return (
         <Stack direction="horizontal"
             gap={3}

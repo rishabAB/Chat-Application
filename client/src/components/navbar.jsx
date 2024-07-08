@@ -5,7 +5,6 @@ import {useContext} from "react";
 import {AuthContext} from "../context/authContext";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
-    console.log(" test",user);
     return (
         <Navbar bg="dark" className="mb-4"
             style={
@@ -20,7 +19,6 @@ const NavBar = () => {
                     <Stack direction="horizontal" gap="3">
                         {
                             user && ( <Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none">Logout</Link> )
-
                         }
                         {
                             !user && (<>
