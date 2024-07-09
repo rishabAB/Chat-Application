@@ -2,7 +2,7 @@ const messageModel = require("../models/messageModel");
 
 const createMessage = async(req,res) =>
 {
-    const {charId,senderId,text} = req.body;
+    const {chatId,senderId,text} = req.body;
 
     const message = new messageModel({
         chatId,senderId,text

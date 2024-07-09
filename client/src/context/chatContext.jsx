@@ -13,9 +13,20 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [isUserChatError, setIsUserChatError] = useState(null);
 
+    const [currentChat,setCurrentChat] = useState(null);
+
+    const [isMessagesLoading,setIsMessagesLoading] = useState(null);
+
+    const [messagesError,setMessagesError] = useState(null);
+
+    const [messages,setMessages]= useState(null);
+
+    const [TextMessageError,setTextMessageError] = useState(null);
+
+    const [newMessage,setNewMessage] = useState(null);
+
     useEffect(() =>
     {
-        console.log("TRIGGERING")
         const getUsers = async() =>
         {
             const response = await getRequest(`${baseUrl}/users`);
@@ -32,7 +43,7 @@ export const ChatContextProvider = ({children, user}) => {
                     {
                         isChatCreated=userChats?.some((chat)=>
                         {
-                            return (chat.members[0] === user._id || chat.members[1] === user._id)
+                            return (chat.members[0] === unit._id || chat.members[1] === unit._id)
                         })
                     }
                     return !isChatCreated; 
@@ -47,8 +58,7 @@ export const ChatContextProvider = ({children, user}) => {
         getUsers();
 
     },[userChats])
-   // Here userChats was the dependency in the above useEffect react hook but due to some issue 
-   // I am removing it 
+   
     useEffect( () =>
     {
         const getUserChats = async() =>
@@ -75,10 +85,57 @@ export const ChatContextProvider = ({children, user}) => {
 
     },[user])
 
+
+    const sendTextMessage = useCallback(async(textMessage,sender,currentChatId)=>
+    {
+        if(!textMessage) return console.log("You must type something");
+
+        const response= await postRequest(`${baseUrl}/messages/createMessage`,JSON.stringify({chatId:currentChatId,senderId:sender._id,text:textMessage}));
+
+        if(response.error)
+        {
+            return setTextMessageError(response);
+        }
+        setNewMessage(response);
+        setMessages((prev) => [...prev,response]);
+        
+
+    },[])
+
+    useEffect( () =>
+        {
+            const getMessages = async() =>
+            {
+               
+                  setIsMessagesLoading(true);
+                  setMessagesError(null);
+                  
+                    const response = await getRequest(`${baseUrl}/messages/${currentChat?._id}`);
+    
+                    setIsMessagesLoading(false);
+    
+                    if(response.error)
+                    {
+                        return setMessagesError(response)
+                    }
+                    setMessages(response);
+                
+            }
+    
+            getMessages();
+    
+        },[currentChat])
+
+    const updateCurrentChat = useCallback((chat)=>
+    {
+        setCurrentChat(chat);
+
+    },[])
+
     const createChat = useCallback(async(firstId,secondId) =>
     {
 
-        const response = await postRequest(`${baseUrl}/createChat/`,JSON.stringify({firstId,secondId}));
+        const response = await postRequest(`${baseUrl}/chats/createChat/`,JSON.stringify({firstId,secondId}));
 
         if(response.error)
         {
@@ -92,7 +149,15 @@ export const ChatContextProvider = ({children, user}) => {
     {
         userChats,
         isUserChatLoading, 
-        isUserChatError,potentialChats,createChat
+        isUserChatError,
+        potentialChats,
+        createChat,
+        updateCurrentChat,
+        messages,
+        isMessagesLoading,
+        messagesError,
+        currentChat,
+        sendTextMessage
     }
     }> {children}</ChatContext.Provider>)
 }

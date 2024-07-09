@@ -56,7 +56,7 @@ const loginUser= async(req,res) =>
 
         if(!isValidPassword) return res.status(400).json("Invalid email or password");
 
-        const token=createToken(user._id);
+        const token = createToken(user._id);
     
         res.status(200).json({_id:user._id,name:user.name,email,token});
 
@@ -65,7 +65,6 @@ const loginUser= async(req,res) =>
     {
         console.error("An unknown error occurred",error);
         return res.status(500).json(error);
-
     }
 }
 

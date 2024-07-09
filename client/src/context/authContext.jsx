@@ -53,7 +53,7 @@ export const AuthContextProvider = ({children}) =>
 
     useEffect( () =>
     {
-      console.log(" BEING CALLED")
+   
         const user=localStorage.getItem("user");
         setUser(JSON.parse(user));
       
@@ -83,9 +83,8 @@ export const AuthContextProvider = ({children}) =>
         setUser(response);
 
     },[loginInfo]);
-    console.log(" user is ",user);
+    
 
- 
     return (
     <AuthContext.Provider value={{
         user,
