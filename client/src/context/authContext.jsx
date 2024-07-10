@@ -29,6 +29,7 @@ export const AuthContextProvider = ({children}) =>
 
     const updateLoginInfo = useCallback((info) =>
     {
+        console.log("info is",info);
         setLoginInfo(info);
     }, []);
   
@@ -77,7 +78,8 @@ export const AuthContextProvider = ({children}) =>
 
         if(response.error)
         {
-           return setLoginError(response.error);
+           return setLoginError(response);
+          
         }
         localStorage.setItem("user",JSON.stringify(response));
         setUser(response);

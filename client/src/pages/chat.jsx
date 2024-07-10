@@ -9,7 +9,7 @@ const Chat = () => {
     const {user} = useContext(AuthContext);
 
     const {userChats, isUserChatLoading, isUserChatError,updateCurrentChat} = useContext(ChatContext);
-
+   
     
     return (
         <Container>

@@ -1,6 +1,6 @@
 import {createContext, useState,useEffect, useCallback} from "react";
 import {getRequest, postRequest, baseUrl} from "../utils/services";
-
+import {io} from "socket.io-client";
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({children, user}) => {
@@ -25,6 +25,33 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [newMessage,setNewMessage] = useState(null);
 
+    // Socket part
+    const[socket,setSocket] = useState(null);
+    const [onlineUsers,setOnlineUsers] = useState([]);
+    useEffect(()=>
+    {
+        const newSocket= io("http://localhost:3000")
+        setSocket(newSocket);
+
+        return(()=>
+        {
+            newSocket.disconnect();
+        })
+
+    },[user]);
+
+    useEffect(()=>
+    {
+        if(!socket) return;
+        socket.emit("addNewUser",user?._id)
+
+        socket.on("showOnlineUsers",(res) => {
+            setOnlineUsers(res);
+        })
+
+    },[socket])
+
+    // ------------------------
     useEffect(() =>
     {
         const getUsers = async() =>
@@ -106,7 +133,7 @@ export const ChatContextProvider = ({children, user}) => {
         {
             const getMessages = async() =>
             {
-               
+               console.log("this is get messages with currentChat as dependency");
                   setIsMessagesLoading(true);
                   setMessagesError(null);
                   
@@ -128,6 +155,7 @@ export const ChatContextProvider = ({children, user}) => {
 
     const updateCurrentChat = useCallback((chat)=>
     {
+        console.log("this is updateCurrentChat");
         setCurrentChat(chat);
 
     },[])

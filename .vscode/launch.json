@@ -5,9 +5,17 @@
             "type": "node",
             "request": "launch",
             "name": "server",
-            "program": "server/index.js",
+            "program": "${workspaceFolder}/server/index.js",
             "cwd": "${workspaceFolder}",
             "envFile": "${workspaceFolder}/server/.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "socket server",
+            "program": "${workspaceFolder}/socket/index.js",
+            "cwd": "${workspaceFolder}",
+           
         }
     ]
 }

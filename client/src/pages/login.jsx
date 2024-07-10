@@ -1,10 +1,26 @@
 import {Alert,Button,Form,Row,Col,Stack} from "react-bootstrap";
 
-import {useContext} from "react";
+import {useCallback, useContext,useEffect} from "react";
 import {AuthContext} from "../context/authContext";
 const Login = () => {
     const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);
+        console.log("loginError",loginError);
+       // this is not working
+       const handleLoginError= useCallback(()=>
+        {
+            console.log("THIS IS USE CALLBACK");
+            if(loginError?.error)
+            {
+                console.log("inside if condition");
+                updateLoginInfo({email:"",password:""})
 
+            }
+
+        },[loginError])
+
+        useEffect(() => {
+            handleLoginError(); // Call the callback function explicitly when loginError changes
+          }, [loginError]);
 
     return (
         <>
@@ -24,9 +40,12 @@ const Login = () => {
                             <Button varient="primary" type="submit">
                                 Login
                             </Button>
-                            <Alert varient="danger">
-                                <p>An error occurred</p>
-                            </Alert>
+                            {
+                                loginError && (  <Alert varient="danger">
+                                    <p>{loginError.message}</p>
+                                </Alert>)
+                            }
+                          
                         </Stack>
                     </Col>
                 </Row>
