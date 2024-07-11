@@ -8,7 +8,7 @@ export const ChatContextProvider = ({children, user}) => {
     const [userChats, setUserChats] = useState(null);
     const [potentialChats,setPotentialChats] = useState([]);
    
-
+    
     const [isUserChatLoading, setIsUserChatLoading] = useState(false);
 
     const [isUserChatError, setIsUserChatError] = useState(null);
@@ -25,6 +25,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [newMessage,setNewMessage] = useState(null);
 
+    const [isFound,setIsFound] = useState(false);
+
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
@@ -39,6 +41,7 @@ export const ChatContextProvider = ({children, user}) => {
         })
 
     },[user]);
+    console.log("messages",messages);
 
     useEffect(()=>
     {
@@ -48,8 +51,33 @@ export const ChatContextProvider = ({children, user}) => {
         socket.on("showOnlineUsers",(res) => {
             setOnlineUsers(res);
         })
+       
 
-    },[socket])
+        // There are errors in changing ui msg being appeared twice/thrice 
+        socket.on("sendToClient",(data)=>
+        {
+            console.log("sendToClient",messages);
+            if(messages && messages.length>0)
+            {
+                for(let msg of messages)
+                {
+                        if(msg._id === data.msgId)
+                        {
+                            setIsFound(true);
+                            // setMessages((prev) => [...prev,data]);
+                            break;
+                        }
+                }
+                // lot ot mistakes in here 
+                if(!isFound)
+                {
+                    setMessages((prev) => [...prev,data]);
+                }
+            }
+            
+        })
+
+    },[socket,messages])
 
     // ------------------------
     useEffect(() =>
@@ -125,6 +153,7 @@ export const ChatContextProvider = ({children, user}) => {
         }
         setNewMessage(response);
         setMessages((prev) => [...prev,response]);
+        // this setMessages is for someone who is seing the msg
         
 
     },[])
@@ -133,7 +162,7 @@ export const ChatContextProvider = ({children, user}) => {
         {
             const getMessages = async() =>
             {
-               console.log("this is get messages with currentChat as dependency");
+               
                   setIsMessagesLoading(true);
                   setMessagesError(null);
                   
@@ -155,7 +184,7 @@ export const ChatContextProvider = ({children, user}) => {
 
     const updateCurrentChat = useCallback((chat)=>
     {
-        console.log("this is updateCurrentChat");
+        
         setCurrentChat(chat);
 
     },[])
@@ -185,7 +214,8 @@ export const ChatContextProvider = ({children, user}) => {
         isMessagesLoading,
         messagesError,
         currentChat,
-        sendTextMessage
+        sendTextMessage,
+        onlineUsers
     }
     }> {children}</ChatContext.Provider>)
 }

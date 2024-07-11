@@ -19,6 +19,7 @@ export const AuthContextProvider = ({children}) =>
     const [loginError,setLoginError] = useState(null);
 
     const [isLoginLoading,setIsLoginLoading] = useState(false);
+
     
     const updateRegisterInfo = useCallback((info) =>
     {
@@ -29,7 +30,7 @@ export const AuthContextProvider = ({children}) =>
 
     const updateLoginInfo = useCallback((info) =>
     {
-        console.log("info is",info);
+        
         setLoginInfo(info);
     }, []);
   

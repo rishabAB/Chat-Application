@@ -9,7 +9,7 @@ export const useFetchRecipientUser = (chat,user) =>
     const {currentChat} = useContext(ChatContext);
 
     const recipientId = chat?.members.find((id) => id !==user?._id);
-
+ // Here recipient User is the person whom with we are showing the conversation
     useEffect(()=>
     {
         const getUser = async() =>

@@ -1,11 +1,16 @@
 import {useFetchRecipientUser} from "../../hooks/useFetchRecipient";
 import {Stack} from "react-bootstrap";
 import avatar from "../../assets/avatar.svg";
-import {useState} from "react";
+import {useState,useContext} from "react";
+import { ChatContext } from "../../context/chatContext";
 
 const UserChat = ({chat, user}) => {
     const {recipientUser} = useFetchRecipientUser(chat, user);
-  
+    const {onlineUsers} = useContext(ChatContext);
+    
+    // recipient user is the list of users with whom we can chat which are there on left side 
+    // when we click our messages appear
+
 
     return (
         <Stack direction="horizontal"
@@ -27,7 +32,10 @@ const UserChat = ({chat, user}) => {
             <div className="d-flex flex-column align-items-end">
                 <div className="date">12/02/2024</div>
                 <div className="this-user-notifications">4</div>
-                <div className="user-online"></div>
+                {
+                    onlineUsers.some((user) => user.userId === recipientUser?._id)  ?  <div className="user-online"></div> : null
+                }
+               
             </div>
           
         </Stack>

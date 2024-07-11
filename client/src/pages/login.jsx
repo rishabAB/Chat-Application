@@ -8,10 +8,10 @@ const Login = () => {
        // this is not working
        const handleLoginError= useCallback(()=>
         {
-            console.log("THIS IS USE CALLBACK");
+           
             if(loginError?.error)
             {
-                console.log("inside if condition");
+               
                 updateLoginInfo({email:"",password:""})
 
             }
