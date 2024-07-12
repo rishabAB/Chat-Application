@@ -3,9 +3,10 @@ import { ChatContext } from "../../context/chatContext";
 import {AuthContext} from "../../context/authContext";
 const PotentialChats = () =>
 {
-    const {potentialChats,createChat} = useContext(ChatContext);
+    const {potentialChats,createChat,onlineUsers} = useContext(ChatContext);
     const {user} = useContext(AuthContext);
-    
+    // potential chats are those that appear when chat hasn't started db is empty 
+    // as in chat and message collection
     return (
     <div className="all-users">
         {
@@ -14,7 +15,10 @@ const PotentialChats = () =>
                 return (
                 <div className="single-user" key={index} onClick={()=> createChat(user._id,u._id)}>
                     {u.name}
-                    <span className="user-online"></span>
+                    <span className={
+                        onlineUsers?.some((user)=> user?.userId === u?._id) ? 
+                        "user-online" : ""
+                        }></span>
                 </div>
                 )
             })

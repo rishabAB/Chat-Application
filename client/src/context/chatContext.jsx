@@ -1,6 +1,7 @@
-import {createContext, useState,useEffect, useCallback} from "react";
+import {createContext, useState,useEffect, useCallback,useRef} from "react";
 import {getRequest, postRequest, baseUrl} from "../utils/services";
 import {io} from "socket.io-client";
+
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({children, user}) => {
@@ -27,58 +28,93 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [isFound,setIsFound] = useState(false);
 
+    const newMessageRef = useRef(newMessage);
+
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
+    // Forming a connection with socket
     useEffect(()=>
     {
+        console.log("NEW SOCKET CONNECTION");
         const newSocket= io("http://localhost:3000")
         setSocket(newSocket);
+        
 
         return(()=>
         {
-            newSocket.disconnect();
+            console.log("hey socket disconnect");
+            newSocket.disconnect();  // Here we are trigger the disconnect event 
         })
 
     },[user]);
-    console.log("messages",messages);
+
+    // User has logged out so by using socket
+
+    // console.log("user ",user);
+    // console.log("messages",messages);
 
     useEffect(()=>
     {
-        if(!socket) return;
+        console.log("HEY USE EFFECT");
+        if(socket ==  null) return;
         socket.emit("addNewUser",user?._id)
 
         socket.on("showOnlineUsers",(res) => {
+            console.log("this is online users",res);
             setOnlineUsers(res);
         })
-       
-
-        // There are errors in changing ui msg being appeared twice/thrice 
-        socket.on("sendToClient",(data)=>
+        return () =>
         {
-            console.log("sendToClient",messages);
-            if(messages && messages.length>0)
-            {
-                for(let msg of messages)
-                {
-                        if(msg._id === data.msgId)
-                        {
-                            setIsFound(true);
-                            // setMessages((prev) => [...prev,data]);
-                            break;
-                        }
-                }
-                // lot ot mistakes in here 
-                if(!isFound)
-                {
-                    setMessages((prev) => [...prev,data]);
-                }
-            }
+            socket.off("showOnlineUsers");
+        }
+       
+    },[socket])
+
+
+    // Send Message
+
+    useEffect(()=>
+        {
             
-        })
+            if(socket ==  null) return;
+            // here we are finding the recipient user to id of user2 which has to recieve message (using current chat)
+            const recipientId = currentChat?.members?.find((id)=> id!==user._id);
 
-    },[socket,messages])
+            socket.emit("sendMessage",{...newMessage,recipientId})
 
+         
+           
+        },[newMessage])
+
+    // Receive Message
+
+    useEffect(()=>
+        {
+            if(socket ==  null) return;
+
+            socket.on("sendToClient",(res)=>
+            {
+                if(currentChat?._id !== res.chatId)
+                return;
+
+                setMessages((prev)=> [...prev,newMessage]);
+            // This if condition will help us to stop from updating the wrong chat 
+
+            })
+
+            return ()=>
+            {
+                socket.off("sendToClient");
+            }
+           
+
+         
+           
+        },[socket,currentChat])
+    // Here we are adding currentChat as a dependency beacause of that case if user1 sends message
+    // to user2 and user2 is online but user2 hasn't opened the conversation so when'it will get 
+    // opned currentChat changes probably thats the reason
     // ------------------------
     useEffect(() =>
     {
@@ -152,6 +188,8 @@ export const ChatContextProvider = ({children, user}) => {
             return setTextMessageError(response);
         }
         setNewMessage(response);
+        newMessageRef.current=response;
+        console.log("messages",messages);
         setMessages((prev) => [...prev,response]);
         // this setMessages is for someone who is seing the msg
         

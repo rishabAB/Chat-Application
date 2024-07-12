@@ -1,5 +1,5 @@
 const messageModel = require("../models/messageModel");
-const chatModel = require("../models/chatModel");
+// const chatModel = require("../models/chatModel");
 
 const io = require('socket.io-client');
 
@@ -16,44 +16,44 @@ const createMessage = async(req,res) =>
         const response = await message.save();
         if(response._doc._id)
         {
-            const chatDataResponse = await chatModel.findOne({
-                _id: chatId
-            });
+        //     const chatDataResponse = await chatModel.findOne({
+        //         _id: chatId
+        //     });
             
-            const obj=chatDataResponse?._doc?.members;
-            let receiverId=null;
+        //     const obj=chatDataResponse?._doc?.members;
+        //     let receiverId=null;
 
-           for(let o in obj)
-           {
-            if(obj[o]!=senderId)
-            {
-                receiverId=obj[o];
-                break;
-            }
-           }
+        //    for(let o in obj)
+        //    {
+        //     if(obj[o]!=senderId)
+        //     {
+        //         receiverId=obj[o];
+        //         break;
+        //     }
+        //    }
 
-           if(!receiverId)
-           {
-            res.status(400).json({error:"An unknown error occurred"});
-           }
-           else{
+        //    if(!receiverId)
+        //    {
+        //     res.status(400).json({error:"An unknown error occurred"});
+        //    }
+        //    else{
           
-             function callSocket()
-             {
-                return new Promise((resolve,reject)=>
-                {
+        //      function callSocket()
+        //      {
+        //         return new Promise((resolve,reject)=>
+        //         {
                   
-                    socket.emit("sendMessage",{senderId,receiverId,text,chatId,msgId:response._doc._id})
-                    resolve();
-                })
+        //             socket.emit("sendMessage",{senderId,receiverId,text,chatId,msgId:response._doc._id})
+        //             resolve();
+        //         })
             
-             } 
+        //      } 
 
-             callSocket().then(()=>
-                {
+        //      callSocket().then(()=>
+        //         {
                     
                     res.status(200).json(response);
-                })
+                // })
 
              
            }
@@ -62,7 +62,7 @@ const createMessage = async(req,res) =>
         }   
       
         
-    } catch (error) {
+     catch (error) {
         console.error(error);
         res.status(500).json(error);
         
