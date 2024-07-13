@@ -70,7 +70,7 @@ const ChatBox =() =>
                   
                 <Stack key={index} className={`${msg?.senderId === user?._id ? "message self align-self-end flex-grow-0": "message align-self-start flex-grow-0"}`}>
                     <span>{msg.text}</span>
-                    <span className="message-footer">{moment(msg.createdAt).format("DD/MM/YYYY :h:mm:ss a")}</span>
+                    <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
                     <div ref={divRef}></div>
                     </Stack>
                     )

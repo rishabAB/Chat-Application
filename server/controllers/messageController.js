@@ -1,9 +1,9 @@
 const messageModel = require("../models/messageModel");
 // const chatModel = require("../models/chatModel");
 
-const io = require('socket.io-client');
+// const io = require('socket.io-client');
 
-const socket=new io("http://localhost:3000");
+// const socket=new io("http://localhost:3000");
 
 const createMessage = async(req,res) =>
 {
