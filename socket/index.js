@@ -45,6 +45,8 @@ socket.on("sendMessage",(message)=>
 socket.on("disconnect",()=>
 {
     onlineUsers = onlineUsers.filter(user => user.socketId != socket.id); 
+    // here I think when user gets online his socket id also changes so if the user's socket id 
+   // does not match with the current socket id it means user is offline 
     io.emit("showOnlineUsers",onlineUsers);
 })
 
