@@ -4,7 +4,7 @@ import {useCallback, useContext,useEffect} from "react";
 import {AuthContext} from "../context/authContext";
 const Login = () => {
     const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);
-        console.log("loginError",loginError);
+       
        // this is not working
        const handleLoginError= useCallback(()=>
         {
@@ -13,7 +13,6 @@ const Login = () => {
             {
                
                 updateLoginInfo({email:"",password:""})
-
             }
 
         },[loginError])

@@ -30,6 +30,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const newMessageRef = useRef(newMessage);
 
+    const [notification,setNotification] = useState([]);
+
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
@@ -68,6 +70,29 @@ export const ChatContextProvider = ({children, user}) => {
        
     },[socket])
 
+    // useEffect(()=>
+    // {
+    //     if(!socket) return;
+
+    //     socket.emit("getNotification",(message)=>
+    //     {
+
+    //     })
+
+
+    // },[socket])
+
+    // useEffect(()=>
+        // {
+            const showNotification = useCallback((serverResponse)=>
+            {
+                console.log("Server Response",serverResponse);
+                setNotification(serverResponse);
+    
+            },[])
+            
+        // },[])
+
 
     // Send Message
 
@@ -91,8 +116,29 @@ export const ChatContextProvider = ({children, user}) => {
 
             socket.on("sendToClient",(res)=>
             {
-                if(currentChat?._id !== res.chatId)
-                return;
+                console.log("res is ??",res);
+                // In this if condition if it doesn't match 
+                // if means user is online but that conversation is not opened so this is the case where we
+                //should show the notification
+                if(currentChat?._id !== res.chatId) 
+                {
+                    showNotification(res);
+
+                //     if(socket == null)
+                //     return;
+
+                //     socket.emit("saveNotification",res);
+
+                //    socket.on("sendNotification",(message)=>
+                // {
+                //     setNotification(message)
+
+                // })
+                    // return;
+                    //we should emit an event saying to socket that save the response
+
+                }
+                
                
                 setMessages((prev)=> [...prev,res]);
             // This if condition will help us to stop from updating the wrong chat 
@@ -247,7 +293,9 @@ export const ChatContextProvider = ({children, user}) => {
         messagesError,
         currentChat,
         sendTextMessage,
-        onlineUsers
+        onlineUsers,
+        showNotification,
+        notification
     }
     }> {children}</ChatContext.Provider>)
 }
