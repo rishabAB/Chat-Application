@@ -1,6 +1,7 @@
 const {Server} =require("socket.io");
 
-const io=new Server({cors:"http://localhost:5173/"});
+const io=new Server({cors:["http://localhost:5173/"]});
+
 
 let onlineUsers=[];
 
@@ -17,16 +18,35 @@ socket.on("addNewUser",(userId)=>
     if(!response && userId)
     {
         onlineUsers.push({userId,socketId:socket.id})
+        io.emit("showOnlineUsers",onlineUsers);
     }
+
     
-
-
-console.log("online users",onlineUsers);
-
 })
 
 io.emit("showOnlineUsers",onlineUsers);
 
+socket.on("sendMessage",(message)=>
+{ 
+    // this line is basiclaly to check if message has to be recieved by a user 
+    // whether this user is online or not and if it's online then send message
+   const user=onlineUsers.find(user => user.userId === message.recipientId);
+
+   if(user)
+   {
+    io.to(user.socketId).emit("sendToClient",message);
+    // This event will be fired to a specifi socket id this syntax io.to is used to send private message 
+   }
+
+
+    
+})
+
+socket.on("disconnect",()=>
+{
+    onlineUsers = onlineUsers.filter(user => user.socketId != socket.id); 
+    io.emit("showOnlineUsers",onlineUsers);
+})
 
 
 })
