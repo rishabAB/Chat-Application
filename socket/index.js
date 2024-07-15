@@ -5,6 +5,8 @@ const io=new Server({cors:["http://localhost:5173/"]});
 
 let onlineUsers=[];
 
+let notifications=[];
+
 io.on("connection",(socket)=>
 {
 console.log("new socket connection",socket.id);
@@ -47,6 +49,16 @@ socket.on("disconnect",()=>
     // here I think when user gets online his socket id also changes so if the user's socket id 
    // does not match with the current socket id it means user is offline 
     io.emit("showOnlineUsers",onlineUsers);
+})
+
+socket.on("saveNotification",(message)=>
+{
+    // console.log("message is ",message);
+    notifications.push(message);
+
+    console.log("notifications",notifications);
+    
+    io.emit("sendNotification",notifications);
 })
 
 
