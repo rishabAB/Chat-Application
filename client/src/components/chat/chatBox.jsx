@@ -19,7 +19,7 @@ const ChatBox =() =>
     useEffect(() => {
       
       divRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    },[messages]);
+    });
    
     // ---------
     

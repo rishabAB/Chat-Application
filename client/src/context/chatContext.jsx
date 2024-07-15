@@ -25,7 +25,7 @@ export const ChatContextProvider = ({children, user}) => {
     const [TextMessageError,setTextMessageError] = useState(null);
 
     const [newMessage,setNewMessage] = useState(null);
-
+  
     const [isFound,setIsFound] = useState(false);
 
     const newMessageRef = useRef(newMessage);
@@ -36,7 +36,6 @@ export const ChatContextProvider = ({children, user}) => {
     // Forming a connection with socket
     useEffect(()=>
     {
-        console.log("NEW SOCKET CONNECTION");
         const newSocket= io("http://localhost:3000")
         setSocket(newSocket);
         
@@ -51,9 +50,7 @@ export const ChatContextProvider = ({children, user}) => {
 
     // User has logged out so by using socket
 
-    // console.log("user ",user);
-    // console.log("messages",messages);
-
+  
     useEffect(()=>
     {
         console.log("HEY USE EFFECT");
@@ -61,7 +58,7 @@ export const ChatContextProvider = ({children, user}) => {
         socket.emit("addNewUser",user?._id)
 
         socket.on("showOnlineUsers",(res) => {
-            console.log("this is online users",res);
+          
             setOnlineUsers(res);
         })
         return () =>
@@ -83,7 +80,6 @@ export const ChatContextProvider = ({children, user}) => {
 
             socket.emit("sendMessage",{...newMessage,recipientId})
 
-         
            
         },[newMessage])
 
@@ -97,8 +93,8 @@ export const ChatContextProvider = ({children, user}) => {
             {
                 if(currentChat?._id !== res.chatId)
                 return;
-
-                setMessages((prev)=> [...prev,newMessage]);
+               
+                setMessages((prev)=> [...prev,res]);
             // This if condition will help us to stop from updating the wrong chat 
 
             })
@@ -109,8 +105,6 @@ export const ChatContextProvider = ({children, user}) => {
             }
            
 
-         
-           
         },[socket,currentChat])
     // Here we are adding currentChat as a dependency beacause of that case if user1 sends message
     // to user2 and user2 is online but user2 hasn't opened the conversation so when'it will get 
