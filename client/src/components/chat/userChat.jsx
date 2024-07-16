@@ -1,7 +1,7 @@
 import {useFetchRecipientUser} from "../../hooks/useFetchRecipient";
 import {Stack} from "react-bootstrap";
 import avatar from "../../assets/avatar.svg";
-import {useState,useContext, useEffect} from "react";
+import {useState,useContext, useEffect,useCallback} from "react";
 import { ChatContext } from "../../context/chatContext";
 
 
@@ -35,51 +35,26 @@ const UserChat = ({chat, user}) => {
                         setShowNotification([]);
                     }
                     else{
-                        // let lastNotify = notify;
-                        console.log("lastNotify",notify);
-                       
+                      
                         setShowNotification([{...notify,count:notification.length}]);
-                        console.log("after that ",showNotification);
-                       
-                       
                     }
 
             }
         })
        }
-        // if(notification && notification.length>0 && recipientUser?._id === notification[0].senderId)
-        // {
-        //     // console.log("recipientUser",notification);
-           
-        //     //     setShowNotification((prevNotifications) => [
-        //     //         ...prevNotifications,
-        //     //         { senderId: notification?.senderId, text: notification.text,recipientId:notification?.recipientId }
-        //     //       ]);
-        //     // console.log("currentChat in userChat is ",currentChat);
-
-        //     // This is the case where the chat is already chat box among two users is already open
-        //     // not notification should be clear
-               
-        // }
+     
         else{
-            console.log("REACHED ELSE PART");
+          
             setShowNotification([]);
         }
+ 
+      
+    },[notification,recipientUser,currentChat])
 
-        // for(let obj of notification)
-        // {
-        //     if(recipientUser?._id === obj?.senderId)
-        //         {
-        //                 setShowNotification((prevNotifications) => [
-        //                     ...prevNotifications,
-        //                     { senderId: obj?.senderId, text: obj.text,recipientId:obj?.recipientId }
-        //                   ]);
-        //         }
-        // }
-        console.log(currentChat,showNotification);
-      
-      
-    },[notification,recipientUser])
+
+   useEffect(() => {
+    console.log("Updated showNotification: ", showNotification);
+  }, [showNotification]);
 
     // useEffect(()=>
     // {
@@ -112,9 +87,7 @@ const UserChat = ({chat, user}) => {
                         {
                         recipientUser ?. name
                     }</div>
-                    {/* <div className="text">{showNotification?.recipientId ===recipientUser?._id  ? showNotification?.text : null}</div> */}
-                    {/* <div className="text"> {showNotification?.senderId === recipientUser?._id ? showNotification.text : null}</div> */}
-                    {/* <div className="text"> {showNotification?.map((notify,index)=> notify.senderId === recipientUser?._id ? notify.text : null)}</div> */}
+                  
                     {showNotification?.map((notify,index)=> notify.senderId === recipientUser?._id ? (<div className="text">{notify.text}</div>) : null)}
                    
 
