@@ -32,6 +32,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [notification,setNotification] = useState([]);
 
+    const [serverResponse,setServerResponse] = useState(null);
+
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
@@ -84,12 +86,12 @@ export const ChatContextProvider = ({children, user}) => {
 
     // useEffect(()=>
         // {
-            const showNotification = useCallback((serverResponse)=>
-            {
-                console.log("Server Response",serverResponse);
-                setNotification(serverResponse);
+            // const showNotification = useCallback((serverResponse)=>
+            // {
+            //     console.log("Server Response",serverResponse);
+            //     // setNotification(serverResponse);
     
-            },[])
+            // },[])
             
         // },[])
 
@@ -105,8 +107,35 @@ export const ChatContextProvider = ({children, user}) => {
 
             socket.emit("sendMessage",{...newMessage,recipientId})
 
+             // Notification Part
+           
+
+            socket.emit("saveNotification",{...serverResponse,recipientId});
+
+
+        // --------------
+
            
         },[newMessage])
+
+        useEffect(()=>
+        {
+            if(!socket) return;
+
+            socket.on("sendNotification",(message)=>
+            {
+                console.log("sendNotification",message);
+                setNotification(message)
+            })
+
+        })
+        // if(!socket) return;
+
+        // socket.on("sendNotification",(message)=>
+        // {
+        //     console.log("sendNotification",message);
+        //     setNotification(message)
+        // })
 
     // Receive Message
 
@@ -116,13 +145,14 @@ export const ChatContextProvider = ({children, user}) => {
 
             socket.on("sendToClient",(res)=>
             {
-                console.log("res is ??",res);
+                // console.log("res is ??",res);
                 // In this if condition if it doesn't match 
                 // if means user is online but that conversation is not opened so this is the case where we
                 //should show the notification
                 if(currentChat?._id !== res.chatId) 
                 {
-                    showNotification(res);
+                    // showNotification(res);
+                    return;
 
                 //     if(socket == null)
                 //     return;
@@ -229,9 +259,16 @@ export const ChatContextProvider = ({children, user}) => {
         }
         setNewMessage(response);
         newMessageRef.current=response;
-        console.log("messages",messages);
+        setServerResponse(response);
+        // console.log("response is ",response);
+        // console.log("user is",user);
+        // console.log("current chat is ", currentChat);
+       
+        // console.log("recipientId",recipientId);
         setMessages((prev) => [...prev,response]);
         // this setMessages is for someone who is seing the msg
+
+       
         
 
     },[])
@@ -257,8 +294,32 @@ export const ChatContextProvider = ({children, user}) => {
             }
     
             getMessages();
+
+            // Notification part remove notification if any 
+
+            if(currentChat?.members && notification && notification.length>0)
+            {
+                const notificationToDelete = notification.find((notify)=> notify.senderId === currentChat?.members[0] || notify.senderId === currentChat?.members[1] );
+                if(notificationToDelete)
+                {
+                    socket.emit("removeNotification",notificationToDelete);
+
+                    // socket.on("sendNotification",(message)=>
+                    //     {
+                    //         console.log("sendNotification",message);
+                    //         setNotification(message)
+                    //     })
+                }
+            }
     
         },[currentChat])
+
+        const removeNotification= useCallback((notify)=>
+        {
+            socket.emit("removeNotification",notify);
+
+        })
+        
 
     const updateCurrentChat = useCallback((chat)=>
     {
@@ -294,8 +355,8 @@ export const ChatContextProvider = ({children, user}) => {
         currentChat,
         sendTextMessage,
         onlineUsers,
-        showNotification,
-        notification
+        notification,
+        removeNotification
     }
     }> {children}</ChatContext.Provider>)
 }

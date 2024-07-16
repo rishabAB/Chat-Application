@@ -17,10 +17,24 @@ socket.on("addNewUser",(userId)=>
     // here in the below line we are chekcing that userid exists in onlineusers array or not if not only 
     //then add it in onlineusers 
     const response=onlineUsers.some((user)=> user.userId === userId) 
+    console.log("userid is ",userId);
     if(!response && userId)
     {
         onlineUsers.push({userId,socketId:socket.id})
         io.emit("showOnlineUsers",onlineUsers);
+
+        // notification part 
+        let userMessages = notifications.filter((elem)=> elem.recipientId ===  userId);
+        
+        
+
+        if(userMessages && userMessages.length>0)
+        {
+            let user= onlineUsers.find((user)=> user.userId === userMessages[0].recipientId);
+            io.to(user.socketId).emit("sendNotification",userMessages);
+        }
+       
+
     }
 
     
@@ -56,9 +70,35 @@ socket.on("saveNotification",(message)=>
     // console.log("message is ",message);
     notifications.push(message);
 
-    console.log("notifications",notifications);
-    
-    io.emit("sendNotification",notifications);
+    // Here check if the recipeitn user is online or not if online then emit otherwise don't do anything 
+    // for the time being
+
+    // check if this user is online or not 
+
+    let isUserOnline = onlineUsers.filter((user)=> user.userId === message.recipientId);
+
+    if(isUserOnline && isUserOnline.length>0)
+    {
+        let userMessages = notifications.filter((elem)=> elem.recipientId ===  message.recipientId);
+        
+        io.to(isUserOnline[0].socketId).emit("sendNotification",userMessages);
+        
+    }
+    else{
+        // user is offline
+
+    }
+})
+
+socket.on("removeNotification",(message)=>
+{
+    const removeNotification = notifications.filter((notify) => notify.senderId !== message.senderId);
+    notifications=removeNotification;
+
+    console.log("updated notification",notifications);
+    const user=onlineUsers.find(user => user.userId === message.recipientId);
+    io.to(user.socketId).emit("sendNotification",notifications);
+
 })
 
 
