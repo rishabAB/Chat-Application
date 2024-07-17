@@ -68,7 +68,18 @@ socket.on("disconnect",()=>
 socket.on("saveNotification",(message)=>
 {
     // console.log("message is ",message);
-    notifications.push(message);
+    const senderId = message.senderId;
+    const recipientId = message.recipientId;
+    let count=1;
+    notifications.forEach((notify)=>
+    {
+        if(notify.senderId === senderId && notify.recipientId === recipientId)
+        {
+            count++;
+        }
+    })
+    
+    notifications.push({...message,count});
 
     // Here check if the recipeitn user is online or not if online then emit otherwise don't do anything 
     // for the time being
@@ -80,8 +91,9 @@ socket.on("saveNotification",(message)=>
     if(isUserOnline && isUserOnline.length>0)
     {
         let userMessages = notifications.filter((elem)=> elem.recipientId ===  message.recipientId);
-        
-        io.to(isUserOnline[0].socketId).emit("sendNotification",userMessages);
+        // console.log(userMessages.slice(-1));
+        // Here we are sending the last message and the correct total msg count inorder to optimize the client side
+        io.to(isUserOnline[0].socketId).emit("sendNotification",userMessages.slice(-1));
         
     }
     else{
@@ -97,6 +109,7 @@ socket.on("removeNotification",(message)=>
 
     console.log("updated notification",notifications);
     const user=onlineUsers.find(user => user.userId === message.recipientId);
+    if(user && user.socketId)
     io.to(user.socketId).emit("sendNotification",notifications);
 
 })

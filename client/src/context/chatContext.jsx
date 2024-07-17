@@ -1,7 +1,7 @@
 import {createContext, useState,useEffect, useCallback,useRef} from "react";
 import {getRequest, postRequest, baseUrl} from "../utils/services";
 import {io} from "socket.io-client";
-
+import sound from "../assets/sound.wav";
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({children, user}) => {
@@ -95,6 +95,15 @@ export const ChatContextProvider = ({children, user}) => {
             
         // },[])
 
+        const playAudio = useCallback(()=>
+            {
+                const audio = new Audio(sound);
+                audio.muted=true;
+               
+                audio.play().catch((Ex)=>
+                console.error(Ex));
+            })
+
 
     // Send Message
 
@@ -124,8 +133,9 @@ export const ChatContextProvider = ({children, user}) => {
 
             socket.on("sendNotification",(message)=>
             {
-                console.log("sendNotification",message);
-                setNotification(message)
+                console.log("USE EFFECT WITHOUT DEPENDENCIES",message);
+                setNotification(message);
+                // playAudio();
             })
 
         })
