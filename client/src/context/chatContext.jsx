@@ -72,6 +72,39 @@ export const ChatContextProvider = ({children, user}) => {
        
     },[socket])
 
+    // AUDIO POOL TO AVOID AUDIO LAGGING
+
+const audioPool = useRef([]);
+const poolSize = 100; // Adjust pool size as needed
+
+useEffect(() => {
+  // Initialize the audio pool
+  for (let i = 0; i < poolSize; i++) {
+    const audio = new Audio(sound);
+    audioPool.current.push(audio);
+  }
+}, []);
+
+const getAudioInstance = useCallback(() => {
+    for (let audio of audioPool.current) {
+      if (audio.paused) {
+        return audio;
+      }
+    }
+    return null;
+  }, []);
+
+  const playAudio = useCallback(() => {
+    const audio = getAudioInstance();
+    if (audio) {
+      audio.play().catch((error) => console.error('Error playing audio:', error));
+    } else {
+      console.warn('No available audio instances');
+    }
+  }, [getAudioInstance]);
+
+// -------------------------
+
     // useEffect(()=>
     // {
     //     if(!socket) return;
@@ -95,14 +128,14 @@ export const ChatContextProvider = ({children, user}) => {
             
         // },[])
 
-        const playAudio = useCallback(()=>
-            {
-                const audio = new Audio(sound);
-                audio.muted=true;
+        // const playAudio = useCallback(()=>
+        //     {
+        //         const audio = new Audio(sound);
+        //         audio.muted=true;
                
-                audio.play().catch((Ex)=>
-                console.error(Ex));
-            })
+        //         audio.play().catch((Ex)=>
+        //         console.error(Ex));
+        //     })
 
 
     // Send Message
@@ -134,11 +167,16 @@ export const ChatContextProvider = ({children, user}) => {
             socket.on("sendNotification",(message)=>
             {
                 console.log("USE EFFECT WITHOUT DEPENDENCIES",message);
+                if(currentChat && message && message.length>0 && message[0]?.notificationTone)
+                {
+                    playAudio();
+                    console.log("PLAY AUDIO");
+                }
                 setNotification(message);
                 // playAudio();
             })
 
-        })
+        },[socket,currentChat,notification])
         // if(!socket) return;
 
         // socket.on("sendNotification",(message)=>
@@ -307,20 +345,20 @@ export const ChatContextProvider = ({children, user}) => {
 
             // Notification part remove notification if any 
 
-            if(currentChat?.members && notification && notification.length>0)
-            {
-                const notificationToDelete = notification.find((notify)=> notify.senderId === currentChat?.members[0] || notify.senderId === currentChat?.members[1] );
-                if(notificationToDelete)
-                {
-                    socket.emit("removeNotification",notificationToDelete);
+            // if(currentChat?.members && notification && notification.length>0)
+            // {
+            //     const notificationToDelete = notification.find((notify)=> notify.senderId === currentChat?.members[0] || notify.senderId === currentChat?.members[1] );
+            //     if(notificationToDelete)
+            //     {
+            //         socket.emit("removeNotification",notificationToDelete);
 
-                    // socket.on("sendNotification",(message)=>
-                    //     {
-                    //         console.log("sendNotification",message);
-                    //         setNotification(message)
-                    //     })
-                }
-            }
+            //         // socket.on("sendNotification",(message)=>
+            //         //     {
+            //         //         console.log("sendNotification",message);
+            //         //         setNotification(message)
+            //         //     })
+            //     }
+            // }
     
         },[currentChat])
 

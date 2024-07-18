@@ -26,7 +26,7 @@ const UserChat = ({chat, user}) => {
 // AUDIO POOL TO AVOID AUDIO LAGGING
 
 const audioPool = useRef([]);
-const poolSize = 10; // Adjust pool size as needed
+const poolSize = 100; // Adjust pool size as needed
 
 useEffect(() => {
   // Initialize the audio pool
@@ -126,7 +126,8 @@ const getAudioInstance = useCallback(() => {
        if(notification && notification.length>0)
        {
         // audioRef.current.play();
-        playAudio();
+        // if(currentChat)
+        // playAudio();
         notification.forEach((notify)=>
         {
             if(recipientUser?._id === notify.senderId)
@@ -141,6 +142,9 @@ const getAudioInstance = useCallback(() => {
                     else{
                       
                         setShowNotification([{...notify,count:notify.count}]);
+
+                    // if(currentChat)
+                    //     playAudio();
                         // audioRef.current.play();
                         // playAudio();
                         // console.log("buttonref",buttonref?.current);
@@ -188,7 +192,7 @@ const getAudioInstance = useCallback(() => {
             <div className="d-flex">
                 {/* <button onClick={playAudio} ref={buttonref} style={{display:"none"}}>Play </button> */}
                 {/* <audio ref={audioRef}></audio> */}
-                <audio ref={audioRef} src={myAudio}   ></audio>
+                {/* <audio ref={audioRef} src={myAudio}   ></audio> */}
              
 
                 <div className="me-2">
