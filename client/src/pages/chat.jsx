@@ -12,11 +12,11 @@ const Chat = () => {
    
     
     return (
-        <Container>
+        <div style={{  padding: '0 2%'}}>
             <PotentialChats/>{
             userChats ?. length < 1 ? null : (
-                <Stack direction="horizontal" gap ={4} className="align-items-start">
-                    <Stack className="messages-box flex-grow-0 pe-3">
+                <Stack direction="horizontal" gap ={4} className="align-items-start" style={{justifyContent: 'center'}}>
+                    <div className="messages-box flex-grow-0 pe-3">
                         {
                         isUserChatLoading && <p>Loading Chats...</p>
                         }
@@ -29,12 +29,13 @@ const Chat = () => {
                                 </div>
                             )
                         })
-                    } </Stack>
+                    }
+                     </div>
                     <ChatBox/>
 
                 </Stack>
             )
-        }</Container>
+        }</div>
     );
 }
 

@@ -20,7 +20,8 @@ function App() {
     <ChatContextProvider user ={user}>
     <NavBar/>
      
-  <Container className="text-secondary">
+  <div className="text-secondary" style={{    width: '100%',
+    padding: '0 4%'}}>
   <Routes>
     <Route path="/" element={user ? <Chat /> : <Login/>} />
     <Route path="/login" element={user ? <Chat/> : <Login />} />
@@ -29,7 +30,7 @@ function App() {
     {/* Here this navigate is the default path that we are passing if url is any random then 
     it will redirected to this / path */}
     </Routes>
-  </Container>
+  </div>
   </ChatContextProvider>
   )
 }
