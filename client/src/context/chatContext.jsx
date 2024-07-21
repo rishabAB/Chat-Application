@@ -218,7 +218,7 @@ const getAudioInstance = useCallback(() => {
                 }
                 
                
-                setMessages((prev)=> [...prev,res]);
+                setMessages((prev)=> [res,...prev]);
             // This if condition will help us to stop from updating the wrong chat 
 
             })
