@@ -40,7 +40,7 @@ const getMessages = async(req,res) =>
     try {
         const messages = await messageModel.find({chatId});
         // Here we are reversing the array of messages in order to fix scrollbar issues
-        res.status(200).json( (messages && messages.length>0) ? messages?.reverse() : null);
+        res.status(200).json( (messages && messages.length>0) ? messages : null);
         
     } catch (error) {
         console.error(error);

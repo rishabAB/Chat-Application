@@ -218,7 +218,7 @@ const getAudioInstance = useCallback(() => {
                 }
                 
                
-                setMessages((prev)=> [res,...prev]);
+                setMessages((prev)=> [...prev,res]);
             // This if condition will help us to stop from updating the wrong chat 
 
             })
@@ -309,7 +309,7 @@ const getAudioInstance = useCallback(() => {
         newMessageRef.current=response;
         setServerResponse(response);
        
-        setMessages( (prev) =>[response,...prev,]);
+        setMessages( (prev) =>[...prev,response]);
         // this setMessages is for someone who is seing the msg
 
        
@@ -329,7 +329,7 @@ const getAudioInstance = useCallback(() => {
     
                     setIsMessagesLoading(false);
     
-                    if(response.error)
+                    if(response?.error)
                     {
                         return setMessagesError(response)
                     }

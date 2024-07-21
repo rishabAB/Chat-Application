@@ -14,16 +14,12 @@ const ChatBox =() =>
     const {user} = useContext(AuthContext);
     const {currentChat,messages,isMessagesLoading,sendTextMessage} = useContext(ChatContext);
 
-
+    
     // scroll part
     const divRef = useRef(null);
 
     const checkScroll = useRef(null);
-    useEffect(() => {
-      
-      // divRef?.current?.scrollIntoView({ behavior: 'smooth' });
-      console.log(checkScroll?.current?.scrollTop);
-    });
+ 
    
     // ---------
     
@@ -32,6 +28,26 @@ const ChatBox =() =>
     // Here recipient User is the person whom with we are showing the conversation
      
     const [textMessage,setTextMessage] = useState("");
+
+    const [isSendMessageClicked,setIsSendMessageClicked] = useState(false);
+
+    useEffect(() => {
+      console.log("hey there????",currentChat);
+      
+        divRef?.current?.scrollIntoView({ behavior: 'instant',block :'nearest' });
+       
+   
+    },[currentChat]);
+
+    useEffect(() => {
+      console.log("smooth");
+      
+        divRef?.current?.scrollIntoView({ behavior: 'smooth',block :'nearest' });
+       
+        setIsSendMessageClicked(false)
+
+  
+    },[isSendMessageClicked]);
     
     useEffect(() => {
       setTextMessage("");
@@ -49,13 +65,19 @@ const ChatBox =() =>
       {
         sendTextMessage(textMessage,user,currentChat._id,sendTextMessage);
         setTextMessage("");
+        console.log("value is ",isSendMessageClicked);
+        
+        setIsSendMessageClicked(true)
 
       }
       else if(!event.key && event.type==="click")
       {
         sendTextMessage(textMessage,user,currentChat._id,sendTextMessage);
         setTextMessage("");
+        setIsSendMessageClicked(true);
       }
+
+      // return(setIsSendMessageClicked(false))
     
     }; 
 

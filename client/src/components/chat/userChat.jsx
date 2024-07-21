@@ -18,8 +18,7 @@ const UserChat = ({chat, user}) => {
     const [showNotification,setShowNotification] = useState([]);
     const [myAudio,setMyAudio] = useState(null);
 
-   console.log("userchat notification is ",notification); 
-   const buttonref = useRef(null);
+     const buttonref = useRef(null);
    const audioRef = useRef(null);
 
 // AUDIO POOL TO AVOID AUDIO LAGGING
