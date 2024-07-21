@@ -6,6 +6,7 @@ import {Stack} from "react-bootstrap";
 import moment from "moment";
 
 import EmojiPicker from "react-input-emoji";
+// import { InfiniteLoader, List } from 'react-virtualized';
 
 const ChatBox =() =>
 {
@@ -16,9 +17,12 @@ const ChatBox =() =>
 
     // scroll part
     const divRef = useRef(null);
+
+    const checkScroll = useRef(null);
     useEffect(() => {
       
-      divRef?.current?.scrollIntoView({ behavior: 'smooth' });
+      // divRef?.current?.scrollIntoView({ behavior: 'smooth' });
+      console.log(checkScroll?.current?.scrollTop);
     });
    
     // ---------
@@ -37,7 +41,7 @@ const ChatBox =() =>
   
     if(isMessagesLoading)
     {
-        return (<Stack gap={4} className="chat-box" style={{textAlign:"center",width:"100%","justifyContent":"center"}}>Chat Loading...</Stack>)
+        return (<Stack gap={4} className="chat-box" style={{textAlign:"center",width:"100%","justifyContent":"center"}}>Loading Chats...</Stack>)
     }
     const sendMessage = (event) => { 
   
@@ -63,7 +67,7 @@ const ChatBox =() =>
            <div className="chat-header">
             <strong>{recipientUser.name}</strong>
            </div>
-           <Stack gap={3} className="messages"   >
+           <Stack gap={3} className="messages" ref={checkScroll}  >
             {messages && messages.map((msg,index)=>
             {
                 return(

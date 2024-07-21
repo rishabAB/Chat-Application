@@ -308,12 +308,8 @@ const getAudioInstance = useCallback(() => {
         setNewMessage(response);
         newMessageRef.current=response;
         setServerResponse(response);
-        // console.log("response is ",response);
-        // console.log("user is",user);
-        // console.log("current chat is ", currentChat);
        
-        // console.log("recipientId",recipientId);
-        setMessages((prev) => [...prev,response]);
+        setMessages( (prev) =>[response,...prev,]);
         // this setMessages is for someone who is seing the msg
 
        

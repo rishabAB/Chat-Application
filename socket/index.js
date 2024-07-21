@@ -111,8 +111,7 @@ socket.on("disconnect",()=>
 
 socket.on("saveNotification",async(message)=>
 {
-    // console.log("message is ",message);
-
+   
     // COUNT LOGIC
     const senderId = message.senderId;
     const recipientId = message.recipientId;
@@ -139,26 +138,6 @@ socket.on("saveNotification",async(message)=>
     if(isUserOnline && isUserOnline.length>0)
     {
         let userMessages = notifications.filter((elem)=> elem.recipientId ===  message.recipientId);
-
-        // New logic
-        // let final_array=[];
-
-        // let reverse_userMessages=userMessages.reverse();
-        // reverse_userMessages.forEach((elem)=>
-        // {
-        //     if(final_array && final_array.length>0)
-        //     {
-        //         let test = final_array.find((user)=> user.senderId === elem.senderId);
-        //         if(!test)
-        //         {
-        //             final_array.push(elem);
-        //         }
-
-        //     }
-        //     else{
-        //         final_array.push(elem);
-        //     }
-        // })
 
         let final_array = await notificationLogic(userMessages);
 
@@ -209,8 +188,7 @@ socket.on("removeNotification",async(message)=>
             array =await notificationLogic(notifications);
 
         } 
-        // (array && array.length>0) ?  io.to(user.socketId).emit("sendNotification",array) :  io.to(user.socketId).emit("sendNotification",my_array)
-
+       
             if(array && array.length>0)
             {
                 io.to(user.socketId).emit("sendNotification",array)

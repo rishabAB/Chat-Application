@@ -16,45 +16,8 @@ const createMessage = async(req,res) =>
         const response = await message.save();
         if(response._doc._id)
         {
-        //     const chatDataResponse = await chatModel.findOne({
-        //         _id: chatId
-        //     });
-            
-        //     const obj=chatDataResponse?._doc?.members;
-        //     let receiverId=null;
-
-        //    for(let o in obj)
-        //    {
-        //     if(obj[o]!=senderId)
-        //     {
-        //         receiverId=obj[o];
-        //         break;
-        //     }
-        //    }
-
-        //    if(!receiverId)
-        //    {
-        //     res.status(400).json({error:"An unknown error occurred"});
-        //    }
-        //    else{
-          
-        //      function callSocket()
-        //      {
-        //         return new Promise((resolve,reject)=>
-        //         {
-                  
-        //             socket.emit("sendMessage",{senderId,receiverId,text,chatId,msgId:response._doc._id})
-        //             resolve();
-        //         })
-            
-        //      } 
-
-        //      callSocket().then(()=>
-        //         {
-                    
-                    res.status(200).json(response);
-                // })
-
+    
+            res.status(200).json(response);
              
            }
 
@@ -76,7 +39,8 @@ const getMessages = async(req,res) =>
 
     try {
         const messages = await messageModel.find({chatId});
-        res.status(200).json(messages);
+        // Here we are reversing the array of messages in order to fix scrollbar issues
+        res.status(200).json( (messages && messages.length>0) ? messages?.reverse() : null);
         
     } catch (error) {
         console.error(error);
