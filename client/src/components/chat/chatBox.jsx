@@ -12,13 +12,14 @@ const ChatBox =() =>
 {
   
     const {user} = useContext(AuthContext);
-    const {currentChat,messages,isMessagesLoading,sendTextMessage} = useContext(ChatContext);
+    const {currentChat,messages,isMessagesLoading,sendTextMessage,newMessage,moreMessagesAvailable,getPartialMessages} = useContext(ChatContext);
 
     
     // scroll part
     const divRef = useRef(null);
 
     const checkScroll = useRef(null);
+    const [offset,setOffset] = useState(1);
  
    
     // ---------
@@ -29,25 +30,50 @@ const ChatBox =() =>
      
     const [textMessage,setTextMessage] = useState("");
 
-    const [isSendMessageClicked,setIsSendMessageClicked] = useState(false);
+    const [test,setTest]= useState(1);
+    // default value for test
 
     useEffect(() => {
-      console.log("hey there????",currentChat);
+      console.log("messags",messages);
       
-        divRef?.current?.scrollIntoView({ behavior: 'instant',block :'nearest' });
+      if(currentChat && messages && messages.length>0)
+      {
+        if(( test == 1 ) || ( test !== messages[0]._id))
+        {
+          setTest(messages[0]._id);
+          divRef?.current?.scrollIntoView({ behavior: 'instant',block :'nearest' });
+        }
        
+       
+      }
+    
    
-    },[currentChat]);
+    },[messages]);
+const onWheelCaptureHandler = useCallback(async()=>
+{
+  
+  if(checkScroll?.current?.scrollTop<1000 && moreMessagesAvailable)
+  {
+    console.log("OnWheelCapture");
+    await getPartialMessages(50,offset,currentChat._id);
+    setOffset((prev) => prev+1);
+    // Get more messages here
+    // 
+
+  }
+
+})
+    
 
     useEffect(() => {
-      console.log("smooth");
       
+      if(newMessage)
+      {
         divRef?.current?.scrollIntoView({ behavior: 'smooth',block :'nearest' });
        
-        setIsSendMessageClicked(false)
-
-  
-    },[isSendMessageClicked]);
+      }
+          
+    },[newMessage]);
     
     useEffect(() => {
       setTextMessage("");
@@ -60,24 +86,21 @@ const ChatBox =() =>
         return (<Stack gap={4} className="chat-box" style={{textAlign:"center",width:"100%","justifyContent":"center"}}>Loading Chats...</Stack>)
     }
     const sendMessage = (event) => { 
-  
+      // console.log("scroll height" ,checkScroll?.current?.scrollTop)
       if(event.key ==="Enter")
       {
         sendTextMessage(textMessage,user,currentChat._id,sendTextMessage);
         setTextMessage("");
-        console.log("value is ",isSendMessageClicked);
-        
-        setIsSendMessageClicked(true)
+       
 
       }
       else if(!event.key && event.type==="click")
       {
         sendTextMessage(textMessage,user,currentChat._id,sendTextMessage);
         setTextMessage("");
-        setIsSendMessageClicked(true);
+      
       }
 
-      // return(setIsSendMessageClicked(false))
     
     }; 
 
@@ -89,7 +112,7 @@ const ChatBox =() =>
            <div className="chat-header">
             <strong>{recipientUser.name}</strong>
            </div>
-           <Stack gap={3} className="messages" ref={checkScroll}  >
+           <Stack gap={3} className="messages" ref={checkScroll} onWheel={onWheelCaptureHandler}  >
             {messages && messages.map((msg,index)=>
             {
                 return(

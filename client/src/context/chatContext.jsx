@@ -34,6 +34,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [serverResponse,setServerResponse] = useState(null);
 
+    const [moreMessagesAvailable,setMoreMessagesAvailable] = useState(false);
+
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
@@ -103,40 +105,6 @@ const getAudioInstance = useCallback(() => {
     }
   }, [getAudioInstance]);
 
-// -------------------------
-
-    // useEffect(()=>
-    // {
-    //     if(!socket) return;
-
-    //     socket.emit("getNotification",(message)=>
-    //     {
-
-    //     })
-
-
-    // },[socket])
-
-    // useEffect(()=>
-        // {
-            // const showNotification = useCallback((serverResponse)=>
-            // {
-            //     console.log("Server Response",serverResponse);
-            //     // setNotification(serverResponse);
-    
-            // },[])
-            
-        // },[])
-
-        // const playAudio = useCallback(()=>
-        //     {
-        //         const audio = new Audio(sound);
-        //         audio.muted=true;
-               
-        //         audio.play().catch((Ex)=>
-        //         console.error(Ex));
-        //     })
-
 
     // Send Message
 
@@ -166,24 +134,17 @@ const getAudioInstance = useCallback(() => {
 
             socket.on("sendNotification",(message)=>
             {
-                console.log("USE EFFECT WITHOUT DEPENDENCIES",message);
                 if(currentChat && message && message.length>0 && message[0]?.notificationTone)
                 {
                     playAudio();
                     console.log("PLAY AUDIO");
                 }
                 setNotification(message);
-                // playAudio();
+               
             })
 
         },[socket,currentChat,notification])
-        // if(!socket) return;
-
-        // socket.on("sendNotification",(message)=>
-        // {
-        //     console.log("sendNotification",message);
-        //     setNotification(message)
-        // })
+       
 
     // Receive Message
 
@@ -193,26 +154,13 @@ const getAudioInstance = useCallback(() => {
 
             socket.on("sendToClient",(res)=>
             {
-                // console.log("res is ??",res);
                 // In this if condition if it doesn't match 
                 // if means user is online but that conversation is not opened so this is the case where we
                 //should show the notification
                 if(currentChat?._id !== res.chatId) 
                 {
-                    // showNotification(res);
                     return;
 
-                //     if(socket == null)
-                //     return;
-
-                //     socket.emit("saveNotification",res);
-
-                //    socket.on("sendNotification",(message)=>
-                // {
-                //     setNotification(message)
-
-                // })
-                    // return;
                     //we should emit an event saying to socket that save the response
 
                 }
@@ -333,28 +281,13 @@ const getAudioInstance = useCallback(() => {
                     {
                         return setMessagesError(response)
                     }
-                    setMessages(response);
+                    setMessages(response?.messages);
+                    setMoreMessagesAvailable(response?.moreMessagesAvailable)
                 
             }
     
-            getMessages();
+            getPartialMessages(0,0,currentChat?._id);
 
-            // Notification part remove notification if any 
-
-            // if(currentChat?.members && notification && notification.length>0)
-            // {
-            //     const notificationToDelete = notification.find((notify)=> notify.senderId === currentChat?.members[0] || notify.senderId === currentChat?.members[1] );
-            //     if(notificationToDelete)
-            //     {
-            //         socket.emit("removeNotification",notificationToDelete);
-
-            //         // socket.on("sendNotification",(message)=>
-            //         //     {
-            //         //         console.log("sendNotification",message);
-            //         //         setNotification(message)
-            //         //     })
-            //     }
-            // }
     
         },[currentChat])
 
@@ -363,6 +296,37 @@ const getAudioInstance = useCallback(() => {
             socket.emit("removeNotification",notify);
 
         })
+
+        const [partialMessagesError,setPartialMessagesError] = useState(null);
+
+    const getPartialMessages = useCallback(async(limit,offset,currentChatId)=>
+    {
+        return new Promise(async(fulfill,reject)=>
+        {
+            const response = await getRequest(`${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`);
+
+            if(response?.error)
+            {
+                return setPartialMessagesError(response)
+            }
+            setMessages((prev) =>{
+                if(prev?.length>0)
+                {
+                    return ([...prev,...response?.messages])
+                }
+                else{
+                    return (response?.messages);
+
+                }
+            })
+            // setMessages(response?.messages);
+            fulfill({isActionSuccess:true});
+            setMoreMessagesAvailable(response?.moreMessagesAvailable)
+
+        })
+        
+
+    },[])
         
 
     const updateCurrentChat = useCallback((chat)=>
@@ -400,7 +364,10 @@ const getAudioInstance = useCallback(() => {
         sendTextMessage,
         onlineUsers,
         notification,
-        removeNotification
+        removeNotification,
+        newMessage,
+        moreMessagesAvailable,
+        getPartialMessages
     }
     }> {children}</ChatContext.Provider>)
 }

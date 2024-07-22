@@ -71,7 +71,7 @@ body {
   /* overflow-y: auto; */
   background: rgb(25, 25, 25);
   border-radius: 10px;
-  max-width: 430px;
+  max-width: 50%
 }
 
 .messages-box {
