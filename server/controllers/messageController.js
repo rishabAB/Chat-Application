@@ -80,10 +80,14 @@ const partialMessages = async(req,res)=>
 
         if(messages?.length > 50)
         {
-            numberOfRecords =2*(limit*offset);
+            numberOfRecords =(limit*offset);
             filteredMessages = (numberOfRecords === 0) ? messages.slice(messages.length-50,messages.length) :  messages.slice(messages.length-numberOfRecords,messages.length);
             returnObject.moreMessagesAvailable=true;
             returnObject.messages=filteredMessages;
+            if(messages.length === filteredMessages.length)
+            {
+                returnObject.moreMessagesAvailable=false;
+            }
            
         }
       

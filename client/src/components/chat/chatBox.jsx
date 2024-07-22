@@ -19,7 +19,7 @@ const ChatBox =() =>
     const divRef = useRef(null);
 
     const checkScroll = useRef(null);
-    const [offset,setOffset] = useState(1);
+    const [offset,setOffset] = useState(2);
  
    
     // ---------
