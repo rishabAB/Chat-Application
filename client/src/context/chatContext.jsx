@@ -26,8 +26,6 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [newMessage,setNewMessage] = useState(null);
   
-    const [isFound,setIsFound] = useState(false);
-
     const newMessageRef = useRef(newMessage);
 
     const [notification,setNotification] = useState([]);
@@ -162,7 +160,6 @@ const getAudioInstance = useCallback(() => {
                     return;
 
                     //we should emit an event saying to socket that save the response
-
                 }
                 
                
@@ -258,7 +255,7 @@ const getAudioInstance = useCallback(() => {
         setServerResponse(response);
        
         setMessages( (prev) =>[...prev,response]);
-        // this setMessages is for someone who is seing the msg
+        // This setMessages is for someone who is seing the msg
 
        
         
@@ -310,14 +307,15 @@ const getAudioInstance = useCallback(() => {
                 return setPartialMessagesError(response)
             }
             setMessages((prev) =>{
-                // if(prev?.length>0)
-                // {
-                //     return ([...prev,...response?.messages])
-                // }
-                // else{
+                if(prev?.length>0 && prev[0].chatId == currentChatId)
+                {
+                    // return ([...prev,...response?.messages])
+                    return ([...response?.messages,...prev])
+                }
+                else{
                     return (response?.messages);
 
-                // }
+                }
             })
             // setMessages(response?.messages);
             fulfill({isActionSuccess:true});

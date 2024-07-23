@@ -73,21 +73,50 @@ const partialMessages = async(req,res)=>
     }
 
     try {
-        // const messages = await messageModel.find({ currentChatId }).limit(limit).skip(offset);
         const messages = await messageModel.find({ chatId:currentChatId });
 
         returnObject.messages=messages;
 
         if(messages?.length > 50)
         {
-            numberOfRecords =(limit*offset);
-            filteredMessages = (numberOfRecords === 0) ? messages.slice(messages.length-50,messages.length) :  messages.slice(messages.length-numberOfRecords,messages.length);
+            // Old login where we are fetching all the data 
+            // like 50 records then 100 then 150 all the records 
+            
+            // Now we'll fetch only new records in 50-50 batches only 50 batches according to index
+            // Old Logic 
+
+            // numberOfRecords =(limit*offset);
+            // filteredMessages = (numberOfRecords === 0) ? messages.slice(messages.length-50,messages.length) :  messages.slice(messages.length-numberOfRecords,messages.length);
+            // if(filteredMessages.length < messages?.length)
+            //     {
+            //         returnObject.moreMessagesAvailable=true;
+            //     }
+            //     returnObject.messages=filteredMessages;
+            
+            
+            // New Logic
+            if(offset === 0)
+            {
+                offset =1;
+            }
+            let startIndex = messages.length-(limit*offset);
+            
+            let endIndex = messages.length - (limit*(offset-1));
+
+            if(startIndex <50)
+            {
+              startIndex =0;
+            }
+          
+            filteredMessages = messages.slice(startIndex ,endIndex)
+          
             returnObject.moreMessagesAvailable=true;
             returnObject.messages=filteredMessages;
-            if(messages.length === filteredMessages.length)
+            if(limit*offset >= messages.length)
             {
                 returnObject.moreMessagesAvailable=false;
             }
+            
            
         }
       
