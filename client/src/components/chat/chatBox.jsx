@@ -33,7 +33,7 @@ const ChatBox = () => {
   // default value for test
   const [isFetching, setIsFetching] = useState(false);
   useLayoutEffect(() => {
-// console.log("messages",messages);
+console.log("messages",messages);
     if (currentChat && messages && messages.length > 0) {
       if ((test == 1) || (test !== messages[0].chatId)) {
         console.log("SCROLL Got affected", divRef?.current)
@@ -117,8 +117,8 @@ const ChatBox = () => {
       <strong>{recipientUser.name}</strong>
     </div>
     <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler}  >
-    {messages?.length == 0  &&  <h4 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4" }}>Start a Conversation</h4> }
-    {messages?.length>0 && !moreMessagesAvailable && <h4 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4" }}>Beggining of the conversation</h4> }
+    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4" }}>Start a Conversation</h5> }
+    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4" }}>Beggining of the conversation</h5> }
       {messages && messages.map((msg, index) => {
         return (
 

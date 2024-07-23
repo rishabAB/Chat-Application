@@ -103,6 +103,8 @@ const partialMessages = async(req,res)=>
             
             let endIndex = messages.length - (limit*(offset-1));
 
+           
+
             if(startIndex <50)
             {
               startIndex =0;
@@ -112,10 +114,12 @@ const partialMessages = async(req,res)=>
           
             returnObject.moreMessagesAvailable=true;
             returnObject.messages=filteredMessages;
-            if(limit*offset >= messages.length)
+            
+            if(limit*offset >= messages.length || startIndex === 0)
             {
                 returnObject.moreMessagesAvailable=false;
             }
+           
             
            
         }
