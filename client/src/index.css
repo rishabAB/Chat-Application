@@ -117,6 +117,7 @@ body {
 .message.self {
  
   background: #00bd9b;
+  color: #711010eb;
 }
 
 .message-footer {

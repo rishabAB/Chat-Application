@@ -32,14 +32,26 @@ const ChatBox = () => {
   const [test, setTest] = useState(1);
   // default value for test
   const [isFetching, setIsFetching] = useState(false);
-  useLayoutEffect(() => {
+
+  useEffect(() => {
 console.log("messages",messages);
     if (currentChat && messages && messages.length > 0) {
-      if ((test == 1) || (test !== messages[0].chatId)) {
-        console.log("SCROLL Got affected", divRef?.current)
+      if ((test == 1) || (test !== messages[0].chatId )) {
+       
         setTest(messages[0].chatId);
         setOffset(2);
-        divRef?.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+     
+          console.log("Scroll getting affected",divRef?.current);
+          divRef?.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+          // We are changing below value in a timeout because in the above line we are changing
+          // the scroll posiiton to bottom first so it needs to reflect first in order make thigns happen
+        setTimeout(function()
+        {
+          setIsScrollButton(false);
+
+        },100)
+        
+      
       }
       else if (isPartialLoading) {
         checkScroll.current.scrollTop = checkScroll.current.scrollHeight - currentScrollPosition;
@@ -54,11 +66,27 @@ console.log("messages",messages);
   const [currentScrollPosition, setCurrentScrollPosition] = useState(null);
   const [isPartialLoading, setIspartialLoading] = useState(false);
 
+  // The below code is for scroll bar to set it below when component mounts (reloads)
+  const [isScrollAllowed,setIsScrollAllowed] = useState(true);
+  useEffect(()=>
+  {
+    if(isScrollAllowed &&  divRef?.current)
+    {
+      divRef.current.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+      setIsScrollAllowed(false);
 
+    }
+
+  })
+  const [bottomScrollHeight,setBottomScrollHeight] = useState(null);
+ 
+  // ------------------------------------------------------
+ const [isScrollButton,setIsScrollButton] = useState(false);
   const onWheelCaptureHandler = useCallback(async () => {
+    setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
 
     if (checkScroll?.current?.scrollTop < 1000 && moreMessagesAvailable && !isFetching) {
-      console.log("OnWheelCapture");
+      console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
 
       setIsFetching(true);
       setCurrentScrollPosition(checkScroll.current.scrollHeight - checkScroll.current.scrollTop);
@@ -70,9 +98,29 @@ console.log("messages",messages);
 
 
     }
+    else if(checkScroll?.current)
+    {
+      if(bottomScrollHeight > 300)
+      {
+        setIsScrollButton(true);
+      }
+      else if(bottomScrollHeight <=300)
+      {
+        setIsScrollButton(false);
+
+      }
+
+    }
 
   })
 
+
+const goToBottom = useCallback(()=>
+{
+  
+  divRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+},[])
 
   useEffect(() => {
 
@@ -125,10 +173,19 @@ console.log("messages",messages);
           <Stack key={index} className={`${msg?.senderId === user?._id ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
             <span>{msg.text}</span>
             <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
-            <div ref={divRef}></div>
+            <div ref={ index === messages.length-1 ? divRef : null}></div>
           </Stack>
         )
       })}
+      {isScrollButton && <button style = {{position:"absolute",backgroundColor:"unset",border:"unset",width:"45%"}} > <svg xmlns="http://www.w3.org/2000/svg"  style={{position: "relative",
+        top: "43em",
+        left: "-2em",
+    backgroundColor: "#175f9f"}} width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down" viewBox="0 0 16 16">
+  <path fillRule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+  <path fillRule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+</svg></button>}
+      
+     
     </Stack>
     <Stack direction="horizontal" gap={3} className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)} >
       <EmojiPicker value={textMessage} onChange={setTextMessage} class="emoji-picker" fontFamily="nunito" borderColor="rgba(72,112,223,0.2)" />

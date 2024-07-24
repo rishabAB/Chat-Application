@@ -282,7 +282,7 @@ const getAudioInstance = useCallback(() => {
                     setMoreMessagesAvailable(response?.moreMessagesAvailable)
                 
             }
-    
+           if(currentChat)
             getPartialMessages(0,0,currentChat?._id);
 
     
@@ -329,7 +329,6 @@ const getAudioInstance = useCallback(() => {
 
     const updateCurrentChat = useCallback((chat)=>
     {
-        
         setCurrentChat(chat);
 
     },[])

@@ -1,6 +1,7 @@
 const messageModel = require("../models/messageModel");
 
-
+const NodeCache = require('node-cache');
+const myCache = new NodeCache();
 const createMessage = async(req,res) =>
 {
     const {chatId,senderId,text} = req.body;
@@ -10,12 +11,15 @@ const createMessage = async(req,res) =>
     });
     try {
         const response = await message.save();
+        if(myCache.has(chatId))
+        {
+            let array = myCache.get(chatId);
+            myCache.set(chatId,[...array,message]);
+        }
         if(response._doc._id)
         {
-    
-            res.status(200).json(response);
-             
-           }
+            res.status(200).json(response);  
+        }
 
             
         }   
@@ -37,7 +41,7 @@ const getMessages = async(req,res) =>
         const messages = await messageModel.find({chatId})
         let moreMessagesAvailable = false;
         let returnObject={messages:messages,moreMessagesAvailable};
-        // Here we are reversing the array of messages in order to fix scrollbar issues
+        
         if(messages?.length>0)
         {
             if(messages.length > 50)
@@ -63,6 +67,7 @@ const partialMessages = async(req,res)=>
     var filteredMessages;
     let numberOfRecords;
     console.log("offset",req.query?.offset);
+    console.time();
    
     let returnObject={messages:null,moreMessagesAvailable:false};
 
@@ -73,11 +78,22 @@ const partialMessages = async(req,res)=>
     }
 
     try {
-        const messages = await messageModel.find({ chatId:currentChatId });
+        let messages;
+        const exists = myCache.has(currentChatId);
+        if(exists)
+        {
+            messages = myCache.get(currentChatId);
 
+        }
+        else{
+            messages = await messageModel.find({ chatId:currentChatId });
+            myCache.set(currentChatId, messages);
+
+        }   
+       
         returnObject.messages=messages;
 
-        if(messages?.length > 50)
+        if(messages?.length > limit)
         {
             // Old login where we are fetching all the data 
             // like 50 records then 100 then 150 all the records 
@@ -105,7 +121,7 @@ const partialMessages = async(req,res)=>
 
            
 
-            if(startIndex <50)
+            if(startIndex <limit)
             {
               startIndex =0;
             }
@@ -119,11 +135,9 @@ const partialMessages = async(req,res)=>
             {
                 returnObject.moreMessagesAvailable=false;
             }
-           
-            
-           
+                 
         }
-      
+        console.timeEnd();
         res.status(200).json(returnObject);
         
     } catch (error) {
