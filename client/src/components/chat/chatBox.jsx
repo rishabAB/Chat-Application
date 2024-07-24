@@ -165,8 +165,8 @@ const goToBottom = useCallback(()=>
       <strong>{recipientUser.name}</strong>
     </div>
     <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler}  >
-    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4" }}>Start a Conversation</h5> }
-    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4" }}>Beggining of the conversation</h5> }
+    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
+    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
       {messages && messages.map((msg, index) => {
         return (
 
