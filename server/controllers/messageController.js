@@ -2,6 +2,8 @@ const messageModel = require("../models/messageModel");
 
 const NodeCache = require('node-cache');
 const myCache = new NodeCache();
+const moment = require("moment");
+
 const createMessage = async(req,res) =>
 {
     const {chatId,senderId,text} = req.body;
@@ -88,27 +90,14 @@ const partialMessages = async(req,res)=>
         else{
             messages = await messageModel.find({ chatId:currentChatId });
             myCache.set(currentChatId, messages);
-
+           
         }   
-       
+        messages = await getMessageTimeLine(messages);
         returnObject.messages=messages;
+        // returnObject.messages = await getMessageTimeLine(returnObject.messages);
 
         if(messages?.length > limit)
         {
-            // Old login where we are fetching all the data 
-            // like 50 records then 100 then 150 all the records 
-            
-            // Now we'll fetch only new records in 50-50 batches only 50 batches according to index
-            // Old Logic 
-
-            // numberOfRecords =(limit*offset);
-            // filteredMessages = (numberOfRecords === 0) ? messages.slice(messages.length-50,messages.length) :  messages.slice(messages.length-numberOfRecords,messages.length);
-            // if(filteredMessages.length < messages?.length)
-            //     {
-            //         returnObject.moreMessagesAvailable=true;
-            //     }
-            //     returnObject.messages=filteredMessages;
-            
             
             // New Logic
             if(offset === 0)
@@ -137,6 +126,8 @@ const partialMessages = async(req,res)=>
             }
                  
         }
+        // get it Done
+        
         console.timeEnd();
         res.status(200).json(returnObject);
         
@@ -145,6 +136,90 @@ const partialMessages = async(req,res)=>
         res.status(500).json(error);
     }
     
+}
+
+function checkIfExists(messageTimeline,date)
+{
+    let response = messageTimeline.find((item) => item.date === date);
+    return response ? true : false;
+
+}
+
+function getMessageTimeLine(messages)
+{
+    return new Promise((fulfill,reject)=>
+    {
+        
+        let messageTimeline =[];
+    
+
+        messages.forEach((message)=>
+        {
+            let msg = message._doc.createdAt;
+            let date = moment(msg).format("LL");
+            if(messageTimeline.length === 0)
+            {
+                messageTimeline.push({date,count:1});
+            }
+            else{
+                if(checkIfExists(messageTimeline,date))
+                {
+                   let object = messageTimeline.find((item) => item.date === date);
+                    
+                   let index = messageTimeline.findIndex(item => item.date === date);
+    
+                   messageTimeline.splice(index,1)
+                   
+                   object.count +=1;
+                   messageTimeline.push(object);
+                }
+                else{
+                    messageTimeline.push({date,count:1});
+                }
+    
+            }
+    
+        })
+        console.log("message timeline",messageTimeline);
+
+        // fulfill(messageTimeline);
+
+        let finalArray=[];
+        let skipIndex=0;
+        let timelineIndex=0;
+        let test=true;
+        messages.forEach((message)=>
+       {
+         if(test || skipIndex === 0)
+         {
+             finalArray.push(messageTimeline.at(timelineIndex));
+         skipIndex = messageTimeline.at(timelineIndex).count;
+         timelineIndex++;
+         finalArray.push(message);
+         test = false;
+         skipIndex--;
+     
+         }
+         else{
+             finalArray.push(message);
+             skipIndex--;
+             if(skipIndex == 0)
+             {
+                test=true;
+             }
+         }
+         
+     
+     
+             
+       })
+
+    //    console.log("final Array",finalArray);
+
+       fulfill(finalArray);
+    })
+   
+   
 }
 
 module.exports ={createMessage,getMessages,partialMessages}

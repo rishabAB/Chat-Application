@@ -307,7 +307,7 @@ const getAudioInstance = useCallback(() => {
                 return setPartialMessagesError(response)
             }
             setMessages((prev) =>{
-                if(prev?.length>0 && prev[0].chatId == currentChatId)
+                if(prev?.length>0 && prev[1].chatId == currentChatId)
                 {
                     // return ([...prev,...response?.messages])
                     return ([...response?.messages,...prev])

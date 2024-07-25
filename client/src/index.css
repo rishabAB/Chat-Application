@@ -114,6 +114,13 @@ body {
   max-width: 50%;
 }
 
+.timeline{
+  justify-content: center;
+  color: blue;
+  margin: auto;
+  width: 45%;
+}
+
 .message.self {
  
   background: #00bd9b;
