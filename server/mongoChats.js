@@ -85,37 +85,37 @@ async function getAllMessages()
     })
 //    console.log( messageTimeline);
 
-   let finalArray=[];
-   let skipIndex=0;
-   let timelineIndex=0;
-   let test=true;
-   response.forEach((message)=>
-  {
-    if(test || skipIndex === 0)
-    {
-        finalArray.push(messageTimeline.at(timelineIndex));
-    skipIndex = messageTimeline.at(timelineIndex).count;
-    timelineIndex++;
-    finalArray.push(message);
-    test = false;
-    skipIndex--;
+//    let finalArray=[];
+//    let skipIndex=0;
+//    let timelineIndex=0;
+//    let test=true;
+//    response.forEach((message)=>
+//   {
+//     if(test || skipIndex === 0)
+//     {
+//         finalArray.push(messageTimeline.at(timelineIndex));
+//     skipIndex = messageTimeline.at(timelineIndex).count;
+//     timelineIndex++;
+//     finalArray.push(message);
+//     test = false;
+//     skipIndex--;
 
-    }
-    else{
-        finalArray.push(message);
-        skipIndex--;
-        if(skipIndex == 0)
-        {
-            test=true;
-        }
-    }
+//     }
+//     else{
+//         finalArray.push(message);
+//         skipIndex--;
+//         if(skipIndex == 0)
+//         {
+//             test=true;
+//         }
+//     }
     
 
 
         
-  })
+//   })
 
-  console.log("final Array",finalArray);
+//   console.log("final Array",finalArray);
 
 
     // console.log("response is ",response);

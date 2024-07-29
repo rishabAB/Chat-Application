@@ -5,6 +5,7 @@ body{
     color:white;
     font-family: "Nunito","sans-serif";
     background: rgb(40, 40, 40);
+    overflow-y: hidden;
 }
 
 
@@ -69,6 +70,7 @@ body {
 .chat-box {
   /* max-height: calc(100vh - 10rem); */
   /* overflow-y: auto; */
+  max-height: calc(90vh);
   background: rgb(25, 25, 25);
   border-radius: 10px;
   max-width: 50%

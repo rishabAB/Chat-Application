@@ -124,11 +124,14 @@ const partialMessages = async(req,res)=>
             {
                 returnObject.moreMessagesAvailable=false;
             }
+            console.log(startIndex,endIndex);
                  
         }
         // get it Done
         
         console.timeEnd();
+     
+        console.log("returnObject.messages",returnObject.messages);
         res.status(200).json(returnObject);
         
     } catch (error) {
@@ -180,7 +183,7 @@ function getMessageTimeLine(messages)
             }
     
         })
-        console.log("message timeline",messageTimeline);
+        // console.log("message timeline",messageTimeline);
 
         // fulfill(messageTimeline);
 

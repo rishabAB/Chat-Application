@@ -6,6 +6,7 @@ import { Stack } from "react-bootstrap";
 import moment from "moment";
 
 import EmojiPicker from "react-input-emoji";
+
 // import { InfiniteLoader, List } from 'react-virtualized';
 
 const ChatBox = () => {
@@ -19,6 +20,7 @@ const ChatBox = () => {
 
   const checkScroll = useRef(null);
   const [offset, setOffset] = useState(2);
+  const offsetRef = useRef(2);
 
 
   // ---------
@@ -31,7 +33,9 @@ const ChatBox = () => {
 
   const [test, setTest] = useState(1);
   // default value for test
-  const [isFetching, setIsFetching] = useState(false);
+  // const [isFetching, setIsFetching] = useState(false);
+
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
 console.log("messages",messages);
@@ -40,6 +44,7 @@ console.log("messages",messages);
        
         setTest(messages[0].chatId);
         setOffset(2);
+        offsetRef.current= 2;
      
           console.log("Scroll getting affected",divRef?.current);
           divRef?.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
@@ -63,6 +68,10 @@ console.log("messages",messages);
 
   }, [messages]);
 
+  function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
   const [currentScrollPosition, setCurrentScrollPosition] = useState(null);
   const [isPartialLoading, setIspartialLoading] = useState(false);
 
@@ -83,17 +92,27 @@ console.log("messages",messages);
   // ------------------------------------------------------
  const [isScrollButton,setIsScrollButton] = useState(false);
   const onWheelCaptureHandler = useCallback(async () => {
+    console.log("TRIGGERING")
     setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
 
-    if (checkScroll?.current?.scrollTop < 1000 && moreMessagesAvailable && !isFetching) {
+    if (checkScroll?.current?.scrollTop < 1000 && moreMessagesAvailable && !isFetchingRef.current) {
       console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
+      // console.log("offset ",offsetRef.current);
 
-      setIsFetching(true);
+      // setIsFetching(true);
+      isFetchingRef.current=true;
+      checkScroll.current.style.pointerEvents = 'none';
       setCurrentScrollPosition(checkScroll.current.scrollHeight - checkScroll.current.scrollTop);
 
-      await getPartialMessages(50, offset, currentChat._id);
-      setOffset((prev) => prev + 1);
-      setIsFetching(false);
+      await getPartialMessages(50, offsetRef.current, currentChat._id);
+       setOffset((prev) => prev + 1);
+     
+       offsetRef.current+=1;
+    //  console.log("before");
+     await delay(800);
+    //  setIsFetching(false);
+    checkScroll.current.style.pointerEvents = 'auto';
+     isFetchingRef.current=false
       setIspartialLoading(true);
 
 
@@ -115,10 +134,12 @@ console.log("messages",messages);
   })
 
 
-const goToBottom = useCallback(()=>
+const goToBottom = useCallback(async()=>
 {
-  
   divRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  await delay(900);
+  setIsScrollButton(false);
+ 
 
 },[])
 
