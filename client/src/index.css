@@ -71,7 +71,8 @@ body {
 .chat-box {
   /* max-height: calc(100vh - 10rem); */
   /* overflow-y: auto; */
-  max-height: calc(90vh);
+  /* max-height: calc(90vh); */
+  max-height: 90%;
   background: rgb(25, 25, 25);
   border-radius: 10px;
   max-width: 50%
@@ -141,7 +142,7 @@ body {
 .chat-input {
   width: 100%;
   background: rgb(30, 30, 30);
-  padding: 1rem;
+  padding: 0.4rem;
 }
 .send-btn {
   border: none;

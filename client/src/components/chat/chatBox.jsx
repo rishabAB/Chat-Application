@@ -28,7 +28,7 @@ const ChatBox = () => {
 
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   // Here recipient User is the person whom with we are showing the conversation
-
+ console.log("In chatbox",recipientUser);
   const [textMessage, setTextMessage] = useState("");
 
   const [test, setTest] = useState(1);
@@ -182,9 +182,9 @@ const goToBottom = useCallback(async()=>
     return (<Stack gap={4} className="chat-box" style={{ textAlign: "center", width: "100%", "justifyContent": "center"}}>No conversation selected yet ...</Stack>)
   }
   return (<Stack gap={4} className="chat-box" >
-    <div className="chat-header">
+    {/* <div className="chat-header">
       <strong>{recipientUser.name}</strong>
-    </div>
+    </div> */}
     <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler}  >
     {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
     {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
@@ -223,7 +223,7 @@ const goToBottom = useCallback(async()=>
 // </button>
 }
    
-    <Stack direction="horizontal" gap={3} className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)} >
+    <Stack direction="horizontal"  className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)} >
       <EmojiPicker value={textMessage} onChange={setTextMessage} class="emoji-picker" fontFamily="nunito" borderColor="rgba(72,112,223,0.2)" />
       <button className="send-btn" onClick={sendMessage}>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill" viewBox="0 0 16 16">
