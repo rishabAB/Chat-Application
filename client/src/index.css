@@ -36,7 +36,8 @@ body {
 .user-card {
  
   position: relative;
-  border-bottom: 1px solid rgb(100, 100, 100);
+ 
+  border-bottom: 2px solid rgb(100, 100, 100);
   /* width: 380px; */
 }
 
@@ -79,6 +80,7 @@ body {
 .messages-box {
   height: 85vh;
   width: 35%;
+  border: 2px solid green;
 }
 
 

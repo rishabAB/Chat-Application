@@ -6,9 +6,9 @@ import {AuthContext} from "../context/authContext";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
     return (
-        <Navbar bg="dark" className="mb-4"
+        <Navbar bg="dark"
             style={
-                {height: "3.75rem"}
+                {height: "3.75rem",width: "35%"}
         }>
             <Container>
                 <h2>
