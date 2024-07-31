@@ -21,6 +21,13 @@ const userSchema= new mongoose.Schema({
         required:true,
         minlength:3,
         maxlength:1024 
+    },
+    profile:{
+        type:String,
+        required:false,
+        minlength:3,
+        unique:true 
+
     }
 },{timestamps:true})
 

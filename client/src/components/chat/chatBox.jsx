@@ -28,7 +28,7 @@ const ChatBox = () => {
 
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   // Here recipient User is the person whom with we are showing the conversation
- console.log("In chatbox",recipientUser);
+ 
   const [textMessage, setTextMessage] = useState("");
 
   const [test, setTest] = useState(1);
@@ -92,11 +92,11 @@ console.log("messages",messages);
   // ------------------------------------------------------
  const [isScrollButton,setIsScrollButton] = useState(false);
   const onWheelCaptureHandler = useCallback(async () => {
-    console.log("TRIGGERING")
+    // console.log("TRIGGERING")
     setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
 
     if (checkScroll?.current?.scrollTop < 1000 && moreMessagesAvailable && !isFetchingRef.current) {
-      console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
+      // console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
       // console.log("offset ",offsetRef.current);
 
       // setIsFetching(true);
@@ -185,16 +185,16 @@ const goToBottom = useCallback(async()=>
     {/* <div className="chat-header">
       <strong>{recipientUser.name}</strong>
     </div> */}
-    <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler}  >
+    <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
     {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
     {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
       {messages && messages.map((msg, index) => {
         return (
-          <Stack direction="vertical">
+          <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
 
-             <Stack className = {`${msg?.date ? "timeline" : null}`}>
+             <div className = {`${msg?.date ? "timeline" : null}`}>
               {msg?.date}
-             </Stack>
+             </div>
         { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
             <span>{msg.text} </span>
             <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
@@ -211,7 +211,7 @@ const goToBottom = useCallback(async()=>
       
      
     </Stack>
-    <Stack direction="vertical" >
+    <Stack direction="vertical" style={{"justifyContent": "flex-end"}} >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 
       <svg xmlns="http://www.w3.org/2000/svg"  style={{position: "relative",
@@ -223,14 +223,14 @@ const goToBottom = useCallback(async()=>
 // </button>
 }
    
-    <Stack direction="horizontal"  className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)} >
+    <div direction="horizontal"  className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)} >
       <EmojiPicker value={textMessage} onChange={setTextMessage} class="emoji-picker" fontFamily="nunito" borderColor="rgba(72,112,223,0.2)" />
       <button className="send-btn" onClick={sendMessage}>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill" viewBox="0 0 16 16">
           <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
         </svg>
       </button>
-    </Stack>
+    </div>
     </Stack>
   </Stack>)
 

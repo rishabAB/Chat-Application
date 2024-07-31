@@ -12,7 +12,7 @@ export const AuthContextProvider = ({children}) =>
 
     const [isRegisterLoading,setIsRegisterLoading] = useState(false);
 
-    const [registerInfo,setRegisterInfo] = useState({name :"",email:"",password:""});
+    const [registerInfo,setRegisterInfo] = useState({name :"",email:"",password:"",profile:""});
 
     const [loginInfo,setLoginInfo] = useState({email:"",password:""});
 
@@ -20,10 +20,53 @@ export const AuthContextProvider = ({children}) =>
 
     const [isLoginLoading,setIsLoginLoading] = useState(false);
 
+    function readFileDataAsBase64(file) {
+        // const file = e.target.files[0];
     
-    const updateRegisterInfo = useCallback((info) =>
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+    
+            reader.onload = (event) => {
+                resolve(event.target.result);
+            };
+    
+            reader.onerror = (err) => {
+                reject(err);
+            };
+    
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function readFileDataAsUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+    
+            reader.onload = (event) => {
+                // Create a URL for the file
+                const fileUrl = URL.createObjectURL(file);
+                resolve(fileUrl);
+            };
+    
+            reader.onerror = (err) => {
+                reject(err);
+            };
+    
+            reader.readAsArrayBuffer(file); // or readAsDataURL(file), either will trigger onload
+        });
+    }
+    
+    const updateRegisterInfo = useCallback(async(info) =>
     {
-        setRegisterInfo(info)
+        // console.log("ingo ",info?.profile);
+        if(info?.profile && info?.profile?.name)
+        {
+            let res = await  readFileDataAsBase64(info.profile);
+            info.profile = res;   
+        }
+        setRegisterInfo(info);
+
+        
     }, []);
    
 

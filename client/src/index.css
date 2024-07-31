@@ -122,7 +122,8 @@ body {
 .timeline{
   justify-content: center;
   color: blue;
-  margin: auto;
+  /* margin: auto; */
+  text-align: center;
   /* width: 45%; */
 }
 
@@ -143,6 +144,12 @@ body {
   width: 100%;
   background: rgb(30, 30, 30);
   padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  
+}
+.customFileInput::before {
+  content: 'profile picture';
 }
 .send-btn {
   border: none;

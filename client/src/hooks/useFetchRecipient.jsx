@@ -9,13 +9,19 @@ export const useFetchRecipientUser = (chat,user) =>
     const {currentChat} = useContext(ChatContext);
 
     const recipientId = chat?.members.find((id) => id !==user?._id);
+    console.log("this is useFetchRecipient",user);
+    console.log("recipientId",recipientId);
  // Here recipient User is the person whom with we are showing the conversation
     useEffect(()=>
     {
         const getUser = async() =>
         {
             
-            if(!recipientId) return null;
+            if(!recipientId || !user) 
+                {
+                    setRecipientUser(null);
+                    return;
+                }
 
             const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
 
@@ -31,7 +37,7 @@ export const useFetchRecipientUser = (chat,user) =>
         }
         getUser();
 
-    },[recipientId])
+    },[recipientId,user])
 
     return {recipientUser}
 }

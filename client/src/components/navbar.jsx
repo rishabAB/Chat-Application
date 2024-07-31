@@ -8,21 +8,20 @@ import {AuthContext} from "../context/authContext";
 import {ChatContext} from "../context/chatContext";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
-    // console.log('user',user);
     const { currentChat } = useContext(ChatContext);
-    // console.log("current Chat",currentChat)
     const {recipientUser} = useFetchRecipientUser(currentChat,user);
-    console.log("recipientUser",recipientUser);
+    console.log("user",user?.profile);
     return (
-        <Navbar bg="dark"
+        <Navbar 
             style={
-                {height: "3.75rem"}
+                {height: "3.75rem",padding:"0 4%",backgroundColor: "rgb(12 69 125)"}
         }>
-            <Container style={{gap:"2rem",justifyContent:"flex-start",marginleft:"3%"}}>
+            <Container style={{gap:"2rem",justifyContent:"flex-start",marginLeft:"1%"}}>
                 <h2>
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
-                {user && (<span className="text-warning">Logged in as {user?.name} </span>) }
+                {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}
+                {user && ( <img src={user?.profile} style={{height:"50px",width:"50px",borderRadius:"50%"}} alt="" />) }
                 <Nav>
                     <Stack direction="horizontal" gap="3">
                         {
@@ -36,9 +35,8 @@ const NavBar = () => {
 
                         }
 
-                  
-                      
                     </Stack>
+                   
                 </Nav>
             </Container>
             {  recipientUser && (<span style = {{marginRight:"24%"}}>{recipientUser.name}</span>) }

@@ -24,6 +24,11 @@ const Register = () => {
                                 (e) => updateRegisterInfo({...registerInfo,email:e.target.value}) }/>
                             <Form.Control type="password" placeholder="Password" onChange={
                                 (e) => updateRegisterInfo({...registerInfo,password:e.target.value}) }/>
+                                <Form.Label>Gender</Form.Label>
+                                 <Form.Control type="radio" placeholder="Password" onChange={
+                                (e) => updateRegisterInfo({...registerInfo,password:e.target.value}) }/>
+                                 <Form.Control type="file" className="customFileInput"  accept=".jpg, .jpeg, .png"  onChange={
+                                (e) => updateRegisterInfo({...registerInfo,profile:e.target?.files?.[0]}) }/>
                             <Button varient="primary" type="submit">
                                 {isRegisterLoading ? "Creating your account" : "Register"}
                             </Button>
