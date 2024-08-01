@@ -23,9 +23,8 @@ const userSchema= new mongoose.Schema({
         maxlength:1024 
     },
     profile:{
-        type:String,
+        type:Buffer,
         required:false,
-        minlength:3,
         unique:true 
 
     }

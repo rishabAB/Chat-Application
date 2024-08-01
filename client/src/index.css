@@ -148,9 +148,10 @@ body {
   align-items: center;
   
 }
-.customFileInput::before {
+/* .customFileInput {
   content: 'profile picture';
-}
+  display: none;
+} */
 .send-btn {
   border: none;
   background: rgba(72, 112, 223, 1);
@@ -158,6 +159,19 @@ body {
   height: 40px;
   width: 40px;
   border-radius: 50%;
+}
+
+.gender{
+  display:flex;
+  flex-direction:row;
+  gap:1rem;
+  font-size: 1rem;
+  margin-bottom: unset;
+  font-size: 1.1rem;
+}
+
+.cursor > input{
+cursor: pointer;
 }
 
 /* Notification */

@@ -6,12 +6,13 @@ import { ChatContext } from "../../context/chatContext";
 import moment from "moment";
 
 import sound from "../../assets/sound.wav";
-
+import ImageViewer from 'react-simple-image-viewer';
 
 
 const UserChat = ({chat, user}) => {
     const {recipientUser} = useFetchRecipientUser(chat, user);
     const {onlineUsers,notification,currentChat,removeNotification} = useContext(ChatContext);
+    const [isViewerOpen, setIsViewerOpen] = useState(false);
    
     // recipient user is the list of users with whom we can chat which are there on left side 
     // when we click our messages appear
@@ -42,6 +43,51 @@ const getAudioInstance = useCallback(() => {
     }
     return null;
   }, []);
+
+  // ----Images Part-------
+  const bufferToUrl = (bufferArray) => {
+    return new Promise((resolve,reject)=>
+    {
+        const byteArray = new Uint8Array(bufferArray.data);
+        const blob = new Blob([byteArray], { type: "image/jpeg" }); // or "image/jpeg"
+        const imageUrl = URL.createObjectURL(blob);
+        console.log("url ",imageUrl)
+        resolve(imageUrl);
+
+    })
+   
+};
+let [imageArray,setImageArray] = useState([]);
+   
+    let imageObjectUrl;
+const loadImage = useCallback(async()=>
+    {
+        imageObjectUrl= await bufferToUrl(recipientUser?.profile) 
+        setImageArray([imageObjectUrl]);
+
+    },[recipientUser])
+
+useEffect(()=>
+    {
+        if(recipientUser)
+        {
+            if(recipientUser?.profile)
+            loadImage();
+            else{
+                setImageArray([avatar]);
+             }
+        }
+       
+
+    },[recipientUser])
+
+    const handleImageViewer = useCallback(()=>
+      {
+          setIsViewerOpen(prevIsViewerOpen => !prevIsViewerOpen);
+          
+      },[])
+
+    //------------ 
 
   const playAudio = useCallback(() => {
     const audio = getAudioInstance();
@@ -98,10 +144,10 @@ const getAudioInstance = useCallback(() => {
         <Stack direction="horizontal"
             gap={3}
             className="user-card align-items-center p-2 justify-content-between" role="button">
-            <div className="d-flex">
+            <div className="d-flex" style={{alignItems:"center"}}>
               
                 <div className="me-2">
-                    <img src={avatar} alt="" height="35px" />
+                <img src={imageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",alignItems:" center"}} alt="" />
                 </div>
                 <div className="text-content">
                     <div className="name">
@@ -128,6 +174,15 @@ const getAudioInstance = useCallback(() => {
                 }
                
             </div>
+
+            {isViewerOpen && (
+                 <ImageViewer
+          src={imageArray} 
+          disableScroll={ false }
+          closeOnClickOutside={ true }
+          onClose={handleImageViewer}
+            
+        />)}
           
         </Stack>
     );
