@@ -4,6 +4,8 @@ export const AuthContext=createContext();
 
 import {postRequest,baseUrl} from "../utils/services";
 
+import avatar from "../assets/avatar.svg";
+
 export const AuthContextProvider = ({children}) =>
 {
     const [user,setUser] = useState(null);
@@ -73,6 +75,7 @@ export const AuthContextProvider = ({children}) =>
     {
         
         setLoginInfo(info);
+        console.log("info",info);
     }, []);
   
     const registerUser = useCallback(async(e) =>
@@ -87,6 +90,13 @@ export const AuthContextProvider = ({children}) =>
         {
             return setRegisterError(response);
         }
+        if(response?.profile)
+            {
+                response.imageUrl = await bufferToUrl(response?.profile,response?.imageType)
+            }
+            else{
+                response.imageUrl = avatar;
+            }
        
         localStorage.setItem("user",JSON.stringify(response));
         setUser(response);
@@ -110,6 +120,28 @@ export const AuthContextProvider = ({children}) =>
 
     },[])
 
+    const bufferToUrl = (bufferArray,imageType) => {
+        return new Promise((resolve,reject)=>
+        {
+            const byteArray = new Uint8Array(bufferArray.data);
+            const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
+            const imageUrl = URL.createObjectURL(blob);
+            console.log("url ",imageUrl)
+            resolve(imageUrl);
+    
+        })
+       
+    };
+
+    // useEffect(()=>
+    // {
+    //     if(user)
+    //     {
+
+    //     }
+
+    // },[user])
+
     const loginUser = useCallback(async (e) =>
     {
         e.preventDefault();
@@ -117,6 +149,14 @@ export const AuthContextProvider = ({children}) =>
         setLoginError(null);
         const response =await postRequest(`${baseUrl}/users/login`,JSON.stringify(loginInfo));
         setIsLoginLoading(false);
+
+        if(response?.profile)
+        {
+            response.imageUrl = await bufferToUrl(response?.profile,response?.imageType)
+        }
+        else{
+            response.imageUrl = avatar;
+        }
 
         if(response.error)
         {

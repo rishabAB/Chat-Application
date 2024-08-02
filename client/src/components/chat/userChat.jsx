@@ -10,7 +10,7 @@ import ImageViewer from 'react-simple-image-viewer';
 
 
 const UserChat = ({chat, user}) => {
-    const {recipientUser} = useFetchRecipientUser(chat, user);
+    const {recipientUser,imageUrl} = useFetchRecipientUser(chat, user);
     const {onlineUsers,notification,currentChat,removeNotification} = useContext(ChatContext);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
    
@@ -21,12 +21,12 @@ const UserChat = ({chat, user}) => {
 
      const buttonref = useRef(null);
    const audioRef = useRef(null);
-
 // AUDIO POOL TO AVOID AUDIO LAGGING
 
 const audioPool = useRef([]);
 const poolSize = 100; // Adjust pool size as needed
-
+console.log("imageUrl in userChat",imageUrl);
+console.log("recipientUser",recipientUser);
 useEffect(() => {
   // Initialize the audio pool
   for (let i = 0; i < poolSize; i++) {
@@ -44,50 +44,13 @@ const getAudioInstance = useCallback(() => {
     return null;
   }, []);
 
-  // ----Images Part-------
-  const bufferToUrl = (bufferArray) => {
-    return new Promise((resolve,reject)=>
+  const handleImageViewer = useCallback(()=>
     {
-        const byteArray = new Uint8Array(bufferArray.data);
-        const blob = new Blob([byteArray], { type: "image/jpeg" }); // or "image/jpeg"
-        const imageUrl = URL.createObjectURL(blob);
-        console.log("url ",imageUrl)
-        resolve(imageUrl);
+        setIsViewerOpen(prevIsViewerOpen => !prevIsViewerOpen);
+        
+    },[])
 
-    })
-   
-};
-let [imageArray,setImageArray] = useState([]);
-   
-    let imageObjectUrl;
-const loadImage = useCallback(async()=>
-    {
-        imageObjectUrl= await bufferToUrl(recipientUser?.profile) 
-        setImageArray([imageObjectUrl]);
-
-    },[recipientUser])
-
-useEffect(()=>
-    {
-        if(recipientUser)
-        {
-            if(recipientUser?.profile)
-            loadImage();
-            else{
-                setImageArray([avatar]);
-             }
-        }
-       
-
-    },[recipientUser])
-
-    const handleImageViewer = useCallback(()=>
-      {
-          setIsViewerOpen(prevIsViewerOpen => !prevIsViewerOpen);
-          
-      },[])
-
-    //------------ 
+ 
 
   const playAudio = useCallback(() => {
     const audio = getAudioInstance();
@@ -123,7 +86,6 @@ useEffect(()=>
                     else{
                       
                         setShowNotification([{...notify,count:notify.count}]);
-
                     }
                    
             }
@@ -139,6 +101,64 @@ useEffect(()=>
     },[notification,recipientUser,currentChat])
 
 
+       // ----Images Part-------
+//   const bufferToUrl = (bufferArray,imageType) => {
+//     return new Promise((resolve,reject)=>
+//     {
+//         const byteArray = new Uint8Array(bufferArray.data);
+//         const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
+//         const imageUrl = URL.createObjectURL(blob);
+//         console.log("url ",imageUrl)
+//         resolve(imageUrl);
+
+//     })
+   
+// };
+// let [imageArray,setImageArray] = useState([]);
+   
+//     let imageObjectUrl;
+// const loadImage = useCallback(async()=>
+//     {
+//         imageObjectUrl= await bufferToUrl(recipientUser?.profile,recipientUser?.imageType) 
+//         setImageArray([imageObjectUrl]);
+     
+//     },[recipientUser])
+
+// useEffect(()=>
+//     {
+//         if(recipientUser)
+//         {
+//             if(recipientUser?.profile)
+//             loadImage();
+//             else{
+//                 setImageArray([avatar]);
+              
+//              }
+//         }
+       
+
+//     },[recipientUser])
+
+let [userImageArray,setUserImageArray] = useState();
+const loadImage = useCallback(async()=>
+    {
+        // imageObjectUrl= await bufferToUrl(user?.profile) 
+        setUserImageArray([imageUrl]);
+
+    },[imageUrl])
+
+    useEffect(()=>
+    {
+        if(imageUrl)
+        loadImage();
+
+    },[imageUrl])
+
+ 
+
+    //------------ 
+
+
 
     return (
         <Stack direction="horizontal"
@@ -147,7 +167,7 @@ useEffect(()=>
             <div className="d-flex" style={{alignItems:"center"}}>
               
                 <div className="me-2">
-                <img src={imageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",alignItems:" center"}} alt="" />
+                <img src={userImageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",alignItems:" center"}} alt="" />
                 </div>
                 <div className="text-content">
                     <div className="name">
@@ -177,7 +197,7 @@ useEffect(()=>
 
             {isViewerOpen && (
                  <ImageViewer
-          src={imageArray} 
+          src={userImageArray} 
           disableScroll={ false }
           closeOnClickOutside={ true }
           onClose={handleImageViewer}

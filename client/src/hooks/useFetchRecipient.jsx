@@ -1,4 +1,4 @@
-import {useContext, useEffect,useState} from "react";
+import {useContext, useEffect,useState,useCallback} from "react";
 import {getRequest, baseUrl} from "../utils/services";
 import {ChatContext} from "../context/chatContext";
 
@@ -24,7 +24,7 @@ export const useFetchRecipientUser = (chat,user) =>
 
             const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
 
-            if(response.error)
+            if(response?.error)
             {
                 return setError(true);
             }
@@ -38,5 +38,54 @@ export const useFetchRecipientUser = (chat,user) =>
 
     },[recipientId,user])
 
-    return {recipientUser}
+     // ----Images Part-------
+  const bufferToUrl = (bufferArray,imageType) => {
+    return new Promise((resolve,reject)=>
+    {
+        const byteArray = new Uint8Array(bufferArray.data);
+        const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
+        const imageUrl = URL.createObjectURL(blob);
+        console.log("url ",imageUrl)
+        resolve(imageUrl);
+
+    })
+   
+};
+let [imageUrl,setImageUrl] = useState(null);
+   
+    let imageObjectUrl;
+const loadImage = useCallback(async()=>
+    {
+        imageObjectUrl= await bufferToUrl(recipientUser?.profile,recipientUser?.imageType) 
+        setImageUrl(imageObjectUrl);
+        // setRecipientUser({...recipientUser,imageObjectUrl});
+        // console.log("recipientuser",recipientUser);
+
+    },[recipientUser])
+    // console.log("useFetch recipient",imageUrl);
+    // console.log("recipientUser",recipientUser);
+
+useEffect(()=>
+    {
+        if(recipientUser)
+        {
+            if(recipientUser?.profile)
+            loadImage();
+            else{
+                // setImageArray([avatar]);
+                setImageUrl(avatar);
+                // setRecipientUser({...recipientUser,avatar});
+             }
+        }
+       
+
+    },[recipientUser])
+
+ 
+
+    //------------ 
+
+    return {
+        recipientUser,imageUrl
+      };
 }

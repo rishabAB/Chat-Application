@@ -10,7 +10,7 @@ const Chat = () => {
 
     const {userChats, isUserChatLoading, isUserChatError,updateCurrentChat} = useContext(ChatContext);
    
-    
+    // console.log("user",user);
     return (
         <div>
             <PotentialChats/>{

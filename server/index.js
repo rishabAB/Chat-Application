@@ -23,7 +23,7 @@ app.use("/api/messages",messageRoute);
 
 
 
-const deleteMessages = require("./mongoChats")
+require("./mongoChats")
 
 
 app.get("/",(req,res) =>

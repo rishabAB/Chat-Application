@@ -10,72 +10,51 @@ import avatar from "../assets/avatar.svg";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
     const { currentChat } = useContext(ChatContext);
-    const {recipientUser} = useFetchRecipientUser(currentChat,user);
+    const {recipientUser,imageUrl} = useFetchRecipientUser(currentChat,user);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
-    let [imageArray,setImageArray] = useState([]);
+    const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
    
-    let imageObjectUrl;
-    
-    
+   
+   
     const handleImageViewer = useCallback(()=>
     {
         setIsViewerOpen(prevIsViewerOpen => !prevIsViewerOpen);
         
     },[])
+
+    const handleRecipientImageViewer = useCallback(()=>
+        {
+            setIsRecipientViewerOpen(prevIsRecipientViewerOpen => !prevIsRecipientViewerOpen);
+            
+        },[])
       
-        const Base64ToUrl = (base64String) => {
-            return new Promise((resolve,reject)=>
-            {
-                const base64Data = base64String.replace(/^data:image\/(png|jpeg);base64,/, "");
-                const byteCharacters = atob(base64Data);
-    
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: "image/jpeg" }); // or "image/jpeg"
-                const imageUrl = URL.createObjectURL(blob);
-                resolve(imageUrl);
-
-            })
-           
-        };
-
-        const bufferToUrl = (bufferArray) => {
-            return new Promise((resolve,reject)=>
-            {
-                const byteArray = new Uint8Array(bufferArray.data);
-                const blob = new Blob([byteArray], { type: "image/jpeg" }); // or "image/jpeg"
-                const imageUrl = URL.createObjectURL(blob);
-                console.log("url ",imageUrl)
-                resolve(imageUrl);
-
-            })
-           
-        };
-
+        let [userImageArray,setUserImageArray] = useState(null);
+        let [recipientUserArray,setRecipientUserArray] = useState(null);
         const loadImage = useCallback(async()=>
             {
-                imageObjectUrl= await bufferToUrl(user?.profile) 
-                setImageArray([imageObjectUrl]);
+                setUserImageArray([user?.imageUrl]);
         
             },[user])
 
-        useEffect(()=>
+            useEffect(()=>
             {
                 if(user)
-                {
-                    if(user?.profile)
-                    loadImage();
-                    else{
-                        setImageArray([avatar]);
-                     }
-                }
-               
+                loadImage();
 
             },[user])
+
+            const loadRecipientImage = useCallback(async()=>
+                {
+                    setRecipientUserArray([imageUrl]);
+            
+                },[imageUrl])
+    
+                useEffect(()=>
+                {
+                    if(imageUrl)
+                    loadRecipientImage();
+    
+                },[imageUrl])
  
            
     return (
@@ -84,11 +63,11 @@ const NavBar = () => {
                 {height: "3.75rem",padding:"0 4%",backgroundColor: "rgb(12 69 125)"}
         }>
             <Container style={{gap:"2rem",justifyContent:"flex-start",marginLeft:"1%"}}>
+            {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" />) }
                 <h2>
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
                 {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}
-                {user && ( <img src={imageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" />) }
                 <Nav>
                     <Stack direction="horizontal" gap="3">
                         {
@@ -108,17 +87,29 @@ const NavBar = () => {
             </Container>
             {isViewerOpen && (
                  <ImageViewer
-          src={imageArray} 
+          src={userImageArray} 
           disableScroll={ false }
           closeOnClickOutside={ true }
           onClose={handleImageViewer}
           
         />
        
-        
+      )}
+
+     {isRecipientViewerOpen && (
+                 <ImageViewer
+          src={recipientUserArray} 
+          disableScroll={ false }
+          closeOnClickOutside={ true }
+          onClose={handleRecipientImageViewer}
+          
+        />
        
       )}
-            {  recipientUser && (<span style = {{marginRight:"24%"}}>{recipientUser.name}</span>) }
+
+
+            {  recipientUser && (<><span style={{display:"flex",marginRight:"21%",gap:"1.2rem",alignItems:"center"}}><span >{recipientUser.name}</span><span><img src={recipientUserArray?.[0] } onClick = {handleRecipientImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" /></span></span>
+               </>) }
         </Navbar>
     );
 }

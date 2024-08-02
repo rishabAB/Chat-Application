@@ -68,7 +68,7 @@ const partialMessages = async(req,res)=>
     let offset = req.query?.offset;
     var filteredMessages;
     let numberOfRecords;
-    console.log("offset",req.query?.offset);
+    // console.log("offset",req.query?.offset);
     console.time();
    
     let returnObject={messages:null,moreMessagesAvailable:false};
@@ -131,7 +131,7 @@ const partialMessages = async(req,res)=>
         
         console.timeEnd();
      
-        console.log("returnObject.messages",returnObject.messages);
+        // console.log("returnObject.messages",returnObject.messages);
         res.status(200).json(returnObject);
         
     } catch (error) {
@@ -152,74 +152,95 @@ function getMessageTimeLine(messages)
 {
     return new Promise((fulfill,reject)=>
     {
-        
-        let messageTimeline =[];
-    
-
-        messages.forEach((message)=>
-        {
-            let msg = message._doc.createdAt;
-            let date = moment(msg).format("LL");
-            if(messageTimeline.length === 0)
+        try{
+            let messageTimeline =[];
+            let currentDate =  moment(new Date()).format("LL");
+            let prevDate;
+            let count =1;
+          
+        console.log("messages",messages)
+            messages.forEach((message)=>
             {
-                messageTimeline.push({date,count:1});
-            }
-            else{
-                if(checkIfExists(messageTimeline,date))
+                let msg = message._doc.createdAt;
+                let date = moment(msg).format("LL");
+                if(messageTimeline.length === 0)
                 {
-                   let object = messageTimeline.find((item) => item.date === date);
-                    
-                   let index = messageTimeline.findIndex(item => item.date === date);
-    
-                   messageTimeline.splice(index,1)
-                   
-                   object.count +=1;
-                   messageTimeline.push(object);
+                    // messageTimeline.push({date,count:1});
+                    prevDate= date;
                 }
                 else{
-                    messageTimeline.push({date,count:1});
+                    if(prevDate === date)
+                    {
+                    //    let object = messageTimeline.find((item) => item.date === date);
+                        
+                    //    let index = messageTimeline.findIndex(item => item.date === date);
+        
+                    //    messageTimeline.splice(index,1)
+                       
+                    //    object.count +=1;
+                    //    messageTimeline.push(object);
+                    count++;
+                    }
+                    else if(prevDate !== date){
+                        const date=prevDate;
+                        messageTimeline.push({date,count});
+                        prevDate = date;
+                        count=1;
+                    }
+        
                 }
+            })
     
+            if(messages?.length>0)
+            {
+                const date= prevDate;
+                messageTimeline.push({date,count});
             }
+            // console.log("message timeline",messageTimeline);
     
-        })
-        // console.log("message timeline",messageTimeline);
-
-        // fulfill(messageTimeline);
-
-        let finalArray=[];
-        let skipIndex=0;
-        let timelineIndex=0;
-        let test=true;
-        messages.forEach((message)=>
-       {
-         if(test || skipIndex === 0)
-         {
-             finalArray.push(messageTimeline.at(timelineIndex));
-         skipIndex = messageTimeline.at(timelineIndex).count;
-         timelineIndex++;
-         finalArray.push(message);
-         test = false;
-         skipIndex--;
-     
-         }
-         else{
-             finalArray.push(message);
-             skipIndex--;
-             if(skipIndex == 0)
+            // fulfill(messageTimeline);
+    
+            let finalArray=[];
+            let skipIndex=0;
+            let timelineIndex=0;
+            let test=true;
+            messages.forEach((message)=>
+           {
+             if(test || skipIndex === 0)
              {
-                test=true;
-             }
-         }
+                 finalArray.push(messageTimeline.at(timelineIndex));
+             skipIndex = messageTimeline.at(timelineIndex).count;
+             timelineIndex++;
+             finalArray.push(message);
+             test = false;
+             skipIndex--;
          
-     
-     
+             }
+             else{
+                 finalArray.push(message);
+                 skipIndex--;
+                 if(skipIndex == 0)
+                 {
+                    test=true;
+                 }
+             }
              
-       })
+         
+         
+                 
+           })
+    
+        //    console.log("final Array",finalArray);
+    
+           fulfill(finalArray);
 
-    //    console.log("final Array",finalArray);
-
-       fulfill(finalArray);
+        }
+        catch(error)
+        {
+            console.error("An error occured in MessageTimeline",error);
+        }
+        
+       
     })
    
    

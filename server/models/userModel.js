@@ -25,8 +25,12 @@ const userSchema= new mongoose.Schema({
     profile:{
         type:Buffer,
         required:false,
-        unique:true 
+        unique:false 
 
+    },
+    imageType:{
+        type:String,
+        required:false
     }
 },{timestamps:true})
 

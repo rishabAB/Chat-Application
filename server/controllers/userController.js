@@ -9,9 +9,13 @@ const createToken = (_id) =>
     return jwt.sign({_id},jwtkey,{expiresIn:"3d"});
 }
 
-const Base64ToUrl = (base64String) => {
+const Base64ToBinary = (base64String) => {
     return new Promise((resolve,reject)=>
     {
+        // console.log("Base64 string is ",base64String);
+        const str=base64String.split(";base64")[0];
+        const imageType = str.split("/")[1];
+        console.log("imageType",imageType);
         const base64Data = base64String.replace(/^data:image\/(png|jpeg);base64,/, "");
         const byteCharacters = atob(base64Data);
 
@@ -22,8 +26,21 @@ const Base64ToUrl = (base64String) => {
         
         const byteArray = new Uint8Array(byteNumbers);
         const buffer = Buffer.from(byteArray);
-        const blob = new Blob([byteArray], { type: "image/jpeg" }); // or "image/jpeg"
-        resolve(buffer);
+        const blob = new Blob([byteArray], { type: `image/${imageType}` }); 
+        resolve({buffer,imageType});
+
+    })
+   
+};
+
+const bufferToUrl = (bufferArray,imageType) => {
+    return new Promise((resolve,reject)=>
+    {
+        const byteArray = new Uint8Array(bufferArray.data);
+        const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
+        const imageUrl = URL.createObjectURL(blob);
+        console.log("url ",imageUrl)
+        resolve(imageUrl);
 
     })
    
@@ -32,11 +49,11 @@ const registerUser = async(req,res) =>
 {
     try{
         const {name,email,password,profile}=req.body;
-        let imageBlob;
+        let binaryImage;
 
         if(profile)
         {
-            imageBlob=await Base64ToUrl(profile)
+            binaryImage=await Base64ToBinary(profile)
         }
 
         let user=await userModel.findOne({email});
@@ -49,7 +66,7 @@ const registerUser = async(req,res) =>
     
         if(!validator.isStrongPassword(password))  return res.status(400).json("Password must be a strong password");
     
-        user=new userModel({name,email,password,profile:imageBlob});
+        user=new userModel({name,email,password,profile:binaryImage.buffer,imageType:binaryImage.imageType});
         const salt=await bcrypt.genSalt(10);
         user.password=await bcrypt.hash(user.password,salt);
     
@@ -57,7 +74,7 @@ const registerUser = async(req,res) =>
     
         const token=createToken(user._id);
     
-        res.status(200).json({_id:user._id,name,email,token,profile:user.profile});
+        res.status(200).json({_id:user._id,name,email,token,profile:user.profile,imageType:binaryImage.imageType});
 
     }
 

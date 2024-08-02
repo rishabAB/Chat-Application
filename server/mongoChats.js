@@ -12,21 +12,75 @@ async function createMessages()
 {
     // chatid 668fcfd5e166e0391ab375b4
     // Rishab's userid is 667d1cbaee421d882089b2c1
-    for(let i=100;i<150;i++)
+    for(let i=0;i<176;i++)
     {
-        let response = await 
-        createSingleMessage('668fcfd5e166e0391ab375b4','667d1cbaee421d882089b2c1',`${i+1}`);
+        if(i>=0 && i<=25)
+        {
+            // 27th july
+            const date = new Date();
+            date.setDate(date.getDate() - 6);
 
+            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+        }
+        else if(i>25 && i<=50)
+        {
+             // 28th july
+             const date = new Date();
+             date.setDate(date.getDate() - 5);
+             await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+
+        }
+        else if(i>50 && i<=75)
+        {
+            // 29th july
+            const date = new Date();
+            date.setDate(date.getDate() - 4);
+            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+
+        }
+        else if(i>75 && i<=100)
+        {
+            // 30th july
+            const date = new Date();
+            date.setDate(date.getDate() - 3);
+            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+
+        }
+        else if(i>100 && i<=125)
+        {
+             // 31st July
+             const date = new Date();
+             date.setDate(date.getDate() - 2);
+             await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+        }
+        else if(i>125 && i<=150)
+        {
+            // 1nd August
+            const date = new Date();
+            date.setDate(date.getDate() - 1);
+            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+
+        }
+        else if(i>150 && i<=175)
+        { 
+            // 2rd August
+            const date = new Date();
+            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+
+        }
+       
     }
     console.log("All DONE");
+    
 }
+// createMessages();
 
- function createSingleMessage(chatId,senderId,text)
+ function createSingleMessage(chatId,senderId,text,createdAt,updatedAt)
 {
     return new Promise(async(resolve,reject)=>
     {
         const message = new messageModel({
-            chatId,senderId,text
+            chatId,senderId,text,createdAt,updatedAt
         });
         const response =await message.save();
         resolve(response);
@@ -122,25 +176,6 @@ async function getAllMessages()
 
 }
 
-// getAllMessages();
 
-
-//  createMessages();
-// deleteMessages();
-// getAllMessages();
-
-// UserIds
-
-// Rishab's userId 667d1cbaee421d882089b2c1
-// Second_user's userId 6687de925a2ff2918403c62d
-// Third user userId 668cbb2b56f34660a608b61d
-// test active userId 6690c2c0051bca05367db8fc
-
-// ChatIds
-
-// Between Rishab and second_user 668fcfbee166e0391ab3759e 
-// Between Rishab and third_user 668fcfd5e166e0391ab375b4
-// Between Second_user and third_user 668fcfeee166e0391ab375bc
-// Between Rishab and test active  6690c442051bca05367db92d
 
 module.exports = {createMessages,deleteMessages,getAllMessages};
