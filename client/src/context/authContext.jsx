@@ -73,9 +73,9 @@ export const AuthContextProvider = ({children}) =>
 
     const updateLoginInfo = useCallback((info) =>
     {
-        
-        setLoginInfo(info);
         console.log("info",info);
+        setLoginInfo(info);
+        
     }, []);
   
     const registerUser = useCallback(async(e) =>
@@ -91,25 +91,59 @@ export const AuthContextProvider = ({children}) =>
             return setRegisterError(response);
         }
         if(response?.profile)
-            {
-                response.imageUrl = await bufferToUrl(response?.profile,response?.imageType)
-            }
-            else{
-                response.imageUrl = avatar;
-            }
-       
+        {
+            response.imageUrl = await bufferToUrl(response?.profile,response?.imageType);
+        }
+        else{
+            response.imageUrl = avatar;
+        }
         localStorage.setItem("user",JSON.stringify(response));
         setUser(response);
         
 
     },[registerInfo])
 
-    useEffect( () =>
+
+    const getImageUrl = useCallback((user)=>
+    {
+        return new Promise(async(resolve,reject)=>
+        {
+            try{
+               
+            if(user?.profile)
+                {
+                    user.imageUrl = await bufferToUrl(user?.profile,user?.imageType)
+                }
+            else{
+                    user.imageUrl = avatar;
+                }
+                delete user.profile;
+                resolve( user);
+
+            }
+            catch(error)
+            {
+                console.error(error);
+                reject(error);
+            }
+            
+
+        })
+      
+
+    },[])
+
+    useEffect(() =>
     {
    
         const user=localStorage.getItem("user");
-        setUser(JSON.parse(user));
-      
+        // console.log("user",user);
+       getImageUrl(JSON.parse(user)).then((userWithUrl)=>
+    {
+        setUser(userWithUrl);
+
+    })
+       
     },[])
 
     const logoutUser = useCallback((e)=>
@@ -126,7 +160,6 @@ export const AuthContextProvider = ({children}) =>
             const byteArray = new Uint8Array(bufferArray.data);
             const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
             const imageUrl = URL.createObjectURL(blob);
-            console.log("url ",imageUrl)
             resolve(imageUrl);
     
         })

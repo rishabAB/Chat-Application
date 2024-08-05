@@ -32,7 +32,16 @@ const NavBar = () => {
         let [recipientUserArray,setRecipientUserArray] = useState(null);
         const loadImage = useCallback(async()=>
             {
-                setUserImageArray([user?.imageUrl]);
+                if(typeof user == "string")
+                {
+                    let ObjUser=JSON.parse(user);
+                    setUserImageArray([ObjUser?.imageUrl]);
+
+                }
+                else{
+                    setUserImageArray([user?.imageUrl]);
+                }
+               
         
             },[user])
 

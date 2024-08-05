@@ -42,12 +42,16 @@ console.log("messages",messages);
     if (currentChat && messages && messages.length > 0) {
       if ((test == 1) || (test !== messages[1].chatId )) {
        
-        setTest(messages[0].chatId);
+        setTest(messages[1]?.chatId);
         setOffset(2);
         offsetRef.current= 2;
      
-          console.log("Scroll getting affected",divRef?.current);
+          // console.log("Scroll getting affected",divRef?.current?.style);
+          // divRef?.current?.style?.padding="0.75rem";
           divRef?.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+          // console.log("divRef.current.clientHeight",checkScroll?.current?.clientHeight)
+
+          // divRef.current.marginTop = divRef.current.clientHeight;
           // We are changing below value in a timeout because in the above line we are changing
           // the scroll posiiton to bottom first so it needs to reflect first in order make thigns happen
         setTimeout(function()
@@ -60,6 +64,10 @@ console.log("messages",messages);
       }
       else if (isPartialLoading) {
         checkScroll.current.scrollTop = checkScroll.current.scrollHeight - currentScrollPosition;
+        delay(2000).then( 
+          onWheelCaptureHandler()
+        );
+       
       }
 
 
@@ -68,12 +76,24 @@ console.log("messages",messages);
 
   }, [messages]);
 
+  useEffect(()=>
+  {
+    if(divRef?.current)
+    {
+      console.log("cdivRef?.current?.style)",divRef?.current?.style?.padding);
+      divRef.current.style.padding="unset !important";
+      // checkScroll.current.scrollTop = checkScroll.current.clientHeight;
+
+    }
+
+  },[divRef?.current])
+
   function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
   const [currentScrollPosition, setCurrentScrollPosition] = useState(null);
-  const [isPartialLoading, setIspartialLoading] = useState(false);
+  const [isPartialLoading, setIspartialLoading] = useState(true);
 
   // The below code is for scroll bar to set it below when component mounts (reloads)
   const [isScrollAllowed,setIsScrollAllowed] = useState(true);
@@ -90,17 +110,53 @@ console.log("messages",messages);
   const [bottomScrollHeight,setBottomScrollHeight] = useState(null);
  
   // ------------------------------------------------------
+  function doSomething()
+  {
+    console.log("hey");
+  }
+  useEffect(()=>
+  {
+    
+    if(checkScroll?.current?.scrollTop == 0 && moreMessagesAvailable)
+    {
+      console.log("Scoroll top 0");
+      checkScroll.current.style.pointerEvents = 'none';
+      delay(1000).then(
+        ()=> {
+          onWheelCaptureHandler();
+
+        }   
+      );
+
+    }
+
+    // checkScroll?.current?.addEventListener('mousedown', (e)=>
+    //   {
+    //     console.log("e is ",e);
+    //   });
+    // onWheelCaptureHandler();  
+
+   
+
+  },[checkScroll?.current?.scrollTop])
+
+  
  const [isScrollButton,setIsScrollButton] = useState(false);
   const onWheelCaptureHandler = useCallback(async () => {
-    // console.log("TRIGGERING")
+   
     setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
+    // console.log("TRIGGERING",checkScroll)
 
     if (checkScroll?.current?.scrollTop < 1000 && moreMessagesAvailable && !isFetchingRef.current) {
-      // console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
-      // console.log("offset ",offsetRef.current);
+      console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
+      console.log("offset ",offsetRef.current);
 
-      // setIsFetching(true);
       isFetchingRef.current=true;
+      // checkScroll.current('mousedown', checkScroll.current);
+      // console.log(checkScroll.current.removeEventListener);
+      // checkScroll.current.addEventListener('mousedown', doSomething);
+      // document.removeEventListener('mousedown', checkScroll.current);
+      // checkScroll?.current?.removeEventListener("onmousedown",doSomething);
       checkScroll.current.style.pointerEvents = 'none';
       setCurrentScrollPosition(checkScroll.current.scrollHeight - checkScroll.current.scrollTop);
 
@@ -108,13 +164,11 @@ console.log("messages",messages);
        setOffset((prev) => prev + 1);
      
        offsetRef.current+=1;
-    //  console.log("before");
      await delay(800);
-    //  setIsFetching(false);
-    checkScroll.current.style.pointerEvents = 'auto';
-     isFetchingRef.current=false
-      setIspartialLoading(true);
-
+    
+     isFetchingRef.current=false;
+     checkScroll.current.style.pointerEvents = 'auto';
+    //  await delay(1000).then(()=> checkScroll.current.style.pointerEvents = 'auto');
 
     }
     else if(checkScroll?.current)
@@ -126,7 +180,6 @@ console.log("messages",messages);
       else if(bottomScrollHeight <=300)
       {
         setIsScrollButton(false);
-
       }
 
     }
@@ -152,6 +205,21 @@ const goToBottom = useCallback(async()=>
     }
 
   }, [newMessage]);
+  const messageBar = useRef(null);
+
+ 
+  const [minMessageBarHeight,setMinMessageBarHeight] = useState(null);
+  useEffect(()=>
+  {
+    if(messageBar?.current)
+    {
+      const currentHeight = messageBar?.current?.clientHeight;
+      const newHeight = currentHeight + 20;
+      // messageBar.current=newHeight;
+      setMinMessageBarHeight(newHeight);
+    }
+
+  },[messageBar?.current])
 
   useEffect(() => {
     setTextMessage("");
@@ -204,19 +272,18 @@ const goToBottom = useCallback(async()=>
          </Stack>
          
         
-         
         )
       })}
     
       
      
     </Stack>
-    <Stack direction="vertical" style={{"justifyContent": "flex-end"}} >
+    <Stack direction="vertical" style={{"justifyContent": "flex-end","minHeight":`${minMessageBarHeight}px`}} ref={messageBar} >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 
       <svg xmlns="http://www.w3.org/2000/svg"  style={{position: "relative",
         
-    backgroundColor: "#175f9f",bottom:"6em",margin:"auto"}} width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down" viewBox="0 0 16 16">
+    backgroundColor: "#175f9f",bottom:"6em",margin:"auto",cursor:"pointer"}} width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down" viewBox="0 0 16 16">
   <path fillRule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
   <path fillRule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 </svg>

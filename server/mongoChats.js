@@ -3,12 +3,12 @@ const messageModel = require("./models/messageModel");
 const moment = require("moment");
 async function deleteMessages()
 {
-    const response = await messageModel.deleteMany({chatId:'668fcfd5e166e0391ab375b4'});
+    const response = await messageModel.deleteMany({chatId:'66b0689b29ac622b5a0b14e1'});
     console.log("response is ",response);
 }
 // deleteMessages();  
 
-async function createMessages()
+async function createMessages(chatId,senderId)
 {
     // chatid 668fcfd5e166e0391ab375b4
     // Rishab's userid is 667d1cbaee421d882089b2c1
@@ -20,14 +20,14 @@ async function createMessages()
             const date = new Date();
             date.setDate(date.getDate() - 6);
 
-            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
         }
         else if(i>25 && i<=50)
         {
              // 28th july
              const date = new Date();
              date.setDate(date.getDate() - 5);
-             await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+             await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
         else if(i>50 && i<=75)
@@ -35,7 +35,7 @@ async function createMessages()
             // 29th july
             const date = new Date();
             date.setDate(date.getDate() - 4);
-            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
         else if(i>75 && i<=100)
@@ -43,7 +43,7 @@ async function createMessages()
             // 30th july
             const date = new Date();
             date.setDate(date.getDate() - 3);
-            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
         else if(i>100 && i<=125)
@@ -51,29 +51,29 @@ async function createMessages()
              // 31st July
              const date = new Date();
              date.setDate(date.getDate() - 2);
-             await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+             await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
         }
         else if(i>125 && i<=150)
         {
             // 1nd August
             const date = new Date();
             date.setDate(date.getDate() - 1);
-            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
         else if(i>150 && i<=175)
         { 
             // 2rd August
             const date = new Date();
-            await createSingleMessage('66accacc61048e7906d796d0','66acc8bd61048e7906d7969e',`${i+1}`,date,date);
+            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
        
     }
-    console.log("All DONE");
+    // console.log("All DONE");
     
 }
-// createMessages();
+// createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
 
  function createSingleMessage(chatId,senderId,text,createdAt,updatedAt)
 {

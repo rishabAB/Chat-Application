@@ -342,7 +342,17 @@ const getAudioInstance = useCallback(() => {
         {
             return console.error("An error occurred",response.error);
         }
-        setUserChats((prev)=>[...prev,response]);
+        // setUserChats((prev)=>[...prev,response]);
+        setUserChats((prev) => {
+           return  prev ? [...prev,response] : [response];
+            // if(prev)
+            // {
+            //     return [...prev,response];
+            // }
+            // else{
+            //     return [response];
+            // }
+        })
 
     },[])
 
