@@ -165,6 +165,35 @@ if(messageTimeline)
  const [isScrollButton,setIsScrollButton] = useState(false);
  const isAllowed = useRef(true);
  const prevTimelineRef = useRef(null);
+
+//  Intersection Observer
+const [isVisible, setIsVisible] = useState(false);
+const targetRef = useRef(null);
+console.log("isVisible",isVisible);
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    },
+    // {
+    //   root: null, // viewport
+    //   rootMargin: '0px', // no margin
+    //   threshold: 0.5, // 50% of target visible
+    // }
+  );
+
+  if (targetRef.current) {
+    observer.observe(targetRef.current);
+  }
+
+  // Clean up the observer
+  return () => {
+    if (targetRef.current) {
+      observer.unobserve(targetRef.current);
+    }
+  };
+}, []);
+// -------------------
   const onWheelCaptureHandler = useCallback(async () => {
     console.log("prevTimelineRef",prevTimelineRef);
     // console.log("timelineRef",timelineRef);
@@ -327,7 +356,7 @@ const goToBottom = useCallback(async()=>
           <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
          
             {msg?.date && 
-            (<div className = {`${msg?.date ? "timeline" : null}`} ref={setRef}>
+            (<div className = {`${msg?.date ? "timeline" : null}`} ref={targetRef}>
               {msg?.date}
              </div>)} 
         { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
