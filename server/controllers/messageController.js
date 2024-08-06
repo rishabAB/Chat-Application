@@ -82,20 +82,24 @@ const partialMessages = async(req,res)=>
 
     try {
         let messages;
+        let messageTimeline;
         const exists = myCache.has(currentChatId);
-        if(exists)
-        {
-            messages = myCache.get(currentChatId);
+        // if(exists)
+        // {
+        //     messages = myCache.get(currentChatId);
 
-        }
-        else{
+        // }
+        // else{
             messages = await messageModel.find({ chatId:currentChatId });
-            messages = await getMessageTimeLine(messages);
-            myCache.set(currentChatId, messages);
+            let response =await getMessageTimeLine(messages)
+            messages = response?.finalArray;
+            messageTimeline = response?.messageTimeline
+            // myCache.set(currentChatId, messages);
            
-        }   
+        // }   
        
         returnObject.messages=messages;
+        returnObject.messageTimeline=messageTimeline;
         // returnObject.messages = await getMessageTimeLine(returnObject.messages);
 
         if(messages?.length > limit)
@@ -229,10 +233,30 @@ function getMessageTimeLine(messages)
             if(messages?.length>0)
             {
                 let date= prevDate;
+                let currentDateFormat = new Date(date);
                 if(date === currentDate)
                 {
                     date="Today";
                 }
+               else if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                        date="Yesterday";
+                    }
+                else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                        date=getDayString(currentDateFormat);
+                    }
+                else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                        date=getDayString(currentDateFormat);
+                    }
+                else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                        date=getDayString(currentDateFormat);
+                    }
                 messageTimeline.push({date,count});
             }
             // console.log("message timeline",messageTimeline);
@@ -271,7 +295,7 @@ function getMessageTimeLine(messages)
     
         //    console.log("final Array",finalArray);
     
-           fulfill(finalArray);
+           fulfill({finalArray,messageTimeline});
 
         }
         catch(error)

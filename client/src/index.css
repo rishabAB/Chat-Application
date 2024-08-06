@@ -83,6 +83,14 @@ body {
   width: 35%;
   border: 2px solid green;
 }
+.svg-icon{
+  position: fixed;
+    background-color: rgb(23, 95, 159);
+    bottom: 19%;
+    right: 26%;
+    margin: auto;
+    cursor: pointer;
+}
 
 
 .react-emoji-picker--wrapper{
@@ -125,6 +133,14 @@ body {
   /* margin: auto; */
   text-align: center;
   /* width: 45%; */
+}
+.previous-date{
+  position: fixed;
+  color: blue;
+  /* margin: auto; */
+  text-align: center;
+  right: 25%;
+  top: 11%;
 }
 
 .message.self {

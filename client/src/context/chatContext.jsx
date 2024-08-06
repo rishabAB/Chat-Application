@@ -22,6 +22,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [messages,setMessages]= useState(null);
 
+    const [messageTimeline,setMessageTimeline] = useState(null);
+
     const [TextMessageError,setTextMessageError] = useState(null);
 
     const [newMessage,setNewMessage] = useState(null);
@@ -306,6 +308,8 @@ const getAudioInstance = useCallback(() => {
             {
                 return setPartialMessagesError(response)
             }
+            console.log("response",response);
+            setMessageTimeline(response?.messageTimeline);
             setMessages((prev) =>{
                 if(prev?.length>0 && prev[1].chatId == currentChatId)
                 {
@@ -374,7 +378,8 @@ const getAudioInstance = useCallback(() => {
         removeNotification,
         newMessage,
         moreMessagesAvailable,
-        getPartialMessages
+        getPartialMessages,
+        messageTimeline
     }
     }> {children}</ChatContext.Provider>)
 }

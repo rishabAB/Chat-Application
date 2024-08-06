@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef, useCallback, useLayoutEffect } from "react";
+import { useContext, useState, useEffect, useRef, useCallback, useLayoutEffect ,createElement,React} from "react";
 import { AuthContext } from "../../context/authContext";
 import { ChatContext } from "../../context/chatContext";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
@@ -12,7 +12,7 @@ import EmojiPicker from "react-input-emoji";
 const ChatBox = () => {
 
   const { user } = useContext(AuthContext);
-  const { currentChat, messages, isMessagesLoading, sendTextMessage, newMessage, moreMessagesAvailable, getPartialMessages } = useContext(ChatContext);
+  const { currentChat, messages, isMessagesLoading, sendTextMessage, newMessage, moreMessagesAvailable, getPartialMessages,messageTimeline } = useContext(ChatContext);
 
 
   // scroll part
@@ -21,7 +21,7 @@ const ChatBox = () => {
   const checkScroll = useRef(null);
   const [offset, setOffset] = useState(2);
   const offsetRef = useRef(2);
-
+  // let timelineRef = useRef(null);
 
   // ---------
 
@@ -36,21 +36,40 @@ const ChatBox = () => {
   // const [isFetching, setIsFetching] = useState(false);
 
   const isFetchingRef = useRef(false);
+// ------------
+  const [messageTimelineIndex,setMessageTimelineIndex] = useState(null);
 
+  const [timelineRef, setTimelineRef] = useState(null);
+
+  let timelineIndex = 1;
+
+  const setRef = useCallback(node => {
+    if (node) {
+      setTimelineRef(node);
+    }
+  }, []);
+
+  // ----------
   useEffect(() => {
 console.log("messages",messages);
+console.log("messageTimeline",messageTimeline);
+if(messageTimeline)
+{
+  setMessageTimelineIndex(messageTimeline.length-timelineIndex);
+}
+
     if (currentChat && messages && messages.length > 0) {
       if ((test == 1) || (test !== messages[1].chatId )) {
        
         setTest(messages[1]?.chatId);
         setOffset(2);
         offsetRef.current= 2;
-     
+        timelineIndex=1;
           // console.log("Scroll getting affected",divRef?.current?.style);
-          // divRef?.current?.style?.padding="0.75rem";
+          // divRef.current.style?.padding="unset";
           divRef?.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
           // console.log("divRef.current.clientHeight",checkScroll?.current?.clientHeight)
-
+          // timelineRef = useRef(null);
           // divRef.current.marginTop = divRef.current.clientHeight;
           // We are changing below value in a timeout because in the above line we are changing
           // the scroll posiiton to bottom first so it needs to reflect first in order make thigns happen
@@ -80,9 +99,10 @@ console.log("messages",messages);
   {
     if(divRef?.current)
     {
-      console.log("cdivRef?.current?.style)",divRef?.current?.style?.padding);
-      divRef.current.style.padding="unset !important";
-      // checkScroll.current.scrollTop = checkScroll.current.clientHeight;
+      // console.log("cdivRef?.current?.style)",divRef?.current?.style?.padding);
+      // divRef.current.style.padding="unset !important";
+      console.log('divRef.current.clientHeight',checkScroll.current.clientHeight);
+      // divRef.current.scrollTop = divRef.current.clientHeight;
 
     }
 
@@ -108,6 +128,7 @@ console.log("messages",messages);
 
   })
   const [bottomScrollHeight,setBottomScrollHeight] = useState(null);
+  
  
   // ------------------------------------------------------
   function doSomething()
@@ -142,8 +163,41 @@ console.log("messages",messages);
 
   
  const [isScrollButton,setIsScrollButton] = useState(false);
+ const isAllowed = useRef(true);
+ const prevTimelineRef = useRef(null);
   const onWheelCaptureHandler = useCallback(async () => {
-   
+    console.log("prevTimelineRef",prevTimelineRef);
+    // console.log("timelineRef",timelineRef);
+    console.log("timelineRef",timelineRef?.getBoundingClientRect()); 
+    if(timelineRef?.getBoundingClientRect().top>0 && timelineRef?.getBoundingClientRect().bottom >0 && timelineRef?.innerText != prevTimelineRef?.current && isAllowed.current)
+    {
+      // timelineRef = useRef(null);
+      // const elem=`<div class="timeline">${messageTimeline[messageTimeline.length-2]?.date}</div>`
+      isAllowed.current=false;
+      timelineIndex++;
+      console.log("Timeline idnex",timelineIndex);
+      prevTimelineRef.current =(timelineRef?.innerText);
+      // let test=document.createElement("div");
+      // let test= React.createElement(
+      //   'div',
+      //   {
+      //     className: 'timeline' ,
+      //     innerHtml:`${messageTimeline[messageTimeline.length-timelineIndex]?.date}`,
+      //     innerText:`${messageTimeline[messageTimeline.length-timelineIndex]?.date}`
+      //   },
+      //   msg?.date
+      // )
+      // test.innerHtml=messageTimeline[messageTimeline.length-timelineIndex]?.date;
+      // test.innerText=messageTimeline[messageTimeline.length-timelineIndex]?.date;
+      // timelineRef.__reactProps$fnwoq4p2lpd
+      // .children
+      // setRef(test);
+      console.log("After ",timelineRef.innerText);
+      console.log("Message timeline",messageTimeline);
+      setMessageTimelineIndex(messageTimeline.length-timelineIndex);
+      isAllowed.current=true;
+
+    }
     setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
     // console.log("TRIGGERING",checkScroll)
 
@@ -208,18 +262,18 @@ const goToBottom = useCallback(async()=>
   const messageBar = useRef(null);
 
  
-  const [minMessageBarHeight,setMinMessageBarHeight] = useState(null);
-  useEffect(()=>
-  {
-    if(messageBar?.current)
-    {
-      const currentHeight = messageBar?.current?.clientHeight;
-      const newHeight = currentHeight + 20;
-      // messageBar.current=newHeight;
-      setMinMessageBarHeight(newHeight);
-    }
+  // const [minMessageBarHeight,setMinMessageBarHeight] = useState(null);
+  // useEffect(()=>
+  // {
+  //   if(messageBar?.current)
+  //   {
+  //     const currentHeight = messageBar?.current?.clientHeight;
+  //     const newHeight = currentHeight + 20;
+  //     // messageBar.current=newHeight;
+  //     setMinMessageBarHeight(newHeight);
+  //   }
 
-  },[messageBar?.current])
+  // },[messageBar?.current])
 
   useEffect(() => {
     setTextMessage("");
@@ -253,16 +307,29 @@ const goToBottom = useCallback(async()=>
     {/* <div className="chat-header">
       <strong>{recipientUser.name}</strong>
     </div> */}
+    
+    {messageTimeline && <div className = "previous-date">{messageTimeline[messageTimelineIndex]?.date}</div>}
+          {/* { messageTimeline && messageTimeline.map((timeline,index)=>
+          {
+            return ( <div className = {`${timeline?.date ? "previous-date" : null}`}>
+              {timeline?.date} 
+             </div>)
+           
+
+          })} */}
+          <div >static</div>
+         
     <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
     {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
     {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
       {messages && messages.map((msg, index) => {
         return (
           <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
-
-             <div className = {`${msg?.date ? "timeline" : null}`}>
+         
+            {msg?.date && 
+            (<div className = {`${msg?.date ? "timeline" : null}`} ref={setRef}>
               {msg?.date}
-             </div>
+             </div>)} 
         { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
             <span>{msg.text} </span>
             <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
@@ -278,12 +345,10 @@ const goToBottom = useCallback(async()=>
       
      
     </Stack>
-    <Stack direction="vertical" style={{"justifyContent": "flex-end","minHeight":`${minMessageBarHeight}px`}} ref={messageBar} >
+    <Stack direction="vertical" style={{"justifyContent": "flex-end"}} ref={messageBar} >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 
-      <svg xmlns="http://www.w3.org/2000/svg"  style={{position: "relative",
-        
-    backgroundColor: "#175f9f",bottom:"6em",margin:"auto",cursor:"pointer"}} width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down svg-icon" viewBox="0 0 16 16">
   <path fillRule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
   <path fillRule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 </svg>
