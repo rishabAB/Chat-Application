@@ -94,8 +94,9 @@ socket.on("sendMessage",(message)=>
 
    if(user)
    {
-    io.to(user.socketId).emit("sendToClient",message);
-    // This event will be fired to a specifi socket id this syntax io.to is used to send private message 
+    const messageWithTimeline=[{date:"Today",count:1},message];
+    io.to(user.socketId).emit("sendToClient",messageWithTimeline);
+    // This event will be fired to a specific socket id this syntax io.to is used to send private message 
    }
 
     

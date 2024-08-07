@@ -21,7 +21,7 @@ const ChatBox = () => {
   const checkScroll = useRef(null);
   const [offset, setOffset] = useState(2);
   const offsetRef = useRef(2);
-  // let timelineRef = useRef(null);
+  let timelineRef = useRef(null);
 
   // ---------
 
@@ -39,7 +39,7 @@ const ChatBox = () => {
 // ------------
   const [messageTimelineIndex,setMessageTimelineIndex] = useState(null);
 
-  const [timelineRef, setTimelineRef] = useState(null);
+  // const [timelineRef, setTimelineRef] = useState(null);
 
   let timelineIndex = 1;
 
@@ -166,61 +166,30 @@ if(messageTimeline)
  const isAllowed = useRef(true);
  const prevTimelineRef = useRef(null);
 
-//  Intersection Observer
-const [isVisible, setIsVisible] = useState(false);
-const targetRef = useRef(null);
-console.log("isVisible",isVisible);
-useEffect(() => {
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      setIsVisible(entry.isIntersecting);
-    },
-    // {
-    //   root: null, // viewport
-    //   rootMargin: '0px', // no margin
-    //   threshold: 0.5, // 50% of target visible
-    // }
-  );
+// --USEREF ARRAY APPROACH -----
 
-  if (targetRef.current) {
-    observer.observe(targetRef.current);
-  }
 
-  // Clean up the observer
-  return () => {
-    if (targetRef.current) {
-      observer.unobserve(targetRef.current);
-    }
-  };
-}, []);
-// -------------------
+
+// useEffect(() => {
+//   if(messageTimeline)
+//   refs.current[messageTimeline.length - 1].current.focus()
+//  }, [messageTimeline])
+
+// ----------------------
   const onWheelCaptureHandler = useCallback(async () => {
-    console.log("prevTimelineRef",prevTimelineRef);
+   
     // console.log("timelineRef",timelineRef);
-    console.log("timelineRef",timelineRef?.getBoundingClientRect()); 
-    if(timelineRef?.getBoundingClientRect().top>0 && timelineRef?.getBoundingClientRect().bottom >0 && timelineRef?.innerText != prevTimelineRef?.current && isAllowed.current)
+    // console.log("refs",refs?.current)
+    // console.log("timelineRef",timelineRef?.getBoundingClientRect()); 
+    if(timelineRef?.current?.getBoundingClientRect().top>0 && timelineRef?.current?.getBoundingClientRect().bottom >0 && timelineRef?.current?.innerText != prevTimelineRef?.current && isAllowed.current)
     {
       // timelineRef = useRef(null);
       // const elem=`<div class="timeline">${messageTimeline[messageTimeline.length-2]?.date}</div>`
       isAllowed.current=false;
       timelineIndex++;
       console.log("Timeline idnex",timelineIndex);
+      // timelineRef = useRef();
       prevTimelineRef.current =(timelineRef?.innerText);
-      // let test=document.createElement("div");
-      // let test= React.createElement(
-      //   'div',
-      //   {
-      //     className: 'timeline' ,
-      //     innerHtml:`${messageTimeline[messageTimeline.length-timelineIndex]?.date}`,
-      //     innerText:`${messageTimeline[messageTimeline.length-timelineIndex]?.date}`
-      //   },
-      //   msg?.date
-      // )
-      // test.innerHtml=messageTimeline[messageTimeline.length-timelineIndex]?.date;
-      // test.innerText=messageTimeline[messageTimeline.length-timelineIndex]?.date;
-      // timelineRef.__reactProps$fnwoq4p2lpd
-      // .children
-      // setRef(test);
       console.log("After ",timelineRef.innerText);
       console.log("Message timeline",messageTimeline);
       setMessageTimelineIndex(messageTimeline.length-timelineIndex);
@@ -231,7 +200,7 @@ useEffect(() => {
     // console.log("TRIGGERING",checkScroll)
 
     if (checkScroll?.current?.scrollTop < 1000 && moreMessagesAvailable && !isFetchingRef.current) {
-      console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
+    console.log("OnWheelCapture",checkScroll?.current?.scrollTop);
       console.log("offset ",offsetRef.current);
 
       isFetchingRef.current=true;
@@ -329,6 +298,8 @@ const goToBottom = useCallback(async()=>
 
   };
 
+
+
   if (!recipientUser) {
     return (<Stack gap={4} className="chat-box" style={{ textAlign: "center", width: "100%", "justifyContent": "center"}}>No conversation selected yet ...</Stack>)
   }
@@ -346,7 +317,7 @@ const goToBottom = useCallback(async()=>
            
 
           })} */}
-          <div >static</div>
+          {/* <div >static</div> */}
          
     <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
     {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
@@ -356,8 +327,8 @@ const goToBottom = useCallback(async()=>
           <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
          
             {msg?.date && 
-            (<div className = {`${msg?.date ? "timeline" : null}`} ref={targetRef}>
-              {msg?.date}
+            (<div className = {`${msg?.date ? "timeline" : null}`} ref={timelineRef} >
+              {msg?.date} 
              </div>)} 
         { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
             <span>{msg.text} </span>

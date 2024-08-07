@@ -22,6 +22,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [messages,setMessages]= useState(null);
 
+    const messageRef = useState(null)
+
     const [messageTimeline,setMessageTimeline] = useState(null);
 
     const [TextMessageError,setTextMessageError] = useState(null);
@@ -35,6 +37,8 @@ export const ChatContextProvider = ({children, user}) => {
     const [serverResponse,setServerResponse] = useState(null);
 
     const [moreMessagesAvailable,setMoreMessagesAvailable] = useState(false);
+
+    const sendToClientTriggered = useRef(false);
 
     // Socket part
     const[socket,setSocket] = useState(null);
@@ -110,6 +114,22 @@ const getAudioInstance = useCallback(() => {
 
     useEffect(()=>
         {
+            console.log("messages",messages);
+       
+           checkTimeline(messages).then(function(result)
+        {
+            if(!result)
+            {
+                setMessages((prev) => [...prev,{date:"Today",count:1}]);
+            }
+            if(newMessageRef?.current)
+            {
+                setMessages( (prev) =>[...prev,newMessageRef?.current]);
+                // This setMessages is for someone who is seing the msg
+            }
+          
+        })
+           
             
             if(socket ==  null) return;
             // here we are finding the recipient user to id of user2 which has to recieve message (using current chat)
@@ -127,6 +147,29 @@ const getAudioInstance = useCallback(() => {
 
            
         },[newMessage])
+
+
+        const setSocketTimelineMessage = useCallback((socketRes)=>
+        {
+            // console.log(" messageRef.current=messages;", messageRef.current);
+            if(sendToClientTriggered?.current)
+            {
+                checkTimeline(messageRef.current).then(function(result)
+                {
+                    if(!result)
+                    {
+                        setMessages( (prev) =>[...prev,...socketRes]);
+                    }
+                    else{
+                        setMessages((prev) => [...prev,socketRes[0]]);
+                    }
+                    sendToClientTriggered.current=false;
+                  
+                })
+
+            }
+
+        },[messages])
 
         useEffect(()=>
         {
@@ -151,21 +194,26 @@ const getAudioInstance = useCallback(() => {
     useEffect(()=>
         {
             if(socket ==  null) return;
-
+           
+            console.log("messages array",messages);
             socket.on("sendToClient",(res)=>
             {
                 // In this if condition if it doesn't match 
                 // if means user is online but that conversation is not opened so this is the case where we
                 //should show the notification
-                if(currentChat?._id !== res.chatId) 
+                if(currentChat?._id !== res?.[1]?.chatId) 
                 {
                     return;
 
                     //we should emit an event saying to socket that save the response
                 }
-                
-               
-                setMessages((prev)=> [...prev,res]);
+
+                sendToClientTriggered.current = true;
+                setSocketTimelineMessage(res)
+
+              
+              
+                // setMessages((prev)=> [...prev,res]);
             // This if condition will help us to stop from updating the wrong chat 
 
             })
@@ -241,6 +289,27 @@ const getAudioInstance = useCallback(() => {
 
     },[user])
 
+    function checkTimeline(messages)
+    {
+        return new Promise((resolve,reject)=>
+        {
+            if(messages?.length>0)
+            {
+                let deepCopy = [...messages];
+                deepCopy.reverse();
+
+                let res =deepCopy.find((elem) => {
+                    if(elem?.date == "Today")
+                    {
+                        return elem;
+                    }
+                })
+                resolve(res ? true : false);
+            }
+            
+        })
+    }
+
 
     const sendTextMessage = useCallback(async(textMessage,sender,currentChatId)=>
     {
@@ -256,7 +325,7 @@ const getAudioInstance = useCallback(() => {
         newMessageRef.current=response;
         setServerResponse(response);
        
-        setMessages( (prev) =>[...prev,response]);
+        // setMessages( (prev) =>[...prev,response]);
         // This setMessages is for someone who is seing the msg
 
        
@@ -314,13 +383,16 @@ const getAudioInstance = useCallback(() => {
                 if(prev?.length>0 && prev[1].chatId == currentChatId)
                 {
                     // return ([...prev,...response?.messages])
+                    messageRef.current=([...response?.messages,...prev]);
                     return ([...response?.messages,...prev])
                 }
                 else{
+                    messageRef.current = (response?.messages);
                     return (response?.messages);
 
                 }
             })
+            // messageRef.current=messages;
             // setMessages(response?.messages);
             fulfill({isActionSuccess:true});
             setMoreMessagesAvailable(response?.moreMessagesAvailable)

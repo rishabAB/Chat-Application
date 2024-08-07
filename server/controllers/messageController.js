@@ -61,6 +61,28 @@ const getMessages = async(req,res) =>
 
 }
 
+function deleteTodaysDate(messages)
+{
+    console.log("new Date().getDate()",new Date());
+    let currentDate = new Date();
+    let c=1;
+    messages.forEach((msg)=>
+    {
+       
+        if(msg?.date === "Today")
+        {
+            let index = messages.findIndex(unit => unit.date == "Today");
+            messages.splice(index,1);
+            while(index<messages.length)
+            {
+                messages.splice(index,1);
+                // index++;
+            }
+        }
+    })
+
+}
+
 const partialMessages = async(req,res)=>
 {
     const {currentChatId} = req.params;
@@ -138,6 +160,7 @@ const partialMessages = async(req,res)=>
         // console.timeEnd();
      
         // console.log("returnObject.messages",returnObject.messages);
+         deleteTodaysDate(returnObject.messages);
         res.status(200).json(returnObject);
         
     } catch (error) {

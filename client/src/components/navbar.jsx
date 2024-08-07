@@ -64,7 +64,8 @@ const NavBar = () => {
                     loadRecipientImage();
     
                 },[imageUrl])
- 
+                // background-color: rgba(0, 0, 0, 0.65);
+            
            
     return (
         <Navbar 
@@ -72,7 +73,7 @@ const NavBar = () => {
                 {height: "3.75rem",padding:"0 4%",backgroundColor: "rgb(12 69 125)"}
         }>
             <Container style={{gap:"2rem",justifyContent:"flex-start",marginLeft:"1%"}}>
-            {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" />) }
+            {user && ( <img src={userImageArray?.[0] } className = {`${isViewerOpen ? "background-image-opacity" : null } `}onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",zIndex:"4"}} alt="" />) }
                 <h2>
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
@@ -117,7 +118,8 @@ const NavBar = () => {
       )}
 
 
-            {  recipientUser && (<><span style={{display:"flex",marginRight:"21%",gap:"1.2rem",alignItems:"center"}}><span >{recipientUser.name}</span><span><img src={recipientUserArray?.[0] } onClick = {handleRecipientImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" /></span></span>
+            {  recipientUser && (<><span style={{display:"flex",marginRight:"21%",gap:"1.2rem",alignItems:"center"}}><span >{recipientUser.name}</span><span>
+                <img src={recipientUserArray?.[0] } onClick = {handleRecipientImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" /></span></span>
                </>) }
         </Navbar>
     );
