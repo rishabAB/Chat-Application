@@ -22,7 +22,7 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [messages,setMessages]= useState(null);
 
-    const messageRef = useState(null)
+    const messageRef = useRef([]);
 
     const [messageTimeline,setMessageTimeline] = useState(null);
 
@@ -78,6 +78,28 @@ export const ChatContextProvider = ({children, user}) => {
        
     },[socket])
 
+    const checkTimeline = useCallback((parameter)=>
+        {
+            return new Promise((resolve,reject)=>
+                {
+                     if(parameter)
+                     {
+                        let deepCopy = [...parameter];
+                        deepCopy.reverse();
+        
+                        let res =deepCopy.find((elem) => {
+                            if(elem?.date == "Today")
+                            {
+                                return elem;
+                            }
+                        })
+                        resolve(res ? true : false);
+                     }
+                    
+                })
+    
+        },[messages,messageRef.current])
+
     // AUDIO POOL TO AVOID AUDIO LAGGING
 
 const audioPool = useRef([]);
@@ -121,6 +143,8 @@ const getAudioInstance = useCallback(() => {
             if(!result)
             {
                 setMessages((prev) => [...prev,{date:"Today",count:1}]);
+                messageRef.current = [...messages,{date:"Today",count:1}];
+                console.log("messageRef.current",messageRef.current);
             }
             if(newMessageRef?.current)
             {
@@ -151,17 +175,21 @@ const getAudioInstance = useCallback(() => {
 
         const setSocketTimelineMessage = useCallback((socketRes)=>
         {
-            // console.log(" messageRef.current=messages;", messageRef.current);
+            console.log(" messageRef.current=messages;", messageRef.current);
             if(sendToClientTriggered?.current)
             {
+                // console.log("messageRef.current",messageRef[0].current)
                 checkTimeline(messageRef.current).then(function(result)
                 {
                     if(!result)
                     {
+                        messageRef.current = [...messageRef.current,...socketRes];
                         setMessages( (prev) =>[...prev,...socketRes]);
                     }
                     else{
-                        setMessages((prev) => [...prev,socketRes[0]]);
+                        messageRef.current = [...messageRef.current,socketRes[1]];
+                        setMessages((prev) => [...prev,socketRes[1]]);
+                       
                     }
                     sendToClientTriggered.current=false;
                   
@@ -169,7 +197,7 @@ const getAudioInstance = useCallback(() => {
 
             }
 
-        },[messages])
+        },[messages,messageRef.current])
 
         useEffect(()=>
         {
@@ -289,26 +317,11 @@ const getAudioInstance = useCallback(() => {
 
     },[user])
 
-    function checkTimeline(messages)
-    {
-        return new Promise((resolve,reject)=>
-        {
-            if(messages?.length>0)
-            {
-                let deepCopy = [...messages];
-                deepCopy.reverse();
-
-                let res =deepCopy.find((elem) => {
-                    if(elem?.date == "Today")
-                    {
-                        return elem;
-                    }
-                })
-                resolve(res ? true : false);
-            }
-            
-        })
-    }
+  
+    // function checkTimeline(messages)
+    // {
+       
+    // }
 
 
     const sendTextMessage = useCallback(async(textMessage,sender,currentChatId)=>

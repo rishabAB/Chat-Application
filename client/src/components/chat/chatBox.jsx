@@ -21,7 +21,7 @@ const ChatBox = () => {
   const checkScroll = useRef(null);
   const [offset, setOffset] = useState(2);
   const offsetRef = useRef(2);
-  let timelineRef = useRef(null);
+  // let timelineRef = useRef(null);
 
   // ---------
 
@@ -39,11 +39,12 @@ const ChatBox = () => {
 // ------------
   const [messageTimelineIndex,setMessageTimelineIndex] = useState(null);
 
-  // const [timelineRef, setTimelineRef] = useState(null);
+  const [timelineRef, setTimelineRef] = useState(null);
 
   let timelineIndex = 1;
 
-  const setRef = useCallback(node => {
+  const setRef = useCallback((node) => {
+    
     if (node) {
       setTimelineRef(node);
     }
@@ -308,7 +309,7 @@ const goToBottom = useCallback(async()=>
       <strong>{recipientUser.name}</strong>
     </div> */}
     
-    {messageTimeline && <div className = "previous-date">{messageTimeline[messageTimelineIndex]?.date}</div>}
+    {/* {messageTimeline && <div className = "previous-date">{messageTimeline[messageTimelineIndex]?.date}</div>} */}
           {/* { messageTimeline && messageTimeline.map((timeline,index)=>
           {
             return ( <div className = {`${timeline?.date ? "previous-date" : null}`}>
@@ -319,7 +320,52 @@ const goToBottom = useCallback(async()=>
           })} */}
           {/* <div >static</div> */}
          
-    <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
+
+         {/* TESTING FOR TIMELINE */}
+         <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
+    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
+    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
+      {messages && messages.map(({date, items}) => {
+        return (
+          <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
+         
+         <div className="flex justify-center mb-4 sticky top-0">
+              <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
+                {date}
+              </span>
+            </div>
+
+            {items && items.map((msg,index)=>
+            {
+              <Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
+            <span>{msg.text} </span>
+            <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
+            <div ref={ index === messages.length-1 ? divRef : null}></div>
+          </Stack>
+
+            })}
+
+            
+        {/* { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
+            <span>{msg.text} </span>
+            <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
+            <div ref={ index === messages.length-1 ? divRef : null}></div>
+          </Stack>) } */}
+
+         </Stack>
+         
+        
+         )
+      })} 
+    
+      
+     
+    </Stack>
+
+         {/* ---------- */}
+
+      {/* ORIGINAL ONES */}
+    {/* <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
     {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
     {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
       {messages && messages.map((msg, index) => {
@@ -327,9 +373,15 @@ const goToBottom = useCallback(async()=>
           <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
          
             {msg?.date && 
-            (<div className = {`${msg?.date ? "timeline" : null}`} ref={timelineRef} >
-              {msg?.date} 
-             </div>)} 
+            // (<div className = {`${msg?.date ? "timeline" : null}`} ref={timelineRef} >
+            //   {msg?.date} 
+            //  </div>)
+            (  <div className="flex justify-center mb-4 sticky top-0">
+              <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
+                {msg?.date}
+              </span>
+            </div>)
+             } 
         { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
             <span>{msg.text} </span>
             <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
@@ -344,7 +396,7 @@ const goToBottom = useCallback(async()=>
     
       
      
-    </Stack>
+    </Stack> */}
     <Stack direction="vertical" style={{"justifyContent": "flex-end"}} ref={messageBar} >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 

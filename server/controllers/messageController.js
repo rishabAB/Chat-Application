@@ -113,55 +113,60 @@ const partialMessages = async(req,res)=>
         // }
         // else{
             messages = await messageModel.find({ chatId:currentChatId });
-            let response =await getMessageTimeLine(messages)
-            messages = response?.finalArray;
-            messageTimeline = response?.messageTimeline
+            let response =await testingGetMessageTimeLine(messages)
+          
             // myCache.set(currentChatId, messages);
            
         // }   
-       
-        returnObject.messages=messages;
-        returnObject.messageTimeline=messageTimeline;
+    //    TESTING FOR TIMELINE
+    // messages = response?.finalArray;
+    // messageTimeline = response?.messageTimeline;
+    returnObject.messages=response;
+    res.status(200).json(returnObject);
+
+    // -----------------------
+        // returnObject.messages=messages;
+        // returnObject.messageTimeline=messageTimeline;
         // returnObject.messages = await getMessageTimeLine(returnObject.messages);
 
-        if(messages?.length > limit)
-        {
+        // if(messages?.length > limit)
+        // {
             
-            // New Logic
-            if(offset === 0)
-            {
-                offset =1;
-            }
-            let startIndex = messages.length-(limit*offset);
+        //     // New Logic
+        //     if(offset === 0)
+        //     {
+        //         offset =1;
+        //     }
+        //     let startIndex = messages.length-(limit*offset);
             
-            let endIndex = messages.length - (limit*(offset-1));
+        //     let endIndex = messages.length - (limit*(offset-1));
 
            
 
-            if(startIndex <limit)
-            {
-              startIndex =0;
-            }
+        //     if(startIndex <limit)
+        //     {
+        //       startIndex =0;
+        //     }
           
-            filteredMessages = messages.slice(startIndex ,endIndex)
+        //     filteredMessages = messages.slice(startIndex ,endIndex)
           
-            returnObject.moreMessagesAvailable=true;
-            returnObject.messages=filteredMessages;
+        //     returnObject.moreMessagesAvailable=true;
+        //     returnObject.messages=filteredMessages;
             
-            if(limit*offset >= messages.length || startIndex === 0)
-            {
-                returnObject.moreMessagesAvailable=false;
-            }
-            console.log(startIndex,endIndex);
+        //     if(limit*offset >= messages.length || startIndex === 0)
+        //     {
+        //         returnObject.moreMessagesAvailable=false;
+        //     }
+        //     console.log(startIndex,endIndex);
                  
-        }
+        // }
         // get it Done
         
         // console.timeEnd();
      
         // console.log("returnObject.messages",returnObject.messages);
-         deleteTodaysDate(returnObject.messages);
-        res.status(200).json(returnObject);
+        //  deleteTodaysDate(returnObject.messages);
+        // res.status(200).json(returnObject);
         
     } catch (error) {
         console.error(error);
@@ -319,6 +324,171 @@ function getMessageTimeLine(messages)
         //    console.log("final Array",finalArray);
     
            fulfill({finalArray,messageTimeline});
+
+        }
+        catch(error)
+        {
+            console.error("An error occured in MessageTimeline",error);
+        }
+        
+       
+    })
+   
+   
+}
+
+function testingGetMessageTimeLine(messages)
+{
+    return new Promise((fulfill,reject)=>
+    {
+        try{
+            let messageTimeline =[];
+            let currentDate =  moment(new Date()).format("LL");
+            const date_format = new Date(currentDate);
+            let prevDate;
+            let count =1;
+            let isFirst = true;
+            let items=[];
+            let finalArray =[];
+            let testCount=0;
+          
+        // console.log("messages",messages)
+            messages.forEach((message)=>
+            {
+                let msg = message._doc.createdAt;
+                let date = moment(msg).format("LL");
+                if(isFirst)
+                {
+                   
+                    prevDate= date;
+                    isFirst=false;
+                    messageTimeline.push(date);
+                }
+                else{
+                    if(prevDate === date)
+                    {
+                    //    let object = messageTimeline.find((item) => item.date === date);
+                        
+                    //    let index = messageTimeline.findIndex(item => item.date === date);
+        
+                    //    messageTimeline.splice(index,1)
+                       
+                    //    object.count +=1;
+                    //    messageTimeline.push(object);
+                    items.push(message);
+                    count++;
+                    }
+                    else if(prevDate !== date){
+                        {
+                            // messageTimeline.push(items);
+
+                            console.log("wait",messageTimeline[testCount]);
+                            finalArray.push({date:messageTimeline[testCount++],items:items});
+                            
+                            items=[];
+                            
+
+                            let date=prevDate;
+                            // let date_format = new date
+                            let currentDateFormat = new Date(date);
+                            // console.log(currentDateFormat.getDate());
+                            if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                            {
+                                date="Yesterday";
+                            }
+                            else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                                {
+                                    // console.log("currentDateFormat",getDayString(currentDateFormat));
+                                    date=getDayString(currentDateFormat);
+                                }
+                            else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                                {
+                                    // console.log("currentDateFormat",getDayString(currentDateFormat));
+                                    date=getDayString(currentDateFormat);
+                                }
+                            else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                                {
+                                    // console.log("currentDateFormat",getDayString(currentDateFormat));
+                                    date=getDayString(currentDateFormat);
+                                }
+    
+                            messageTimeline.push(date);
+                        }
+                       
+                        prevDate = date;
+                        count=1;
+                    }
+        
+                }
+            })
+    
+            if(messages?.length>0)
+            {
+                let date= prevDate;
+                let currentDateFormat = new Date(date);
+                if(date === currentDate)
+                {
+                    date="Today";
+                }
+               else if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                        date="Yesterday";
+                    }
+                else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                        date=getDayString(currentDateFormat);
+                    }
+                else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                        date=getDayString(currentDateFormat);
+                    }
+                else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                        date=getDayString(currentDateFormat);
+                    }
+                messageTimeline.push(date);
+            }
+            // console.log("message timeline",messageTimeline);
+    
+            // fulfill(messageTimeline);
+    
+            // let finalArray=[];
+            fulfill(finalArray);
+        //     let skipIndex=0;
+        //     let timelineIndex=0;
+        //     let test=true;
+        //     messages.forEach((message)=>
+        //    {
+        //      if(test || skipIndex === 0)
+        //      {
+        //          finalArray.push(messageTimeline.at(timelineIndex));
+        //      skipIndex = messageTimeline.at(timelineIndex).count;
+        //      timelineIndex++;
+        //      finalArray.push(message);
+        //      test = false;
+        //      skipIndex--;
+         
+        //      }
+        //      else{
+        //          finalArray.push(message);
+        //          skipIndex--;
+        //          if(skipIndex == 0)
+        //          {
+        //             test=true;
+        //          }
+        //      }
+             
+         
+         
+                 
+        //    })
+    
+        // //    console.log("final Array",finalArray);
+    
+        //    fulfill({finalArray,messageTimeline});
 
         }
         catch(error)

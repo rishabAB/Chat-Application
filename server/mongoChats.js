@@ -6,13 +6,13 @@ async function deleteMessages()
     const response = await messageModel.deleteMany({chatId:'66b0689b29ac622b5a0b14e1'});
     console.log("response is ",response);
 }
-// deleteMessages();  
+    // deleteMessages();  
 
 async function createMessages(chatId,senderId)
 {
     // chatid 668fcfd5e166e0391ab375b4
     // Rishab's userid is 667d1cbaee421d882089b2c1
-    for(let i=0;i<176;i++)
+    for(let i=0;i<151;i++)
     {
         if(i>=0 && i<=25)
         {
@@ -61,19 +61,19 @@ async function createMessages(chatId,senderId)
             await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
-        else if(i>150 && i<=175)
-        { 
-            // 2rd August
-            const date = new Date();
-            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
+        // else if(i>150 && i<=175)
+        // { 
+        //     // 2rd August
+        //     const date = new Date();
+        //     await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
-        }
+        // }
        
     }
-    // console.log("All DONE");
+    console.log("All DONE");
     
 }
-// createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
+    // createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
 
  function createSingleMessage(chatId,senderId,text,createdAt,updatedAt)
 {
