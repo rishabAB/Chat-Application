@@ -57,6 +57,7 @@ export const ChatContextProvider = ({children, user}) => {
         })
 
     },[user]);
+    
 
     // User has logged out so by using socket
 
@@ -393,7 +394,7 @@ const getAudioInstance = useCallback(() => {
             console.log("response",response);
             setMessageTimeline(response?.messageTimeline);
             setMessages((prev) =>{
-                if(prev?.length>0 && prev[1].chatId == currentChatId)
+                if(prev?.length>0 && prev[0]?.items[0].chatId == currentChatId)
                 {
                     // return ([...prev,...response?.messages])
                     messageRef.current=([...response?.messages,...prev]);

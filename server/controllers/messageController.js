@@ -113,14 +113,34 @@ const partialMessages = async(req,res)=>
         // }
         // else{
             messages = await messageModel.find({ chatId:currentChatId });
-            let response =await testingGetMessageTimeLine(messages)
+            let completeResponse =await testingGetMessageTimeLine(messages)
           
             // myCache.set(currentChatId, messages);
            
         // }   
     //    TESTING FOR TIMELINE
     // messages = response?.finalArray;
-    // messageTimeline = response?.messageTimeline;
+    let response=[];
+    if(offset ==0)
+    {
+        // response.push(completeResponse[0]);
+        response.push(completeResponse[1]);
+        response.push(completeResponse[2]);
+        // completeResponse[3].date="Tuesday";
+        response.push(completeResponse[3]);
+        // completeResponse[4].date="Yesterday";
+        response.push(completeResponse[4]);
+
+    }
+    // else{
+       
+
+    // }
+    // // messageTimeline = response?.messageTimeline;
+    // if(offset == 0)
+    // {
+    //     returnObject.moreMessagesAvailable=true;
+    // }
     returnObject.messages=response;
     res.status(200).json(returnObject);
 
@@ -356,16 +376,40 @@ function testingGetMessageTimeLine(messages)
             messages.forEach((message)=>
             {
                 let msg = message._doc.createdAt;
-                let date = moment(msg).format("LL");
+                let currentMsgDate = moment(msg).format("LL");
+                let ttttt=currentMsgDate;
                 if(isFirst)
-                {
+                {   
                    
-                    prevDate= date;
+                    prevDate= currentMsgDate;
                     isFirst=false;
+                    let date=currentMsgDate;
+
+                    let currentDateFormat = new Date(date);
+                    // console.log(currentDateFormat.getDate());
+                    if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                    {
+                        date="Yesterday";
+                    }
+                    else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                        {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                            date=getDayString(currentDateFormat);
+                        }
+                    else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                        {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                            date=getDayString(currentDateFormat);
+                        }
+                    else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
+                        {
+                            // console.log("currentDateFormat",getDayString(currentDateFormat));
+                            date=getDayString(currentDateFormat);
+                        }
                     messageTimeline.push(date);
                 }
                 else{
-                    if(prevDate === date)
+                    if(prevDate === currentMsgDate)
                     {
                     //    let object = messageTimeline.find((item) => item.date === date);
                         
@@ -378,18 +422,28 @@ function testingGetMessageTimeLine(messages)
                     items.push(message);
                     count++;
                     }
-                    else if(prevDate !== date){
-                        {
+                    else if(prevDate !== currentMsgDate){
+                        // {
                             // messageTimeline.push(items);
 
-                            console.log("wait",messageTimeline[testCount]);
-                            finalArray.push({date:messageTimeline[testCount++],items:items});
+                            // console.log("wait",messageTimeline[testCount]);
+                            // if(messageTimeline[testCount].includes("3"))
+                            // {
+                            //     finalArray.push({date:"h",items:items});
+                            //     testCount++;
+
+                            // }
+                            // else{
+                               
+
+                            // }
+                           
                             
                             items=[];
                             
 
                             let date=prevDate;
-                            // let date_format = new date
+                           // // let date_format = new date
                             let currentDateFormat = new Date(date);
                             // console.log(currentDateFormat.getDate());
                             if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
@@ -411,19 +465,25 @@ function testingGetMessageTimeLine(messages)
                                     // console.log("currentDateFormat",getDayString(currentDateFormat));
                                     date=getDayString(currentDateFormat);
                                 }
-    
-                            messageTimeline.push(date);
-                        }
+
+                                finalArray.push({date:messageTimeline[testCount++],items:items});
+                                messageTimeline.push(date);
+                                
+                            
+
+
+                        // }
                        
-                        prevDate = date;
+                        prevDate = currentMsgDate;
                         count=1;
                     }
         
                 }
             })
     
-            if(messages?.length>0)
+            if(finalArray?.length>0)
             {
+               
                 let date= prevDate;
                 let currentDateFormat = new Date(date);
                 if(date === currentDate)
@@ -450,6 +510,7 @@ function testingGetMessageTimeLine(messages)
                         date=getDayString(currentDateFormat);
                     }
                 messageTimeline.push(date);
+                finalArray.push({date:messageTimeline[testCount++],items:items});
             }
             // console.log("message timeline",messageTimeline);
     

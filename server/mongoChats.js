@@ -6,15 +6,15 @@ async function deleteMessages()
     const response = await messageModel.deleteMany({chatId:'66b0689b29ac622b5a0b14e1'});
     console.log("response is ",response);
 }
-    // deleteMessages();  
+        //   deleteMessages();  
 
 async function createMessages(chatId,senderId)
 {
     // chatid 668fcfd5e166e0391ab375b4
     // Rishab's userid is 667d1cbaee421d882089b2c1
-    for(let i=0;i<151;i++)
+    for(let i=0;i<101;i++)
     {
-        if(i>=0 && i<=25)
+        if(i>=0 && i<=7)
         {
             // 27th july
             const date = new Date();
@@ -22,7 +22,7 @@ async function createMessages(chatId,senderId)
 
             await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
         }
-        else if(i>25 && i<=50)
+        else if(i>7 && i<=13)
         {
              // 28th july
              const date = new Date();
@@ -30,7 +30,7 @@ async function createMessages(chatId,senderId)
              await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
-        else if(i>50 && i<=75)
+        else if(i>13 && i<=20)
         {
             // 29th july
             const date = new Date();
@@ -38,7 +38,7 @@ async function createMessages(chatId,senderId)
             await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
-        else if(i>75 && i<=100)
+        else if(i>20 && i<=27)
         {
             // 30th july
             const date = new Date();
@@ -46,21 +46,21 @@ async function createMessages(chatId,senderId)
             await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
         }
-        else if(i>100 && i<=125)
+        else if(i>27 && i<=33)
         {
              // 31st July
              const date = new Date();
              date.setDate(date.getDate() - 2);
              await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
         }
-        else if(i>125 && i<=150)
-        {
-            // 1nd August
-            const date = new Date();
-            date.setDate(date.getDate() - 1);
-            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
+        // else if(i>125 && i<=150)
+        // {
+        //     // 1nd August
+        //     const date = new Date();
+        //     date.setDate(date.getDate() - 1);
+        //     await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
-        }
+        // }
         // else if(i>150 && i<=175)
         // { 
         //     // 2rd August
@@ -73,7 +73,7 @@ async function createMessages(chatId,senderId)
     console.log("All DONE");
     
 }
-    // createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
+    //   createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
 
  function createSingleMessage(chatId,senderId,text,createdAt,updatedAt)
 {

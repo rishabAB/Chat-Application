@@ -134,18 +134,19 @@ body {
   text-align: center;
   /* width: 45%; */
 }
-.previous-date{
-  position: fixed;
-  color: blue;
-  text-align: center;
-  right: 25%;
-  top: 11%;
-}
+
 
 .background-image-opacity{
-  background-color: rgba(0, 0, 0, 0.57);
+  background-color: unset !important;
+  /* background-color: rgba(0, 0, 0, 0.57) !important; */
+}
+#ReactSimpleImageViewer{
+  background-color: rgba(0, 0, 0, 0.57) !important;
 }
 
+#ReactSimpleImageViewer > div > div > img{
+  max-height: 50%;
+}
 .message.self {
  
   background: #00bd9b;

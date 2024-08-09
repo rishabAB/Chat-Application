@@ -39,25 +39,20 @@ const ChatBox = () => {
 // ------------
   const [messageTimelineIndex,setMessageTimelineIndex] = useState(null);
 
-  const [timelineRef, setTimelineRef] = useState(null);
+
 
   let timelineIndex = 1;
 
-  const setRef = useCallback((node) => {
-    
-    if (node) {
-      setTimelineRef(node);
-    }
-  }, []);
+
 
   // ----------
   useEffect(() => {
 console.log("messages",messages);
 console.log("messageTimeline",messageTimeline);
-if(messageTimeline)
-{
-  setMessageTimelineIndex(messageTimeline.length-timelineIndex);
-}
+// if(messageTimeline)
+// {
+//   setMessageTimelineIndex(messageTimeline.length-timelineIndex);
+// }
 
     if (currentChat && messages && messages.length > 0) {
       if ((test == 1) || (test !== messages[1].chatId )) {
@@ -96,18 +91,6 @@ if(messageTimeline)
 
   }, [messages]);
 
-  useEffect(()=>
-  {
-    if(divRef?.current)
-    {
-      // console.log("cdivRef?.current?.style)",divRef?.current?.style?.padding);
-      // divRef.current.style.padding="unset !important";
-      console.log('divRef.current.clientHeight',checkScroll.current.clientHeight);
-      // divRef.current.scrollTop = divRef.current.clientHeight;
-
-    }
-
-  },[divRef?.current])
 
   function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -167,36 +150,25 @@ if(messageTimeline)
  const isAllowed = useRef(true);
  const prevTimelineRef = useRef(null);
 
-// --USEREF ARRAY APPROACH -----
 
-
-
-// useEffect(() => {
-//   if(messageTimeline)
-//   refs.current[messageTimeline.length - 1].current.focus()
-//  }, [messageTimeline])
-
-// ----------------------
   const onWheelCaptureHandler = useCallback(async () => {
    
-    // console.log("timelineRef",timelineRef);
-    // console.log("refs",refs?.current)
-    // console.log("timelineRef",timelineRef?.getBoundingClientRect()); 
-    if(timelineRef?.current?.getBoundingClientRect().top>0 && timelineRef?.current?.getBoundingClientRect().bottom >0 && timelineRef?.current?.innerText != prevTimelineRef?.current && isAllowed.current)
-    {
-      // timelineRef = useRef(null);
-      // const elem=`<div class="timeline">${messageTimeline[messageTimeline.length-2]?.date}</div>`
-      isAllowed.current=false;
-      timelineIndex++;
-      console.log("Timeline idnex",timelineIndex);
-      // timelineRef = useRef();
-      prevTimelineRef.current =(timelineRef?.innerText);
-      console.log("After ",timelineRef.innerText);
-      console.log("Message timeline",messageTimeline);
-      setMessageTimelineIndex(messageTimeline.length-timelineIndex);
-      isAllowed.current=true;
+   
+    // if(timelineRef?.current?.getBoundingClientRect().top>0 && timelineRef?.current?.getBoundingClientRect().bottom >0 && timelineRef?.current?.innerText != prevTimelineRef?.current && isAllowed.current)
+    // {
+    //   // timelineRef = useRef(null);
+    //   // const elem=`<div class="timeline">${messageTimeline[messageTimeline.length-2]?.date}</div>`
+    //   isAllowed.current=false;
+    //   timelineIndex++;
+    //   console.log("Timeline idnex",timelineIndex);
+    //   // timelineRef = useRef();
+    //   prevTimelineRef.current =(timelineRef?.innerText);
+    //   console.log("After ",timelineRef.innerText);
+    //   console.log("Message timeline",messageTimeline);
+    //   setMessageTimelineIndex(messageTimeline.length-timelineIndex);
+    //   isAllowed.current=true;
 
-    }
+    // }
     setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
     // console.log("TRIGGERING",checkScroll)
 
@@ -258,22 +230,7 @@ const goToBottom = useCallback(async()=>
     }
 
   }, [newMessage]);
-  const messageBar = useRef(null);
-
- 
-  // const [minMessageBarHeight,setMinMessageBarHeight] = useState(null);
-  // useEffect(()=>
-  // {
-  //   if(messageBar?.current)
-  //   {
-  //     const currentHeight = messageBar?.current?.clientHeight;
-  //     const newHeight = currentHeight + 20;
-  //     // messageBar.current=newHeight;
-  //     setMinMessageBarHeight(newHeight);
-  //   }
-
-  // },[messageBar?.current])
-
+  
   useEffect(() => {
     setTextMessage("");
   }, [recipientUser]);
@@ -308,17 +265,6 @@ const goToBottom = useCallback(async()=>
     {/* <div className="chat-header">
       <strong>{recipientUser.name}</strong>
     </div> */}
-    
-    {/* {messageTimeline && <div className = "previous-date">{messageTimeline[messageTimelineIndex]?.date}</div>} */}
-          {/* { messageTimeline && messageTimeline.map((timeline,index)=>
-          {
-            return ( <div className = {`${timeline?.date ? "previous-date" : null}`}>
-              {timeline?.date} 
-             </div>)
-           
-
-          })} */}
-          {/* <div >static</div> */}
          
 
          {/* TESTING FOR TIMELINE */}
@@ -327,23 +273,23 @@ const goToBottom = useCallback(async()=>
     {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
       {messages && messages.map(({date, items}) => {
         return (
-          <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
+          <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents",display:"flex",flexDirection:"column",gap:"1.5rem"}}>
          
-         <div className="flex justify-center mb-4 sticky top-0">
-              <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
+         <div className="flex justify-center mb-3 mt-3 sticky top-0" style={{"position": "sticky","display": "flex","justifyContent": "center"}}>
+              <span className="text-sm border px-2 rounded-full bg-white border-gray-300" style={{"borderRadius":"50px"}}>
                 {date}
               </span>
             </div>
 
             {items && items.map((msg,index)=>
-            {
-              <Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
-            <span>{msg.text} </span>
-            <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
-            <div ref={ index === messages.length-1 ? divRef : null}></div>
-          </Stack>
+            
+              ( <Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
+                <span>{msg.text} </span>
+                <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
+                <div ref={ index === items.length-1 ? divRef : null}></div>
+              </Stack>)
 
-            })}
+            )}
 
             
         {/* { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
@@ -397,7 +343,7 @@ const goToBottom = useCallback(async()=>
       
      
     </Stack> */}
-    <Stack direction="vertical" style={{"justifyContent": "flex-end"}} ref={messageBar} >
+    <Stack direction="vertical" style={{"justifyContent": "flex-end"}}  >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 
       <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down svg-icon" viewBox="0 0 16 16">

@@ -14,7 +14,7 @@ const NavBar = () => {
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
    
-   
+   console.log("isViewerOpen",isViewerOpen);
    
     const handleImageViewer = useCallback(()=>
     {
@@ -73,7 +73,7 @@ const NavBar = () => {
                 {height: "3.75rem",padding:"0 4%",backgroundColor: "rgb(12 69 125)"}
         }>
             <Container style={{gap:"2rem",justifyContent:"flex-start",marginLeft:"1%"}}>
-            {user && ( <img src={userImageArray?.[0] } className = {`${isViewerOpen ? "background-image-opacity" : null } `}onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",zIndex:"4"}} alt="" />) }
+            {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",zIndex:"4"}} alt="" />) }
                 <h2>
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
@@ -107,7 +107,7 @@ const NavBar = () => {
       )}
 
      {isRecipientViewerOpen && (
-                 <ImageViewer
+                 <ImageViewer 
           src={recipientUserArray} 
           disableScroll={ false }
           closeOnClickOutside={ true }
