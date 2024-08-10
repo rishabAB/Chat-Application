@@ -6,7 +6,7 @@ async function deleteMessages()
     const response = await messageModel.deleteMany({chatId:'66b0689b29ac622b5a0b14e1'});
     console.log("response is ",response);
 }
-        //   deleteMessages();  
+//   deleteMessages();  
 
 async function createMessages(chatId,senderId)
 {
@@ -53,14 +53,14 @@ async function createMessages(chatId,senderId)
              date.setDate(date.getDate() - 2);
              await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
         }
-        // else if(i>125 && i<=150)
-        // {
-        //     // 1nd August
-        //     const date = new Date();
-        //     date.setDate(date.getDate() - 1);
-        //     await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
+        else if(i>33 && i<=41)
+        {
+            // 1nd August
+            const date = new Date();
+            date.setDate(date.getDate() - 1);
+            await createSingleMessage(chatId,senderId,`${i+1}`,date,date);
 
-        // }
+        }
         // else if(i>150 && i<=175)
         // { 
         //     // 2rd August
@@ -73,7 +73,7 @@ async function createMessages(chatId,senderId)
     console.log("All DONE");
     
 }
-    //   createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
+    //    createMessages("66b0689b29ac622b5a0b14e1","66b065a429ac622b5a0b149c");
 
  function createSingleMessage(chatId,senderId,text,createdAt,updatedAt)
 {
@@ -137,44 +137,36 @@ async function getAllMessages()
         }
 
     })
-//    console.log( messageTimeline);
 
-//    let finalArray=[];
-//    let skipIndex=0;
-//    let timelineIndex=0;
-//    let test=true;
-//    response.forEach((message)=>
-//   {
-//     if(test || skipIndex === 0)
-//     {
-//         finalArray.push(messageTimeline.at(timelineIndex));
-//     skipIndex = messageTimeline.at(timelineIndex).count;
-//     timelineIndex++;
-//     finalArray.push(message);
-//     test = false;
-//     skipIndex--;
-
-//     }
-//     else{
-//         finalArray.push(message);
-//         skipIndex--;
-//         if(skipIndex == 0)
-//         {
-//             test=true;
-//         }
-//     }
+   
     
 
-
-        
-//   })
-
-//   console.log("final Array",finalArray);
-
-
-    // console.log("response is ",response);
-
 }
+
+async function isYesterday(date) {
+    const givenDate = new Date(date); // Convert input to Date object
+
+    // Set the given date to midnight
+    givenDate.setHours(0, 0, 0, 0);
+
+    // Get today's date and set time to midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Get yesterday's date by subtracting one day from today
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    // Compare the given date with yesterday's date
+    return givenDate.getTime() === yesterday.getTime();
+}
+
+// Example usage
+const dateToCheck = "2024-08-09";
+const today= new Date();
+const yesterday = new Date(new Date());
+yesterday.setDate(today.getDate() - 2);// Example date string (YYYY-MM-DD)
+//  console.log(isYesterday(yesterday)) // Outputs: true or false
 
 
 

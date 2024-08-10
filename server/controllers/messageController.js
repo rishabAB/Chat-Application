@@ -120,18 +120,18 @@ const partialMessages = async(req,res)=>
         // }   
     //    TESTING FOR TIMELINE
     // messages = response?.finalArray;
-    let response=[];
-    if(offset ==0)
-    {
-        // response.push(completeResponse[0]);
-        response.push(completeResponse[1]);
-        response.push(completeResponse[2]);
-        // completeResponse[3].date="Tuesday";
-        response.push(completeResponse[3]);
-        // completeResponse[4].date="Yesterday";
-        response.push(completeResponse[4]);
+    // let response=[];
+    // if(offset ==0)
+    // {
+    //     // response.push(completeResponse[0]);
+    //     response.push(completeResponse[1]);
+    //     response.push(completeResponse[2]);
+    //     // completeResponse[3].date="Tuesday";
+    //     response.push(completeResponse[3]);
+    //     // completeResponse[4].date="Yesterday";
+    //     response.push(completeResponse[4]);
 
-    }
+    // }
     // else{
        
 
@@ -141,7 +141,7 @@ const partialMessages = async(req,res)=>
     // {
     //     returnObject.moreMessagesAvailable=true;
     // }
-    returnObject.messages=response;
+    returnObject.messages=completeResponse;
     res.status(200).json(returnObject);
 
     // -----------------------
@@ -357,6 +357,54 @@ function getMessageTimeLine(messages)
    
 }
 
+// Dates part
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+async function checkForDays(givenDate) {
+    return new Promise((resolve,reject)=>
+    {
+    // Set the given date to midnight
+    givenDate.setHours(0, 0, 0, 0);
+
+    // Get today's date and set time to midnight
+  
+
+    // Get yesterday's date by subtracting one day from today
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const twoDays = new Date(today);
+    twoDays.setDate(today.getDate() - 2);
+
+    const threeDays = new Date(today);
+    threeDays.setDate(today.getDate() - 3);
+
+    const fourDays = new Date(today);
+    fourDays.setDate(today.getDate() - 4);
+
+
+    if(today.getTime() === givenDate.getTime())
+    {
+        resolve("Today");
+    }
+    else if(givenDate.getTime() === yesterday.getTime())
+    {
+        resolve ("Yesterday");
+    }
+    else if((givenDate.getTime() === twoDays.getTime()) || (givenDate.getTime() === threeDays.getTime()) || (givenDate.getTime() === fourDays.getTime()))
+    {
+        resolve (getDayString(givenDate));
+    }
+    else{
+        resolve (givenDate);
+    }
+
+
+    })
+   
+}
+// --------
+
 function testingGetMessageTimeLine(messages)
 {
     return new Promise((fulfill,reject)=>
@@ -366,190 +414,66 @@ function testingGetMessageTimeLine(messages)
             let currentDate =  moment(new Date()).format("LL");
             const date_format = new Date(currentDate);
             let prevDate;
-            let count =1;
+            
             let isFirst = true;
             let items=[];
             let finalArray =[];
             let testCount=0;
+            let index=0;
           
-        // console.log("messages",messages)
-            messages.forEach((message)=>
+            messages.forEach(async(message)=>
             {
                 let msg = message._doc.createdAt;
                 let currentMsgDate = moment(msg).format("LL");
-                let ttttt=currentMsgDate;
+              
                 if(isFirst)
                 {   
-                   
                     prevDate= currentMsgDate;
                     isFirst=false;
-                    let date=currentMsgDate;
-
-                    let currentDateFormat = new Date(date);
-                    // console.log(currentDateFormat.getDate());
-                    if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                    {
-                        date="Yesterday";
-                    }
-                    else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                        {
-                            // console.log("currentDateFormat",getDayString(currentDateFormat));
-                            date=getDayString(currentDateFormat);
-                        }
-                    else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                        {
-                            // console.log("currentDateFormat",getDayString(currentDateFormat));
-                            date=getDayString(currentDateFormat);
-                        }
-                    else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                        {
-                            // console.log("currentDateFormat",getDayString(currentDateFormat));
-                            date=getDayString(currentDateFormat);
-                        }
+                  
+                    let currentDateFormat = new Date(currentMsgDate);
+                    let date = await checkForDays(currentDateFormat)
+                  
                     messageTimeline.push(date);
+                    items.push(message);
                 }
                 else{
                     if(prevDate === currentMsgDate)
                     {
-                    //    let object = messageTimeline.find((item) => item.date === date);
-                        
-                    //    let index = messageTimeline.findIndex(item => item.date === date);
-        
-                    //    messageTimeline.splice(index,1)
-                       
-                    //    object.count +=1;
-                    //    messageTimeline.push(object);
+                        if(index == messages.length-1)
+                        {
+                            let currentDateFormat = new Date(prevDate);
+                            let date = await checkForDays(currentDateFormat);
+                            messageTimeline.push(date);
+                        }
                     items.push(message);
-                    count++;
+                 
                     }
-                    else if(prevDate !== currentMsgDate){
-                        // {
-                            // messageTimeline.push(items);
-
-                            // console.log("wait",messageTimeline[testCount]);
-                            // if(messageTimeline[testCount].includes("3"))
-                            // {
-                            //     finalArray.push({date:"h",items:items});
-                            //     testCount++;
-
-                            // }
-                            // else{
-                               
-
-                            // }
-                           
+                    else if(prevDate != currentMsgDate){
                             
-                            items=[];
-                            
-
-                            let date=prevDate;
-                           // // let date_format = new date
-                            let currentDateFormat = new Date(date);
-                            // console.log(currentDateFormat.getDate());
-                            if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                            {
-                                date="Yesterday";
-                            }
-                            else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                                {
-                                    // console.log("currentDateFormat",getDayString(currentDateFormat));
-                                    date=getDayString(currentDateFormat);
-                                }
-                            else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                                {
-                                    // console.log("currentDateFormat",getDayString(currentDateFormat));
-                                    date=getDayString(currentDateFormat);
-                                }
-                            else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                                {
-                                    // console.log("currentDateFormat",getDayString(currentDateFormat));
-                                    date=getDayString(currentDateFormat);
-                                }
-
-                                finalArray.push({date:messageTimeline[testCount++],items:items});
-                                messageTimeline.push(date);
-                                
-                            
-
-
-                        // }
-                       
-                        prevDate = currentMsgDate;
-                        count=1;
+                    let currentDateFormat = new Date(prevDate);
+                    let date = await checkForDays(currentDateFormat);
+                          
+                    finalArray.push({date:messageTimeline[testCount++],items:items});
+                    messageTimeline.push(date);
+                                   
+                    prevDate = currentMsgDate;
+                   
+                    items=[];
                     }
         
                 }
+                index++;
             })
-    
-            if(finalArray?.length>0)
+
+            if(items.length>0)
             {
-               
-                let date= prevDate;
-                let currentDateFormat = new Date(date);
-                if(date === currentDate)
-                {
-                    date="Today";
-                }
-               else if(currentDateFormat.getDate() === date_format.getDate() -1 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                    {
-                        date="Yesterday";
-                    }
-                else if(currentDateFormat.getDate() === date_format.getDate() -2 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                    {
-                            // console.log("currentDateFormat",getDayString(currentDateFormat));
-                        date=getDayString(currentDateFormat);
-                    }
-                else if(currentDateFormat.getDate() === date_format.getDate() -3 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                    {
-                            // console.log("currentDateFormat",getDayString(currentDateFormat));
-                        date=getDayString(currentDateFormat);
-                    }
-                else if(currentDateFormat.getDate() === date_format.getDate() -4 && currentDateFormat.getFullYear() === date_format.getFullYear() && currentDateFormat.getMonth() === date_format.getMonth())
-                    {
-                            // console.log("currentDateFormat",getDayString(currentDateFormat));
-                        date=getDayString(currentDateFormat);
-                    }
-                messageTimeline.push(date);
                 finalArray.push({date:messageTimeline[testCount++],items:items});
             }
-            // console.log("message timeline",messageTimeline);
     
-            // fulfill(messageTimeline);
-    
-            // let finalArray=[];
+           
             fulfill(finalArray);
-        //     let skipIndex=0;
-        //     let timelineIndex=0;
-        //     let test=true;
-        //     messages.forEach((message)=>
-        //    {
-        //      if(test || skipIndex === 0)
-        //      {
-        //          finalArray.push(messageTimeline.at(timelineIndex));
-        //      skipIndex = messageTimeline.at(timelineIndex).count;
-        //      timelineIndex++;
-        //      finalArray.push(message);
-        //      test = false;
-        //      skipIndex--;
-         
-        //      }
-        //      else{
-        //          finalArray.push(message);
-        //          skipIndex--;
-        //          if(skipIndex == 0)
-        //          {
-        //             test=true;
-        //          }
-        //      }
-             
-         
-         
-                 
-        //    })
-    
-        // //    console.log("final Array",finalArray);
-    
-        //    fulfill({finalArray,messageTimeline});
+      
 
         }
         catch(error)
