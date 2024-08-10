@@ -407,7 +407,7 @@ async function checkForDays(givenDate) {
 
 function testingGetMessageTimeLine(messages)
 {
-    return new Promise((fulfill,reject)=>
+    return new Promise(async(fulfill,reject)=>
     {
         try{
             let messageTimeline =[];
@@ -420,52 +420,77 @@ function testingGetMessageTimeLine(messages)
             let finalArray =[];
             let testCount=0;
             let index=0;
-          
-            messages.forEach(async(message)=>
-            {
-                let msg = message._doc.createdAt;
-                let currentMsgDate = moment(msg).format("LL");
-              
-                if(isFirst)
-                {   
-                    prevDate= currentMsgDate;
-                    isFirst=false;
-                  
-                    let currentDateFormat = new Date(currentMsgDate);
-                    let date = await checkForDays(currentDateFormat)
-                  
-                    messageTimeline.push(date);
-                    items.push(message);
-                }
-                else{
-                    if(prevDate === currentMsgDate)
-                    {
-                        if(index == messages.length-1)
-                        {
-                            let currentDateFormat = new Date(prevDate);
-                            let date = await checkForDays(currentDateFormat);
-                            messageTimeline.push(date);
-                        }
-                    items.push(message);
-                 
-                    }
-                    else if(prevDate != currentMsgDate){
-                            
-                    let currentDateFormat = new Date(prevDate);
-                    let date = await checkForDays(currentDateFormat);
-                          
-                    finalArray.push({date:messageTimeline[testCount++],items:items});
-                    messageTimeline.push(date);
-                                   
-                    prevDate = currentMsgDate;
-                   
-                    items=[];
-                    }
-        
-                }
-                index++;
-            })
 
+            if(messages.length == 1)
+            {
+                let msg = messages[0]._doc.createdAt;
+                let currentMsgDate = moment(msg).format("LL");
+                let currentDateFormat = new Date(currentMsgDate);
+                let date = await checkForDays(currentDateFormat);
+                if(typeof date == "object")
+                {
+                   date= moment(date).format("LL");
+                }
+                messageTimeline.push(date);
+                items.push(messages);
+
+            }
+            else{
+                for(let message of messages)
+                {
+                    let msg = message._doc.createdAt;
+                    let currentMsgDate = moment(msg).format("LL");
+                  
+                    if(isFirst)
+                    {   
+                        prevDate= currentMsgDate;
+                        isFirst=false;
+                      
+                    }
+                    else{
+    
+                        if(prevDate === currentMsgDate)
+                        {
+                            if(index == messages.length-1)
+                            {
+                                let currentDateFormat = new Date(prevDate);
+                                let date = await checkForDays(currentDateFormat);
+                                if(typeof date == "object")
+                                {
+                                   date= moment(date).format("LL");
+                                }
+                                messageTimeline.push(date);
+                            }
+                       
+                        }
+                        else if(prevDate != currentMsgDate)
+                        {
+                                
+                        let currentDateFormat = new Date(prevDate);
+                        let date = await checkForDays(currentDateFormat);
+                        if(typeof date == "object")
+                        {
+                           date= moment(date).format("LL");
+                        }
+                              
+                        messageTimeline.push(date);
+                        finalArray.push({date:messageTimeline[testCount++],items:items});
+                                       
+                        prevDate = currentMsgDate;
+                       
+                        items=[];
+    
+                        }
+            
+                    }
+                    items.push(message);
+                    index++;
+    
+                }
+
+            }
+          
+         
             if(items.length>0)
             {
                 finalArray.push({date:messageTimeline[testCount++],items:items});
@@ -474,7 +499,6 @@ function testingGetMessageTimeLine(messages)
            
             fulfill(finalArray);
       
-
         }
         catch(error)
         {
