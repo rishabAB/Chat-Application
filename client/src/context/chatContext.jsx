@@ -141,19 +141,53 @@ const getAudioInstance = useCallback(() => {
        
            checkTimeline(messages).then(function(result)
         {
+           
             if(!result)
             {
-                setMessages((prev) => [...prev,{date:"Today",count:1}]);
-                messageRef.current = [...messages,{date:"Today",count:1}];
+                // setMessages((prev) => [...prev,{date:"Today"}]);
+                // messageRef.current = [...messages,{date:"Today"}];
                 console.log("messageRef.current",messageRef.current);
             }
+
             if(newMessageRef?.current)
             {
-                setMessages( (prev) =>[...prev,newMessageRef?.current]);
+               
+                if(!result)
+                {
+                    // it won't have today
+                    
+                    messageRef.current = [...messages,{date:"Today",items:[newMessageRef?.current]}];
+                    setMessages((prev) => [...prev,{date:"Today",items:[newMessageRef?.current]}]);
+                   
+                }
+                else{
+                     let arr =[];
+                    for(let message of messages)
+                        {
+                            if(message?.date == "Today")
+                            {
+                                 arr=message.items ? message.items : [];
+                                arr.push(newMessageRef?.current);
+                                break;
+                                
+                            }
+                        }
+
+                        let index = messages.indexOf((elem) => elem.date == "Today");
+                        messages.splice(index,1);
+
+                        messageRef.current = [...messages,{date:"Today",items:arr}];
+                        setMessages((prev) => [...prev,{date:"Today",items:arr}])
+                       
+                       
+                    
+                }
+              
                 // This setMessages is for someone who is seing the msg
             }
           
         })
+       
            
             
             if(socket ==  null) return;
@@ -182,14 +216,40 @@ const getAudioInstance = useCallback(() => {
                 // console.log("messageRef.current",messageRef[0].current)
                 checkTimeline(messageRef.current).then(function(result)
                 {
+                    let arr=[];
                     if(!result)
                     {
-                        messageRef.current = [...messageRef.current,...socketRes];
-                        setMessages( (prev) =>[...prev,...socketRes]);
+                        // Today is not there at present
+                        // messageRef.current = [...messageRef.current,...socketRes];
+                        // setMessages( (prev) =>[...prev,...socketRes]);
+                        arr.push(socketRes[1]);
+ 
+                        messageRef.current = [...messageRef.current,{date:"Today",items:arr}];
+                        setMessages((prev) => [...prev,{date:"Today",items:arr}]);
+                       
                     }
                     else{
-                        messageRef.current = [...messageRef.current,socketRes[1]];
-                        setMessages((prev) => [...prev,socketRes[1]]);
+                        
+                        // Today is already there 
+                        // messageRef.current = [...messageRef.current,socketRes[1]];
+                        // setMessages((prev) => [...prev,socketRes[1]]);
+
+                        for(let message of messageRef.current)
+                            {
+                                if(message?.date == "Today")
+                                {
+                                     arr=message.items ? message.items : [];
+                                    arr.push(socketRes[1]);
+                                    break;
+                                    
+                                }
+                            }
+    
+                            // let index = messageRef.current.indexOf((elem) => elem.date == "Today");
+                            // messages.splice(index,1);
+    
+                            messageRef.current = [...messageRef.current,{date:"Today",items:arr}];
+                            setMessages((prev) => [...prev,{date:"Today",items:arr}])
                        
                     }
                     sendToClientTriggered.current=false;

@@ -54,10 +54,10 @@ console.log("messageTimeline",messageTimeline);
 //   setMessageTimelineIndex(messageTimeline.length-timelineIndex);
 // }
 
-    if (currentChat && messages && messages.length > 0) {
-      if ((test == 1) || (test !== messages[1].chatId )) {
+    if (currentChat && messages && messages.length > 0 && messages[0].items?.length >0) {
+      if ((test == 1) || (test !== messages[0]?.items[0].chatId )) {
        
-        setTest(messages[1]?.chatId);
+        setTest(messages[0]?.items[0].chatId);
         setOffset(2);
         offsetRef.current= 2;
         timelineIndex=1;

@@ -68,8 +68,10 @@ function deleteTodaysDate(messages)
     let c=1;
     messages.forEach((msg)=>
     {
+        date = msg?.date;
+        items = msg.items;
        
-        if(msg?.date === "Today")
+        if(date === "Today" ) 
         {
             let index = messages.findIndex(unit => unit.date == "Today");
             messages.splice(index,1);
@@ -78,6 +80,17 @@ function deleteTodaysDate(messages)
                 messages.splice(index,1);
                 // index++;
             }
+        }
+        else if(!date)
+        {
+            let index = messages.findIndex(unit => unit.date == undefined);
+            messages.splice(index,1);
+            // while(index<messages.length)
+            // {
+                messages.splice(index,1);
+                // index++;
+            // }
+
         }
     })
 
@@ -142,6 +155,7 @@ const partialMessages = async(req,res)=>
     //     returnObject.moreMessagesAvailable=true;
     // }
     returnObject.messages=completeResponse;
+     deleteTodaysDate(returnObject.messages);
     res.status(200).json(returnObject);
 
     // -----------------------

@@ -14,7 +14,6 @@ const NavBar = () => {
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
    
-   console.log("isViewerOpen",isViewerOpen);
    
     const handleImageViewer = useCallback(()=>
     {
