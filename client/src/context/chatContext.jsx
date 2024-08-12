@@ -173,7 +173,7 @@ const getAudioInstance = useCallback(() => {
                             }
                         }
 
-                        let index = messages.indexOf((elem) => elem.date == "Today");
+                        let index = messages.findIndex((elem) => elem.date == "Today");
                         messages.splice(index,1);
 
                         messageRef.current = [...messages,{date:"Today",items:arr}];
@@ -244,9 +244,9 @@ const getAudioInstance = useCallback(() => {
                                     
                                 }
                             }
-    
-                            // let index = messageRef.current.indexOf((elem) => elem.date == "Today");
-                            // messages.splice(index,1);
+                           
+                            let index =messages.findIndex((elem) => elem.date == "Today");
+                            messages.splice(index,1);
     
                             messageRef.current = [...messageRef.current,{date:"Today",items:arr}];
                             setMessages((prev) => [...prev,{date:"Today",items:arr}])
@@ -313,7 +313,7 @@ const getAudioInstance = useCallback(() => {
             }
            
 
-        },[socket,currentChat])
+        },[socket,currentChat,messages])
     // Here we are adding currentChat as a dependency beacause of that case if user1 sends message
     // to user2 and user2 is online but user2 hasn't opened the conversation so when'it will get 
     // opned currentChat changes probably thats the reason
