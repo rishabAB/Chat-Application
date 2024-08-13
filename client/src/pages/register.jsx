@@ -7,10 +7,11 @@ const Register = () => {
     return (
         <>
             <Form onSubmit = {registerUser}>
-            <Row style={{
-                    height:"100vh",
+            <div style={{
+                    height:"85vh",
                 justifyContent:"center",
-                paddingTop:"10%"
+                alignItems:"center",
+                display:"flex"
                 }}>
 
                     <Col xs={6}>
@@ -54,7 +55,7 @@ const Register = () => {
                         
                         </Stack>
                     </Col>
-                </Row>
+                </div>
             </Form>
 
         </>

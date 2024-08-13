@@ -269,13 +269,13 @@ const goToBottom = useCallback(async()=>
 
          {/* TESTING FOR TIMELINE */}
          <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
-    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Start a Conversation</h5> }
-    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important" }}>Beggining of the conversation</h5> }
+    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important","paddingTop":"1rem" }}>Start a Conversation</h5> }
+    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"#5087cfc4","cursor":"unset !important","paddingTop":"1rem" }}>Beggining of the conversation</h5> }
       {messages && messages.map(({date, items}) => {
         return (
           <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents",display:"flex",flexDirection:"column",gap:"1.5rem"}}>
          
-         <div className="flex justify-center mb-3 mt-3 sticky top-0" style={{"position": "sticky","display": "flex","justifyContent": "center"}}>
+         <div className="flex justify-center mb-3 sticky top-0" style={{"position": "sticky","display": "flex","justifyContent": "center"}}>
               <span className="text-sm border px-2 rounded-full bg-white border-gray-300" style={{"borderRadius":"50px"}}>
                 {date}
               </span>
