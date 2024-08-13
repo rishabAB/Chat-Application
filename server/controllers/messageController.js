@@ -155,7 +155,7 @@ const partialMessages = async(req,res)=>
     //     returnObject.moreMessagesAvailable=true;
     // }
     returnObject.messages=completeResponse;
-     deleteTodaysDate(returnObject.messages);
+    //  deleteTodaysDate(returnObject.messages);
     res.status(200).json(returnObject);
 
     // -----------------------

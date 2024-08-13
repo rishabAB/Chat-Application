@@ -64,6 +64,7 @@ console.log("messageTimeline",messageTimeline);
           // console.log("Scroll getting affected",divRef?.current?.style);
           // divRef.current.style?.padding="unset";
           divRef?.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+         
           // console.log("divRef.current.clientHeight",checkScroll?.current?.clientHeight)
           // timelineRef = useRef(null);
           // divRef.current.marginTop = divRef.current.clientHeight;
@@ -78,7 +79,7 @@ console.log("messageTimeline",messageTimeline);
       
       }
       else if (isPartialLoading) {
-        checkScroll.current.scrollTop = checkScroll.current.scrollHeight - currentScrollPosition;
+          checkScroll.current.scrollTop = checkScroll.current.scrollHeight - currentScrollPosition;
         delay(2000).then( 
           onWheelCaptureHandler()
         );
@@ -105,7 +106,9 @@ console.log("messageTimeline",messageTimeline);
   {
     if(isScrollAllowed &&  divRef?.current)
     {
+      // console.log(checkScroll?.current.clientHeight);
       divRef.current.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+     
       setIsScrollAllowed(false);
 
     }
@@ -147,28 +150,11 @@ console.log("messageTimeline",messageTimeline);
 
   
  const [isScrollButton,setIsScrollButton] = useState(false);
- const isAllowed = useRef(true);
- const prevTimelineRef = useRef(null);
+
 
 
   const onWheelCaptureHandler = useCallback(async () => {
    
-   
-    // if(timelineRef?.current?.getBoundingClientRect().top>0 && timelineRef?.current?.getBoundingClientRect().bottom >0 && timelineRef?.current?.innerText != prevTimelineRef?.current && isAllowed.current)
-    // {
-    //   // timelineRef = useRef(null);
-    //   // const elem=`<div class="timeline">${messageTimeline[messageTimeline.length-2]?.date}</div>`
-    //   isAllowed.current=false;
-    //   timelineIndex++;
-    //   console.log("Timeline idnex",timelineIndex);
-    //   // timelineRef = useRef();
-    //   prevTimelineRef.current =(timelineRef?.innerText);
-    //   console.log("After ",timelineRef.innerText);
-    //   console.log("Message timeline",messageTimeline);
-    //   setMessageTimelineIndex(messageTimeline.length-timelineIndex);
-    //   isAllowed.current=true;
-
-    // }
     setBottomScrollHeight(checkScroll?.current?.scrollHeight - checkScroll?.current?.clientHeight - checkScroll?.current?.scrollTop);
     // console.log("TRIGGERING",checkScroll)
 
@@ -214,8 +200,8 @@ console.log("messageTimeline",messageTimeline);
 
 const goToBottom = useCallback(async()=>
 {
-  divRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  await delay(900);
+  divRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });  
+  await delay(400);
   setIsScrollButton(false);
  
 
@@ -225,7 +211,7 @@ const goToBottom = useCallback(async()=>
 
     if (newMessage) {
       console.log("NEW MESSAGE SCORLL AFFECTED");
-      divRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      divRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });  
 
     }
 
@@ -279,14 +265,14 @@ const goToBottom = useCallback(async()=>
               <span className="text-sm border px-2 rounded-full bg-white border-gray-300" style={{"borderRadius":"50px"}}>
                 {date}
               </span>
-            </div>
+          </div>
 
             {items && items.map((msg,index)=>
             
-              ( <Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
+              ( <Stack  ref={ index === items.length-1 ? divRef : null} key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
                 <span>{msg.text} </span>
                 <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
-                <div ref={ index === items.length-1 ? divRef : null}></div>
+                {/* <div  ></div> */}
               </Stack>)
 
             )}

@@ -109,16 +109,21 @@ export const AuthContextProvider = ({children}) =>
         return new Promise(async(resolve,reject)=>
         {
             try{
-               
-            if(user?.profile)
-                {
-                    user.imageUrl = await bufferToUrl(user?.profile,user?.imageType)
-                }
-            else{
-                    user.imageUrl = avatar;
-                }
-                delete user.profile;
-                resolve( user);
+          if(user)
+            {
+                if(user?.profile)
+                    {
+                        user.imageUrl = await bufferToUrl(user?.profile,user?.imageType)
+                    }
+                else{
+                    
+                        user.imageUrl = avatar;
+                    }
+                    delete user.profile;
+                    resolve( user);
+
+            }     
+          
 
             }
             catch(error)
