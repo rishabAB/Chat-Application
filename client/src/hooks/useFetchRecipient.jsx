@@ -45,7 +45,6 @@ export const useFetchRecipientUser = (chat,user) =>
         const byteArray = new Uint8Array(bufferArray.data);
         const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
         const imageUrl = URL.createObjectURL(blob);
-        console.log("url ",imageUrl)
         resolve(imageUrl);
 
     })

@@ -20,7 +20,7 @@ function App() {
     <ChatContextProvider user ={user}>
     <NavBar/>
      
-  <div className="text-secondary" style={{    width: '100%',
+  <div className="text-secondary" style={{width: '100%',
     padding: '0 4%'}}>
   <Routes>
     <Route path="/" element={user ? <Chat /> : <Login/>} />

@@ -118,16 +118,13 @@ console.log("messageTimeline",messageTimeline);
   
  
   // ------------------------------------------------------
-  function doSomething()
-  {
-    console.log("hey");
-  }
+ 
   useEffect(()=>
   {
     
     if(checkScroll?.current?.scrollTop == 0 && moreMessagesAvailable)
     {
-      console.log("Scoroll top 0");
+
       checkScroll.current.style.pointerEvents = 'none';
       delay(1000).then(
         ()=> {

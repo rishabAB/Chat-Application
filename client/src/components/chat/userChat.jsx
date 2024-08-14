@@ -25,8 +25,7 @@ const UserChat = ({chat, user}) => {
 
 const audioPool = useRef([]);
 const poolSize = 100; // Adjust pool size as needed
-console.log("imageUrl in userChat",imageUrl);
-console.log("recipientUser",recipientUser);
+
 useEffect(() => {
   // Initialize the audio pool
   for (let i = 0; i < poolSize; i++) {

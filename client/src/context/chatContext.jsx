@@ -16,6 +16,8 @@ export const ChatContextProvider = ({children, user}) => {
 
     const [currentChat,setCurrentChat] = useState(null);
 
+    const currentChatRef = useRef(currentChat);
+
     const [isMessagesLoading,setIsMessagesLoading] = useState(null);
 
     const [messagesError,setMessagesError] = useState(null);
@@ -123,11 +125,14 @@ const getAudioInstance = useCallback(() => {
     return null;
   }, []);
 
-  const playAudio = useCallback(() => {
+
+  const playAudio = useCallback(async() => {
     const audio = getAudioInstance();
-    if (audio) {
+    if (audio ) {
       audio.play().catch((error) => console.error('Error playing audio:', error));
-    } else {
+   
+    } 
+    else {
       console.warn('No available audio instances');
     }
   }, [getAudioInstance]);
@@ -260,22 +265,24 @@ const getAudioInstance = useCallback(() => {
 
         },[messages,messageRef.current])
 
+
         useEffect(()=>
         {
             if(!socket) return;
 
             socket.on("sendNotification",(message)=>
             {
-                if(currentChat && message && message.length>0 && message[0]?.notificationTone)
+                if(currentChatRef.current && message && message.length>0 && message[0]?.notificationTone)
                 {
                     playAudio();
                     console.log("PLAY AUDIO");
                 }
-                setNotification(message);
+                  setNotification(message);
                
             })
 
-        },[socket,currentChat,notification])
+        },[socket,currentChatRef])
+
        
 
     // Receive Message
@@ -379,12 +386,6 @@ const getAudioInstance = useCallback(() => {
     },[user])
 
   
-    // function checkTimeline(messages)
-    // {
-       
-    // }
-
-
     const sendTextMessage = useCallback(async(textMessage,sender,currentChatId)=>
     {
         if(!textMessage) return console.log("You must type something");
@@ -428,7 +429,11 @@ const getAudioInstance = useCallback(() => {
                 
             }
            if(currentChat)
+           {
             getPartialMessages(0,0,currentChat?._id);
+          
+           }
+            
 
     
         },[currentChat])
@@ -480,6 +485,7 @@ const getAudioInstance = useCallback(() => {
     const updateCurrentChat = useCallback((chat)=>
     {
         setCurrentChat(chat);
+        currentChatRef.current=chat;
 
     },[])
 
