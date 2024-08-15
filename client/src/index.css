@@ -284,3 +284,32 @@ cursor: pointer;
   align-items: center;
   justify-content: center;
 }
+
+/* ---Navbar */
+
+
+.add-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.add-hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2.5px;
+  background-color: white;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.5s ease-in-out;
+  border-radius: 50px;
+  
+}
+
+.add-hover:hover::after,.add-hover:focus::after {
+  transform: scaleX(1);
+}
+
+/* ------ */

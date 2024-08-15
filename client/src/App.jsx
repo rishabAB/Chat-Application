@@ -14,6 +14,8 @@ import {AuthContext} from "./context/authContext";
 
 import {ChatContextProvider} from "./context/chatContext";
 
+import IntroPage from "./pages/introPage/introPage";
+
 function App() {
  const {user} = useContext(AuthContext);
   return (
@@ -23,9 +25,10 @@ function App() {
   <div className="text-secondary" style={{width: '100%',
     padding: '0 4%'}}>
   <Routes>
-    <Route path="/" element={user ? <Chat /> : <Login/>} />
+    {/* <Route path="/" element={user ? <Chat /> : <Login/>} /> */}
     <Route path="/login" element={user ? <Chat/> : <Login />} />
     <Route path="/register" element={user ? <Chat/> : <Register />} />
+    <Route path="/" element = {user ? <Chat/> : <IntroPage user={user}/>} />
     <Route path="*" element={<Navigate to ="/" />} />  
     {/* Here this navigate is the default path that we are passing if url is any random then 
     it will redirected to this / path */}

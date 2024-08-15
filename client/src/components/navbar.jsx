@@ -63,8 +63,7 @@ const NavBar = () => {
                     loadRecipientImage();
     
                 },[imageUrl])
-                // background-color: rgba(0, 0, 0, 0.65);
-            
+               
            
     return (
         <Navbar 
@@ -84,8 +83,12 @@ const NavBar = () => {
                         }
                         {
                             !user && (<>
-                             <Link to="/login" className="link-light text-decoration-none">Login</Link>
-                        <Link to="/register" className="link-light text-decoration-none">Register</Link>
+                            {/* <span className="add-hover"> */}
+                            <Link to="/login" className="link-light text-decoration-none add-hover">Login</Link>
+                            <span></span>
+                            {/* </span> */}
+                            
+                        <Link to="/register" className="link-light text-decoration-none add-hover">Register</Link>
                         </>)
 
                         }
