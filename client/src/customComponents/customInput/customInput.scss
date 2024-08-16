@@ -1,25 +1,26 @@
+@import '../../index';
+
 .custom-input{
-    border-radius: 50px;
+    border-radius: $input_Button_Border_Radius;
     padding: 0.4rem;
     width: 100%;
     border: unset;
-    font-size: unset;
     outline: unset;
-    height: 45px;
+    height:$input_Button_Height;
      padding-left: 12px;
-    font-size: 1em;
+    font-size: $input_Font_Size;
     text-decoration: none;
     transition: all 0.5s ease-in-out;
 
-    
+    // Pink color #ff0083
     &::placeholder{
-        color: #ff0083;
+        color: $genericBlueColor;
         padding-left: 12px;
     }
     &:hover,&:focus{
        padding-left: 30px;
        transition: all 0.5s ease-in-out;
-       outline: 3px solid #ff0083;
+       outline: 3.5px solid $genericBlueColor;
        
     } 
    

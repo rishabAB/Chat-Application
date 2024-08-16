@@ -1,27 +1,40 @@
 import {useEffect, useState} from "react";
-import Login from "../login";
-const IntroPage = (user) => {
-    console.log("user is ", user);
+import Login from "../loginPage/login";
+import Register  from "../registerPage/register";
+import "./introPage.scss"
+const IntroPage = ({  isRegister }) => {
+   
     const [isUserNull, setIsUserNull] = useState(false);
-
+    const [isRegisterProp, setIsRegister] = useState(false);
+   
 
     useEffect(() => {
-        if (!user == false) {
-            setIsUserNull(true);
+      
+        if(isRegister)
+        {
+            setIsRegister(true);
+        }
+        else{
+            setIsRegister(false);
+
         }
 
-    }, [user])
+    }, [isRegister])
 
 
-    return(isUserNull  (
-        <div><img src="../../../public/chat_application_2.png" alt=""
-                style={
-                    {
-                        height: "400px",
-                        width: "50%"
-                    }
-                }/></div>
-    )   && <Login/>)
+
+return (<div className="register_login">
+<img
+    src="../../../public/chat_application_2.png"
+    alt=""
+   
+/>
+<div style={{width:"35%"}}>
+{isRegisterProp ? <Register/> : <Login/> }
+</div>
+</div>
+);
+    
 
 }
 export default IntroPage;

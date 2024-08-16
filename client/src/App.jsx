@@ -2,8 +2,8 @@
 import {Routes,Route,Navigate} from "react-router-dom";
 
 import Chat from "./pages/chat";
-import Login from "./pages/login";
-import Register from "./pages/register";
+import Login from "./pages/loginPage/login";
+import Register from "./pages/registerPage/register";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Container} from "react-bootstrap";
@@ -18,6 +18,7 @@ import IntroPage from "./pages/introPage/introPage";
 
 function App() {
  const {user} = useContext(AuthContext);
+ const isRegister=true;
   return (
     <ChatContextProvider user ={user}>
     <NavBar/>
@@ -26,9 +27,9 @@ function App() {
     padding: '0 4%'}}>
   <Routes>
     {/* <Route path="/" element={user ? <Chat /> : <Login/>} /> */}
-    <Route path="/login" element={user ? <Chat/> : <Login />} />
-    <Route path="/register" element={user ? <Chat/> : <Register />} />
-    <Route path="/" element = {user ? <Chat/> : <IntroPage user={user}/>} />
+    <Route path="/login" element={user ? <Chat/> : <IntroPage />} />
+    <Route path="/register" element={user ? <Chat/> : <IntroPage isRegister={isRegister}/>} />
+    <Route path="/" element = {user ? <Chat/> : <IntroPage />} />
     <Route path="*" element={<Navigate to ="/" />} />  
     {/* Here this navigate is the default path that we are passing if url is any random then 
     it will redirected to this / path */}

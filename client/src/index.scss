@@ -1,20 +1,26 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap");
+
+$genericBlueColor:rgb(12, 69, 125);
+$buttonHoverColor:rgb(38 98 157);
+$input_Button_Height:40px;
+$input_Button_Border_Radius:50px;
+$fontColor:white;
+$genericBackgroundColor:black;
+$input_Font_Size:16px;
+
+
+
 body{
-    color:white;
-    font-family: "Nunito","sans-serif";
-    background: rgb(40, 40, 40);
-    overflow-y: hidden;
+color:var($fontColor);
+font-family: "Nunito","sans-serif";
+background: rgb(40, 40, 40);
+overflow-y: hidden;
 }
 
 
 
-body {
-  font-family: "Nunito", sans-serif;
-  background: rgb(40, 40, 40);
-  color: white;
-}
 
 /* All users */
 .all-users {
@@ -181,14 +187,7 @@ body {
   border-radius: 50%;
 }
 
-.gender{
-  display:flex;
-  flex-direction:row;
-  gap:1rem;
-  font-size: 1rem;
-  margin-bottom: unset;
-  font-size: 1.1rem;
-}
+
 
 .cursor > input{
 cursor: pointer;
@@ -312,4 +311,16 @@ cursor: pointer;
   transform: scaleX(1);
 }
 
+
+.submit-button{
+  border-radius: 50px;
+  height: 40px;
+    background-color: rgb(12, 69, 125);
+    border: unset;
+}
+.submit-button:hover{
+  background-color: rgb(38 98 157);
+}
+
 /* ------ */
+

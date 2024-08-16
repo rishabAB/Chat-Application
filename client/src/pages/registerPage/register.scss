@@ -1,0 +1,27 @@
+@import '../../index';
+
+.form_main_div{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    color: $fontColor;
+
+    .gender{
+        display:flex;
+        flex-direction:row;
+        gap:1rem;
+        font-size: $input_Font_Size;
+        height: 30px;
+        
+      }
+
+      .picture_label{
+        display: flex;
+        flex-direction: column;
+        font-size: $input_Font_Size;
+        gap: 0.25rem;
+      }
+}
+
+
+

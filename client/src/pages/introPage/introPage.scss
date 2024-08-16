@@ -1,0 +1,13 @@
+.register_login{
+    display: flex;
+    margin-top: 3%;
+    gap:15%;
+    align-items: center;
+
+    & > img{
+        height:400px;
+        width: 40%;
+    }
+
+}
+
