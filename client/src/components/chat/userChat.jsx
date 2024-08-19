@@ -7,7 +7,7 @@ import moment from "moment";
 
 import sound from "../../assets/sound.wav";
 import ImageViewer from 'react-simple-image-viewer';
-
+import "./chat.scss";
 
 const UserChat = ({chat, user}) => {
     const {recipientUser,imageUrl} = useFetchRecipientUser(chat, user);

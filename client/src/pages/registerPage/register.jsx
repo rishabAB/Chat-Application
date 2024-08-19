@@ -70,7 +70,7 @@ const Register = () => {
                                     label={`Female`}></Form.Check>
                             </div>
                             {/* <div > */}
-                                <Form.Label class="picture_label">Profile picture:</Form.Label>
+                                <Form.Label className="picture_label">Profile picture:</Form.Label>
 
                                 <ProfilePicture placeholder="Profile Picture"
                                     onChange={updateRegisterInfo}

@@ -1,0 +1,12 @@
+@import '../../index';
+
+.login_main_elem{
+    justify-content: center;
+
+    & h2 {
+        color: $fontColor;
+    }
+    & .Toastify__toast-icon{
+        display: none !important;
+    }
+}

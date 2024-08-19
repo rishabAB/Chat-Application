@@ -45,6 +45,8 @@ export const ChatContextProvider = ({children, user}) => {
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
+
+    console.log("chatConTEXT");
     // Forming a connection with socket
     useEffect(()=>
     {

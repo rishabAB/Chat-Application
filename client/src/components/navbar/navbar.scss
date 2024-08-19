@@ -1,0 +1,47 @@
+@import "../../index.scss";
+
+
+$img_height:50px;
+$img_width:50px;
+$z_index:4;
+.navbar_main{
+    height: 3.4rem;
+    padding: 0 4%;
+    background-color: $genericBlueColor;
+
+    &_container{
+        gap: 2rem;
+        justify-content: flex-start !important;
+        margin-left: 1%;
+    }
+
+    .user_img{
+        height: $img_height;
+        width: $img_width;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index:$z_index;
+
+    }
+
+    .recipient {
+        display: flex;
+        margin-right: 21%;
+        gap: 1.2rem; 
+        align-items: center;
+    
+        // Target the first child span
+        span:first-child {
+            color: $fontColor;
+        }
+
+        img{
+            height: $img_height;
+            width: $img_width;
+            border-radius: 50%;
+            cursor: pointer;
+            
+        }
+    }
+    
+}

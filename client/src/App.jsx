@@ -8,20 +8,38 @@ import Register from "./pages/registerPage/register";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Container} from "react-bootstrap";
 
-import NavBar from "./components/navbar";
+import NavBar from "./components/navbar/navbar";
 import {useContext} from "react";
 import {AuthContext} from "./context/authContext";
 
 import {ChatContextProvider} from "./context/chatContext";
 
 import IntroPage from "./pages/introPage/introPage";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
  const {user} = useContext(AuthContext);
  const isRegister=true;
+
+ 
   return (
     <ChatContextProvider user ={user}>
     <NavBar/>
+
+    <ToastContainer 
+        position="top-right" 
+        autoClose={2000} 
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        colored
+      />
+
      
   <div className="text-secondary" style={{width: '100%',
     padding: '0 4%'}}>

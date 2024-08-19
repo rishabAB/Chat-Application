@@ -1,12 +1,13 @@
 import {Container, Nav, Navbar, Stack} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
-import { useFetchRecipientUser } from "../hooks/useFetchRecipient";
+import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import ImageViewer from 'react-simple-image-viewer';
 import {useCallback, useContext,useEffect,useState} from "react";
-import {AuthContext} from "../context/authContext";
-import {ChatContext} from "../context/chatContext";
-import avatar from "../assets/avatar.svg";
+import {AuthContext} from "../../context/authContext";
+import {ChatContext} from "../../context/chatContext";
+import avatar from "../../assets/avatar.svg";
+import "./navbar.scss";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
     const { currentChat } = useContext(ChatContext);
@@ -14,11 +15,37 @@ const NavBar = () => {
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
    
-   
+    const [isLoginStyle,setIsLoginStyle] = useState(false);
+    const [isRegisterStyle,setIsRegisterStyle] = useState(false);
+
+    const [isCssAffected,setIsCssAffected] = useState(true);
+
+    useEffect(()=>
+    {
+        // console.log("window",window.location.pathname);
+        if(isCssAffected && window.location.pathname == "/" || window.location.pathname == "/login")
+        {
+            setIsLoginStyle(true);
+            setIsRegisterStyle(false);
+            setIsCssAffected(false);
+        }
+        else if(isCssAffected && window.location.pathname == "/register")
+        {
+            setIsRegisterStyle(true);
+            setIsLoginStyle(false);
+            setIsCssAffected(false);
+        }
+
+    },[window.location,isCssAffected])
     const handleImageViewer = useCallback(()=>
     {
         setIsViewerOpen(prevIsViewerOpen => !prevIsViewerOpen);
         
+    },[])
+
+    const handleUnderlineCss = useCallback(()=>
+    {
+        setIsCssAffected(true);
     },[])
 
     const handleRecipientImageViewer = useCallback(()=>
@@ -67,28 +94,27 @@ const NavBar = () => {
            
     return (
         <Navbar 
-            style={
-                {height: "3.75rem",padding:"0 4%",backgroundColor: "rgb(12 69 125)"}
-        }>
-            <Container style={{gap:"2rem",justifyContent:"flex-start",marginLeft:"1%"}}>
-            {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",zIndex:"4"}} alt="" />) }
+           className="navbar_main">
+            <Container className="navbar_main_container" >
+            {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer} className="user_img" alt="" />) }
                 <h2>
+                    {/* <img src="../../../public/icon.png" style={{height:"30px",width:"30px"}}/> */}
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
                 {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}
                 <Nav>
                     <Stack direction="horizontal" gap="3">
                         {
-                            user && ( <Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none">Logout</Link> )
+                            user && ( <Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none add-hover">Logout</Link> )
                         }
                         {
                             !user && (<>
                             {/* <span className="add-hover"> */}
-                            <Link to="/login" className="link-light text-decoration-none add-hover">Login</Link>
+                            <Link to="/login" onClick={handleUnderlineCss} className= {`link-light text-decoration-none ${isLoginStyle ? "underline " : "add-hover"}`  }>Login</Link>
                             <span></span>
                             {/* </span> */}
                             
-                        <Link to="/register" className="link-light text-decoration-none add-hover">Register</Link>
+                        <Link to="/register" onClick={handleUnderlineCss}  className= {`link-light text-decoration-none ${isRegisterStyle ? "underline " : "add-hover"}`  }>Register</Link>
                         </>)
 
                         }
@@ -120,8 +146,13 @@ const NavBar = () => {
       )}
 
 
-            {  recipientUser && (<><span style={{display:"flex",marginRight:"21%",gap:"1.2rem",alignItems:"center"}}><span >{recipientUser.name}</span><span>
-                <img src={recipientUserArray?.[0] } onClick = {handleRecipientImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer"}} alt="" /></span></span>
+            {  recipientUser && (<>
+            <span className="recipient">
+                <span >{recipientUser.name}</span>
+                <span>
+                <img src={recipientUserArray?.[0] } onClick = {handleRecipientImageViewer} alt="" />
+                </span>
+                </span>
                </>) }
         </Navbar>
     );
