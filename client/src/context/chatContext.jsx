@@ -9,7 +9,6 @@ export const ChatContextProvider = ({children, user}) => {
     const [userChats, setUserChats] = useState(null);
     const [potentialChats,setPotentialChats] = useState([]);
    
-    
     const [isUserChatLoading, setIsUserChatLoading] = useState(false);
 
     const [isUserChatError, setIsUserChatError] = useState(null);
@@ -41,6 +40,8 @@ export const ChatContextProvider = ({children, user}) => {
     const [moreMessagesAvailable,setMoreMessagesAvailable] = useState(false);
 
     const sendToClientTriggered = useRef(false);
+
+    const [isModalOpen,setIsModalOpen] = useState(false);
 
     // Socket part
     const[socket,setSocket] = useState(null);
@@ -405,8 +406,6 @@ const getAudioInstance = useCallback(() => {
         // setMessages( (prev) =>[...prev,response]);
         // This setMessages is for someone who is seing the msg
 
-       
-        
 
     },[])
 
@@ -491,6 +490,13 @@ const getAudioInstance = useCallback(() => {
 
     },[])
 
+    // --Modal
+
+    const updateModal = useCallback((change)=>
+    {
+        setIsModalOpen((prev) => change);
+    },[])
+
     const createChat = useCallback(async(firstId,secondId) =>
     {
 
@@ -533,7 +539,9 @@ const getAudioInstance = useCallback(() => {
         newMessage,
         moreMessagesAvailable,
         getPartialMessages,
-        messageTimeline
+        messageTimeline,
+        isModalOpen,
+        updateModal
     }
     }> {children}</ChatContext.Provider>)
 }
