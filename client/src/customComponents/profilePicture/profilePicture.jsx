@@ -1,20 +1,30 @@
 import "./profilePicture.scss"
-import { useState,useCallback} from "react";
+import { useState,useCallback, useEffect} from "react";
 const ProfilePicture = (props) =>
 {
-    const {placeholder,onChange,obj,propName} =props;
+    const {placeholder,onChange,obj,propName,onErrorObj} =props;
     const [fileName,setFileName] = useState(null);
 
     const getFileName = useCallback((event)=>
     {
         setFileName(event?.target?.files[0].name)
-        onChange({...obj,propName:event?.target?.files[0]});
+        onChange({...obj,[propName]:event?.target?.files[0]});
 
-    },[])
+    },[obj])
     
     const styles = {
         color: fileName ? 'black' : 'rgb(12, 69, 125)',
     };
+
+    useEffect(()=>
+    {
+        if(onErrorObj?.error)
+        {
+            setFileName(null);
+
+        }
+
+    },[onErrorObj])
    
 
     return (

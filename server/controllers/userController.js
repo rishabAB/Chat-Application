@@ -48,7 +48,7 @@ const bufferToUrl = (bufferArray,imageType) => {
 const registerUser = async(req,res) =>
 {
     try{
-        const {name,email,password,profile}=req.body;
+        const {name,email,password,profile,gender}=req.body;
         let binaryImage;
 
         if(profile)
@@ -58,15 +58,9 @@ const registerUser = async(req,res) =>
 
         let user=await userModel.findOne({email});
     
-        if(user) return res.status(400).json("User with the given email already exists");
+        if(user) return res.status(400).json("This email address is already taken");
     
-        if(!name || !email || !password) return res.status(400).json("All fields are required");
-    
-        if(!validator.isEmail(email))  return res.status(400).json("Email must be a valid email");
-    
-        if(!validator.isStrongPassword(password))  return res.status(400).json("Password must be a strong password");
-    
-        user=new userModel({name,email,password,profile:binaryImage.buffer,imageType:binaryImage.imageType});
+        user=new userModel({name,email,password,gender,profile:binaryImage.buffer,imageType:binaryImage.imageType});
         const salt=await bcrypt.genSalt(10);
         user.password=await bcrypt.hash(user.password,salt);
     
@@ -74,7 +68,7 @@ const registerUser = async(req,res) =>
     
         const token=createToken(user._id);
     
-        res.status(200).json({_id:user._id,name,email,token,profile:user.profile,imageType:binaryImage.imageType});
+        res.status(200).json({_id:user._id,name,email,token,profile:user.profile,imageType:binaryImage.imageType,gender});
 
     }
 
@@ -93,11 +87,11 @@ const loginUser= async(req,res) =>
     try{
         let user=await userModel.findOne({email});
 
-        if(!user) return res.status(400).json("Invalid email or password");
+        if(!user) return res.status(400).json("Incorrect email or password");
 
         const isValidPassword= await bcrypt.compare(password,user.password);
 
-        if(!isValidPassword) return res.status(400).json("Invalid email or password");
+        if(!isValidPassword) return res.status(400).json("Incorrect email or password");
 
         const token = createToken(user._id);
     

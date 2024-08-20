@@ -1,45 +1,41 @@
 import "./toaster.scss";
 
-import { ToastContainer, toast } from 'react-toastify';
-import {useState,useEffect} from "react";
+import {  toast } from 'react-toastify';
 
-const Toaster = (props) =>
+import 'react-toastify/dist/ReactToastify.css';
+
+const toastOptions = {
+  position: "top-right",
+  autoClose: 2000,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: false,
+  progress: false,
+  hideProgressBar: true,
+  theme: "colored",
+};
+
+class Toaster{
+success = (message) =>
 {
-    console.log("props",props);
-    const {type,message} = props;
-    // console.log("message",message);
-    useEffect(()=>
-    {
-        showToastMessage(type,message);
+  toast.success(message,{
+    ...toastOptions
+  })
+};
+error = (message) =>
+  {
+    toast.error(message,{
+      ...toastOptions
+    })
+  };
 
-    },[props])
-    const showToastMessage = (type,message) => {
-        if(type == "warning")
-        {
-            toast.warning(message, {
-                position: "top-right",
-                theme: "colored",
-                autoClose: 2000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                
-                });
-
-        }
-     
-      };
-
-      return(     <ToastContainer 
-        position="top-right" 
-        autoClose={5000} 
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />)
+warning = (message) =>
+{
+  toast.warning(message,{
+    ...toastOptions
+  })
+}
 
 }
-export default Toaster;
+const toasts = new Toaster();
+export default toasts;

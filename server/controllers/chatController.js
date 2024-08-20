@@ -9,15 +9,21 @@ const createChat = async(req,res) =>
             members:{$all:[firstId,secondId]}
         });
 
-        if(chat) return res.status(200).json(chat);
+        if(chat) 
+        {
+            return res.status(200).json(chat);
+        }
+        else{
+            const newChat= new chatModel({
+                members:[firstId,secondId]
+            });
+    
+            const response = await newChat.save();
+    
+            res.status(200).json(response);
 
-        const newChat= new chatModel({
-            members:[firstId,secondId]
-        });
-
-        const response = await newChat.save();
-
-        res.status(200).json(response);
+        }
+           
         
     } catch (error) {
         console.error(error);

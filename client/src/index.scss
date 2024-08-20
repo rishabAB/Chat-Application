@@ -25,7 +25,8 @@ overflow-y: hidden;
 /* All users */
 .all-users {
   display: flex;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .single-user {

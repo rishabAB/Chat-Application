@@ -90,15 +90,20 @@ export const AuthContextProvider = ({children}) =>
         {
             return setRegisterError(response);
         }
-        if(response?.profile)
-        {
-            response.imageUrl = await bufferToUrl(response?.profile,response?.imageType);
-        }
         else{
-            response.imageUrl = avatar;
+            if(response?.profile)
+            {
+                response.imageUrl = await bufferToUrl(response?.profile,response?.imageType);
+            }
+            else
+            {
+                response.imageUrl = avatar;
+            }
+
+            localStorage.setItem("user",JSON.stringify(response));
+            setUser(response);
+
         }
-        localStorage.setItem("user",JSON.stringify(response));
-        setUser(response);
         
 
     },[registerInfo])
@@ -171,20 +176,11 @@ export const AuthContextProvider = ({children}) =>
        
     };
 
-    // useEffect(()=>
-    // {
-    //     if(user)
-    //     {
-
-    //     }
-
-    // },[user])
 
     const loginUser = useCallback(async (e) =>
     {
         e.preventDefault();
         setIsLoginLoading(true);
-        setLoginError(null);
         const response =await postRequest(`${baseUrl}/users/login`,JSON.stringify(loginInfo));
         setIsLoginLoading(false);
 
@@ -198,12 +194,15 @@ export const AuthContextProvider = ({children}) =>
 
         if(response.error)
         {
-           return setLoginError(response);
+            return setLoginError(response);
           
         }
-        localStorage.setItem("user",JSON.stringify(response));
-        setUser(response);
+        else{
+            localStorage.setItem("user",JSON.stringify(response));
+            setUser(response);
 
+        }
+       
     },[loginInfo]);
     
 
