@@ -1,9 +1,9 @@
  import "./customInput.scss";
- import {useEffect,useState,useRef, createRef} from "react";
+ import {useEffect,useState,useRef} from "react";
 const CustomInput = (props) =>
 {
    
-    const {type,regular,placeholder,onChange,obj,propName,onEnter,onErrorObj} =props;
+    const {type,regular,placeholder,onChange,obj,propName,onEnter,onErrorObj,maxLength} =props;
     const input_ref = useRef(null);
 
     useEffect(()=>
@@ -17,7 +17,7 @@ const CustomInput = (props) =>
   
    
     return(
-        <input type={type} ref={input_ref}  placeholder={placeholder}  className="custom-input"  onKeyDown = {(e) => e.key=="Enter" && onEnter ? onEnter(e) : null} onChange={(e) => onChange({...obj,[propName]:e.target.value})}/>
+        <input type={type} ref={input_ref} maxLength={maxLength} placeholder={placeholder}  className="custom-input"  onKeyDown = {(e) => e.key=="Enter" && onEnter ? onEnter(e) : null} onChange={(e) => onChange({...obj,[propName]:e.target.value})}/>
     )
 
 }

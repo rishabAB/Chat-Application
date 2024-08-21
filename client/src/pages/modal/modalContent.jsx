@@ -3,6 +3,8 @@ import {useContext,useState,useEffect} from "react";
 import Modal from 'react-modal';
 import PotentialChats from "../../components/chat/potentialChats";
 import {ChatContext} from "../../context/chatContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 const ModalContent = () =>
 {
   
@@ -15,6 +17,9 @@ const ModalContent = () =>
           right: 'auto',
           bottom: 'auto',
           transform: 'translate(-50%, -50%)',
+          background:"black",
+          color:"white",
+          border:"unset"
         },
       };
 
@@ -42,11 +47,15 @@ const ModalContent = () =>
         style={customStyles}
         contentLabel="Example Modal"
       >
-         <h2>Potential Chats</h2>
+        <span className="inline-flex">
+        <h2>Potential Chats</h2> <FontAwesomeIcon icon={faXmark} className="fa-icon" onClick={closeModal}/>
+        </span>
+         
+         <h4>Please select a chat to start a conversation</h4>
          <PotentialChats/>
       
         
-        <button onClick={closeModal}>close</button>
+        
        
       </Modal>)
    

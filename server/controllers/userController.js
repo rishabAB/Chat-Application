@@ -59,16 +59,17 @@ const registerUser = async(req,res) =>
         let user=await userModel.findOne({email});
     
         if(user) return res.status(400).json("This email address is already taken");
+       
+        user = profile ? new userModel({name,email,password,gender,profile:binaryImage.buffer,imageType:binaryImage.imageType}) : new userModel({name,email,password,gender});
     
-        user=new userModel({name,email,password,gender,profile:binaryImage.buffer,imageType:binaryImage.imageType});
         const salt=await bcrypt.genSalt(10);
         user.password=await bcrypt.hash(user.password,salt);
     
         await user.save();
     
-        const token=createToken(user._id);
-    
-        res.status(200).json({_id:user._id,name,email,token,profile:user.profile,imageType:binaryImage.imageType,gender});
+        const token= createToken(user._id);
+
+        profile ? res.status(200).json({_id:user._id,name,email,token,profile:user.profile,imageType:binaryImage.imageType,gender}) : res.status(200).json({_id:user._id,name,email,token,gender});
 
     }
 

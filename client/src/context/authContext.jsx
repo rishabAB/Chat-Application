@@ -6,6 +6,8 @@ import {postRequest,baseUrl} from "../utils/services";
 
 import avatar from "../assets/avatar.svg";
 
+import toasts from "../pages/toaster/toaster";
+
 export const AuthContextProvider = ({children}) =>
 {
     const [user,setUser] = useState(null);
@@ -99,6 +101,8 @@ export const AuthContextProvider = ({children}) =>
             {
                 response.imageUrl = avatar;
             }
+            toasts.success("User Registered successfully");
+
 
             localStorage.setItem("user",JSON.stringify(response));
             setUser(response);
@@ -198,6 +202,7 @@ export const AuthContextProvider = ({children}) =>
           
         }
         else{
+            toasts.success("Login Successfull");
             localStorage.setItem("user",JSON.stringify(response));
             setUser(response);
 

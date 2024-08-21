@@ -92,7 +92,7 @@ const Register = () => {
 
                             <CustomInput type="text" regular="true" placeholder="Name:*"
                                 onChange={updateRegisterInfo}
-                                obj={registerInfo} onErrorObj={registerError}
+                                obj={registerInfo} onErrorObj={registerError} maxLength={12}
                                 propName="name"/>
 
                             <CustomInput type="email" regular="true" placeholder="Email:*"

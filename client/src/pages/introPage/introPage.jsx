@@ -4,7 +4,6 @@ import Register  from "../registerPage/register";
 import "./introPage.scss"
 const IntroPage = ({  isRegister }) => {
    
-    const [isUserNull, setIsUserNull] = useState(false);
     const [isRegisterProp, setIsRegister] = useState(false);
    
 

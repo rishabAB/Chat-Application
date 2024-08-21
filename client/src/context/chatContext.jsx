@@ -501,7 +501,8 @@ const getAudioInstance = useCallback(() => {
     {
 
         const response = await postRequest(`${baseUrl}/chats/createChat/`,JSON.stringify({firstId,secondId}));
-
+ 
+        console.log("single user response",response);
         if(response.error)
         {
             return console.error("An error occurred",response.error);
@@ -520,6 +521,30 @@ const getAudioInstance = useCallback(() => {
 
     },[])
 
+    const createMultipleChats = useCallback(async(arrOfObjects) =>
+        {
+    
+            const response = await postRequest(`${baseUrl}/chats/createMultipleChats/`,JSON.stringify(arrOfObjects));
+    
+            console.log("response of Multiple chats",response);
+            if(response.error)
+            {
+                return console.error("An error occurred",response.error);
+            }
+            // setUserChats((prev)=>[...prev,response]);
+            setUserChats((prev) => {
+               return  prev ? [...prev,...response] : [...response];
+                // if(prev)
+                // {
+                //     return [...prev,response];
+                // }
+                // else{
+                //     return [response];
+                // }
+            })
+    
+        },[])
+
     return (<ChatContext.Provider value={
     {
         userChats,
@@ -527,6 +552,7 @@ const getAudioInstance = useCallback(() => {
         isUserChatError,
         potentialChats,
         createChat,
+        createMultipleChats,
         updateCurrentChat,
         messages,
         isMessagesLoading,

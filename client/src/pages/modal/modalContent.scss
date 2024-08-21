@@ -1,0 +1,24 @@
+@import "../../index.scss";
+.ReactModal__Overlay {
+    background-color: rgba(0, 0, 0, 0.57) !important;
+}
+
+.inline-flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .fa-icon{
+        font-size: larger;
+        cursor: pointer;
+
+    }
+    .fa-icon:hover{
+        color: $genericBlueColor;
+    }
+   
+}
+
+h4{
+    margin-bottom: 1rem !important;
+}

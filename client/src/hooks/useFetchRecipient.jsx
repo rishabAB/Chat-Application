@@ -1,7 +1,7 @@
 import {useContext, useEffect,useState,useCallback} from "react";
 import {getRequest, baseUrl} from "../utils/services";
 import {ChatContext} from "../context/chatContext";
-
+import avatar from "../assets/avatar.svg";
 export const useFetchRecipientUser = (chat,user) =>
 {
     const [recipientUser,setRecipientUser] = useState(null);
@@ -61,9 +61,7 @@ const loadImage = useCallback(async()=>
         // console.log("recipientuser",recipientUser);
 
     },[recipientUser])
-    // console.log("useFetch recipient",imageUrl);
-    // console.log("recipientUser",recipientUser);
-
+   
 useEffect(()=>
     {
         if(recipientUser)
@@ -77,7 +75,6 @@ useEffect(()=>
              }
         }
        
-
     },[recipientUser])
 
  

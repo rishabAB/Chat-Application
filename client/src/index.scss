@@ -22,22 +22,7 @@ overflow-y: hidden;
 
 
 
-/* All users */
-.all-users {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
 
-.single-user {
-  background: rgb(0, 213, 255);
- 
-  cursor: pointer;
-  padding: 5px 7px;
-  border-radius: 10px;
-  margin-right: 0.5rem;
-  position: relative;
-}
 
 /* User Card */
 .user-card {
@@ -46,6 +31,9 @@ overflow-y: hidden;
  
   border-bottom: 2px solid rgb(100, 100, 100);
   /* width: 380px; */
+}
+.user-card:hover{
+  background-color: rgb(59, 56, 56);
 }
 
 .user-card .text-content {
@@ -62,17 +50,7 @@ overflow-y: hidden;
   color: rgb(180, 180, 180);
 }
 
-.user-online {
-  display: inline-block;
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  background: rgb(0, 219, 0);
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  z-index: 2;
-}
+
 
 
 

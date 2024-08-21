@@ -31,6 +31,45 @@ const createChat = async(req,res) =>
     }
 }
 
+const createMultipleChats = async(req,res) =>
+    {
+        let arrOfObjects = req.body;
+        let response=[];
+        
+        try {
+            if(arrOfObjects && arrOfObjects.length>0)
+            {
+                for(let elem of arrOfObjects)
+                {
+                    const chat= await chatModel.findOne({
+                        members:{$all:[elem.userId,elem.chatId]}
+                    });
+                    if(chat)
+                    {
+                        response.push(chat);
+                    }
+                    else{
+                        const newChat= new chatModel({
+                            members:[elem.userId,elem.chatId]
+                        });
+                
+                        const newChatResponse = await newChat.save();
+                        response.push(newChatResponse);
+
+                    }
+
+                }
+                res.status(200).json(response);
+
+            }
+               
+            
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error);
+        }
+    }
+
 
 const findUserChats = async(req,res) =>
 {
@@ -65,4 +104,4 @@ const findChat = async() =>
 
 }
 
-module.exports= {createChat,findUserChats,findChat};
+module.exports= {createChat,createMultipleChats,findUserChats,findChat};
