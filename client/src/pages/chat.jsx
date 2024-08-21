@@ -26,16 +26,17 @@ const Chat = () => {
                  (
                     <>
                     {/* WILL SHOW ANIMATION TEXT OR SOMETHING */}
-                        <button onClick={openModal}>New Chats</button>
-                        {isModalOpen && (<ModalContent isOpen={true} />)}
+                        {/* <button onClick={openModal}>New Chats</button>
+                        {isModalOpen && (<ModalContent isOpen={true} />)} */}
 
                     </>
 
                 ) : (
-                    <>  <button onClick={openModal}>New Chats</button>
-                        {isModalOpen && (<ModalContent isOpen={true} />)}
+                    <>  
+                    {/* <button onClick={openModal}>New Chats</button>
+                        {isModalOpen && (<ModalContent isOpen={true} />)} */}
                         <Stack direction="horizontal" className="align-items-start" style={{ justifyContent: 'space-between', gap: '4.5rem', height: "95vh" }}>
-                        <div className="messages-box flex-grow-0 pe-3">
+                        <div className="messages-box flex-grow-0">
                             {
                                 isUserChatLoading && <p>Loading Chats...</p>
                             }

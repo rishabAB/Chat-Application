@@ -8,9 +8,10 @@ import {AuthContext} from "../../context/authContext";
 import {ChatContext} from "../../context/chatContext";
 import avatar from "../../assets/avatar.svg";
 import "./navbar.scss";
+import ModalContent from "../../pages/modal/modalContent";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
-    const { currentChat } = useContext(ChatContext);
+    const { currentChat,updateModal,isModalOpen } = useContext(ChatContext);
     const {recipientUser,imageUrl} = useFetchRecipientUser(currentChat,user);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
@@ -19,6 +20,12 @@ const NavBar = () => {
     const [isRegisterStyle,setIsRegisterStyle] = useState(false);
 
     const [isCssAffected,setIsCssAffected] = useState(true);
+
+    const openModal= useCallback(()=>
+    {
+      updateModal(true)
+
+    },[])
 
     useEffect(()=>
     {
@@ -95,6 +102,8 @@ const NavBar = () => {
     return (
         <Navbar 
            className="navbar_main">
+            {isModalOpen && (<ModalContent isOpen={true} />)}
+            {/* {user && <div onClick={openModal} className="modal_nav add-hover">Open Modal</div>} */}
             <Container className="navbar_main_container" >
             {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer} className="user_img" alt="" />) }
                 <h2>
@@ -105,7 +114,7 @@ const NavBar = () => {
                 <Nav>
                     <Stack direction="horizontal" gap="3">
                         {
-                            user && ( <Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none add-hover">Logout</Link> )
+                            user && ( <span className="added-flex"><Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none add-hover">Logout</Link><div onClick={openModal} className="modal_nav add-hover">Potential Chats</div></span> )
                         }
                         {
                             !user && (<>

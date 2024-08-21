@@ -9,6 +9,16 @@ $z_index:4;
     padding: 0 4%;
     background-color: $genericBlueColor;
 
+    .modal_nav{
+        
+        cursor: pointer;
+        color: $fontColor;
+    }
+    .added-flex{
+        display: flex;
+        gap: 2rem;
+    }
+
     &_container{
         gap: 2rem;
         justify-content: flex-start !important;
