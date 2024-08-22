@@ -1,4 +1,4 @@
-import {useContext,useState,useCallback} from "react";
+import {useContext,useState,useCallback,useRef, useEffect} from "react";
 import {Container, Stack} from "react-bootstrap";
 import {ChatContext} from "../context/chatContext";
 import {AuthContext} from "../context/authContext";
@@ -10,13 +10,79 @@ import ModalContent from "./modal/modalContent";
 const Chat = () => {
     const {user} = useContext(AuthContext);
 
-    const {userChats, isUserChatLoading, isUserChatError,updateCurrentChat,isModalOpen,updateModal,potentialChats} = useContext(ChatContext);
+    const {userChats, isUserChatLoading,updateCurrentChat,updateModal,potentialChats} = useContext(ChatContext);
 
     const openModal= useCallback(()=>
     {
       updateModal(true)
 
     },[])
+
+    const pRef=useRef(null);
+    const test_ref =useRef(null);
+
+    // ---------------
+    const textEffect = useCallback((animationName)=>
+    {
+        if(pRef && pRef.current)
+        {
+            var text = "This is Rishab's ChattApp",
+            chars = text.length,
+            newText = '',
+            animation = animationName,
+            char,
+            i;
+    
+        for (i = 0; i < chars; i += 1) {
+            newText += '<i>' + text.charAt(i) + '</i>';
+        }
+    
+        pRef.current.innerHTML = newText;
+    
+        var wrappedChars = document.getElementsByTagName('i'),
+            wrappedCharsLen = wrappedChars.length,
+            j = 0;
+         
+
+        function addEffect () {
+            // if(j == wrappedCharsLen-1)
+            // {
+            //     clearTimeout();
+            // }
+            setTimeout(function () {
+                wrappedChars[j].className = animation;
+                j += 1;
+                if(j < wrappedCharsLen) {
+                    
+                    addEffect();
+                    // j++;
+                }
+            }, 100)
+        }
+    
+        addEffect();
+
+        }
+      
+
+    },[pRef?.current]) 
+
+    // if( potentialChats.length>=1 && userChats?.length == 0 )
+    // {
+    //     textEffect('rishab');
+
+    // }
+   
+    useEffect(()=>
+    {
+        textEffect('rishab');
+
+    },[pRef?.current])
+
+      
+
+
+    // ------------
     return (
         <div>
             {
@@ -26,8 +92,14 @@ const Chat = () => {
                  (
                     <>
                     {/* WILL SHOW ANIMATION TEXT OR SOMETHING */}
-                        {/* <button onClick={openModal}>New Chats</button>
-                        {isModalOpen && (<ModalContent isOpen={true} />)} */}
+                    <div>
+                    <p   className="p_tag" ref={pRef}>
+                    </p>
+                    <button className="pos_abs">Recipient Chats</button>
+                    </div>
+                  
+                   
+                    {/* <div  style={{display:"none !important"}} ref={test_ref}></div> */}
 
                     </>
 

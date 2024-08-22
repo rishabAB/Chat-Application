@@ -15,7 +15,7 @@ import {AuthContext} from "./context/authContext";
 import {ChatContextProvider} from "./context/chatContext";
 
 import IntroPage from "./pages/introPage/introPage";
-import { ToastContainer, toast } from 'react-toastify';
+
   import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -27,20 +27,7 @@ function App() {
     <ChatContextProvider user ={user}>
     <NavBar/>
 
-    <ToastContainer 
-        position="top-right" 
-        autoClose={2000} 
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        colored
-      />
-
-     
+    
   <div className="text-secondary" style={{width: '100%',
     padding: '0 4%'}}>
   <Routes>

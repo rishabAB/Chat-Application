@@ -19,7 +19,14 @@ const PotentialChats = () =>
 
     const addChatId = useCallback((chatId)=>
     {
-        chatIds.current.push({userId:user._id,chatId});
+        let index=chatIds.current.findIndex(elem => elem.chatId == chatId);
+        if(index!=-1)
+        {
+        chatIds.current.splice(index,1);
+        }
+        else{
+            chatIds.current.push({userId:user._id,chatId});
+        }
 
     },[user])
     
@@ -38,7 +45,6 @@ const PotentialChats = () =>
         }
         else{
             createMultipleChats(chatIds.current);
-
         }
         
 
@@ -47,7 +53,7 @@ const PotentialChats = () =>
     // as in chat and message collection
     return (
         <>
-        <button onClick={selectMultipleChats} className="multiple-chat-btn">Select Multiple</button>
+        {potentialChats?.length>1 && <button onClick={selectMultipleChats} className="btnn">Select Multiple</button>}
           <div className="all-users">
             {
                 potentialChats && potentialChats.map((u, index) => {
@@ -55,7 +61,7 @@ const PotentialChats = () =>
                         <>
                             <span className="single-user">
                                 {isMultipleChats && (<span><input type="checkbox"  onClick={() => addChatId(u._id)} /></span>)}
-                                <span key={index} onClick={() => createChat(user._id, u._id)}>
+                                <span style={{width:"100%"}} key={index} onClick={() => createChat(user._id, u._id)}>
                                     {u.name}
 
                                     <span className={
@@ -72,7 +78,7 @@ const PotentialChats = () =>
                 })
             }
         </div>
-        <button onClick={createChats}>Continue</button>
+        {isMultipleChats && <button onClick={createChats} className="btnn">Continue</button>}
         </>
       
     )

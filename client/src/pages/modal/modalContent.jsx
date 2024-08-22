@@ -19,7 +19,8 @@ const ModalContent = () =>
           transform: 'translate(-50%, -50%)',
           background:"black",
           color:"white",
-          border:"unset"
+          border:"unset",
+          borderRadius:"30px"
         },
       };
 
