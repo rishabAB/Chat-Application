@@ -377,7 +377,7 @@ const getAudioInstance = useCallback(() => {
 
                 if(response.error)
                 {
-                    return setIsUserChatError(response)
+                    return setIsUserChatError(response);
                 }
                 setUserChats(response);
             }

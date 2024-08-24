@@ -45,17 +45,13 @@ const Chat = () => {
          
 
         function addEffect () {
-            // if(j == wrappedCharsLen-1)
-            // {
-            //     clearTimeout();
-            // }
+           
             setTimeout(function () {
                 wrappedChars[j].className = animation;
                 j += 1;
                 if(j < wrappedCharsLen) {
                     
                     addEffect();
-                    // j++;
                 }
             }, 100)
         }
