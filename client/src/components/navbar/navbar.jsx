@@ -11,7 +11,7 @@ import "./navbar.scss";
 import ModalContent from "../../pages/modal/modalContent";
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
-    const { currentChat,updateModal,isModalOpen } = useContext(ChatContext);
+    const { currentChat,updateModal,isModalOpen,isUserNew } = useContext(ChatContext);
     const {recipientUser,imageUrl} = useFetchRecipientUser(currentChat,user);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
@@ -26,6 +26,19 @@ const NavBar = () => {
       updateModal(true)
 
     },[])
+
+    useEffect(()=>
+    {
+        if(isUserNew )
+        {
+            setTimeout(() => {
+                openModal();
+
+            }, 7000);
+           
+        }
+
+    },[isUserNew])
 
     useEffect(()=>
     {
@@ -114,7 +127,11 @@ const NavBar = () => {
                 <Nav>
                     <Stack direction="horizontal" gap="3">
                         {
-                            user && ( <span className="added-flex"><Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none add-hover">Logout</Link><div onClick={openModal} className="modal_nav add-hover">Potential Chats</div></span> )
+                            user && ( <span className="added-flex">
+                                <Link onClick= {logoutUser} to="/login" className="link-light text-decoration-none add-hover">Logout</Link>
+                                <div onClick={openModal} className= {`modal_nav ${isModalOpen ? "underline " : "add-hover"}`  }>Potential Chats</div>
+                                </span>
+                                 )
                         }
                         {
                             !user && (<>

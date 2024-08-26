@@ -3,14 +3,14 @@ import {Container, Stack} from "react-bootstrap";
 import {ChatContext} from "../context/chatContext";
 import {AuthContext} from "../context/authContext";
 import UserChat from "../components/chat/userChat";
-import PotentialChats from "../components/chat/potentialChats";
+
 import ChatBox from "../components/chat/chatBox";
 
 import ModalContent from "./modal/modalContent";
 const Chat = () => {
     const {user} = useContext(AuthContext);
 
-    const {userChats, isUserChatLoading,updateCurrentChat,updateModal,potentialChats} = useContext(ChatContext);
+    const {userChats, isUserChatLoading,updateCurrentChat,updateModal,isUserNew} = useContext(ChatContext);
 
     const openModal= useCallback(()=>
     {
@@ -22,11 +22,11 @@ const Chat = () => {
     const test_ref =useRef(null);
 
     // ---------------
-    const textEffect = useCallback((animationName)=>
+    const textEffect = useCallback((animationName,txt)=>
     {
         if(pRef && pRef.current)
         {
-            var text = "This is Rishab's ChattApp",
+            var text = txt,
             chars = text.length,
             newText = '',
             animation = animationName,
@@ -71,7 +71,9 @@ const Chat = () => {
    
     useEffect(()=>
     {
-        textEffect('rishab');
+        if(isUserNew)
+        textEffect('rishab',"Welcome to Rishab's ChattApp");
+       
 
     },[pRef?.current])
 
@@ -84,14 +86,14 @@ const Chat = () => {
             {
 
                 // userChats?.length >= 1 ?
-                potentialChats.length>=1 && userChats?.length == 0 ?
+                isUserNew ?
                  (
                     <>
                     {/* WILL SHOW ANIMATION TEXT OR SOMETHING */}
                     <div>
                     <p   className="p_tag" ref={pRef}>
                     </p>
-                    <button className="pos_abs">Recipient Chats</button>
+                    {/* <button className="pos_abs">Recipient Chats</button> */}
                     </div>
                   
                    
@@ -103,7 +105,7 @@ const Chat = () => {
                     <>  
                     {/* <button onClick={openModal}>New Chats</button>
                         {isModalOpen && (<ModalContent isOpen={true} />)} */}
-                        <Stack direction="horizontal" className="align-items-start" style={{ justifyContent: 'space-between', gap: '4.5rem', height: "95vh" }}>
+                        <Stack direction="horizontal" className="align-items-start" style={{ justifyContent: 'space-between', gap: '4.5rem', height: "100vh" }}>
                         <div className="messages-box flex-grow-0">
                             {
                                 isUserChatLoading && <p>Loading Chats...</p>

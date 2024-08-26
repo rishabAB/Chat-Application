@@ -8,7 +8,6 @@ export const ChatContextProvider = ({children, user}) => {
     
     const [userChats, setUserChats] = useState(null);
     const [potentialChats,setPotentialChats] = useState([]);
-   
     const [isUserChatLoading, setIsUserChatLoading] = useState(false);
 
     const [isUserChatError, setIsUserChatError] = useState(null);
@@ -46,6 +45,8 @@ export const ChatContextProvider = ({children, user}) => {
     // Socket part
     const[socket,setSocket] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
+
+    const [isUserNew,setIsUserNew] = useState(false);
 
     console.log("chatConTEXT");
     // Forming a connection with socket
@@ -361,6 +362,19 @@ const getAudioInstance = useCallback(() => {
         getUsers();
 
     },[userChats])
+
+    useEffect(()=>
+    {
+        if(potentialChats?.length > 0 && userChats?.length ==0)
+        {
+            setIsUserNew(true);
+        }
+        else{
+            setIsUserNew(false);
+
+        }
+
+    },[potentialChats,userChats])
    
     useEffect( () =>
     {
@@ -567,7 +581,8 @@ const getAudioInstance = useCallback(() => {
         getPartialMessages,
         messageTimeline,
         isModalOpen,
-        updateModal
+        updateModal,
+        isUserNew
     }
     }> {children}</ChatContext.Provider>)
 }
