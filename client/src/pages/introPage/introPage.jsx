@@ -28,7 +28,7 @@ return (<div className="register_login">
     alt=""
    
 />
-<div style={{width:"35%"}}>
+<div style={{width:"25%"}}>
 {isRegisterProp ? <Register/> : <Login/> }
 </div>
 </div>

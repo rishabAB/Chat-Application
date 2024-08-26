@@ -28,8 +28,7 @@ function App() {
     <NavBar/>
 
     
-  <div className="text-secondary" style={{width: '100%',
-    padding: '0 4%'}}>
+  <div className="text-secondary" style={{width: '100%'}}>
   <Routes>
     {/* <Route path="/" element={user ? <Chat /> : <Login/>} /> */}
     <Route path="/login" element={user ? <Chat/> : <IntroPage />} />
