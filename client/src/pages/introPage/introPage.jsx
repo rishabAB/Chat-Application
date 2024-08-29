@@ -24,10 +24,11 @@ const IntroPage = ({  isRegister }) => {
 
 return (<div className="register_login">
 <img
-    src="../../../public/test8.png"
+    src="../../../public/final_img_1.jpg"
     alt=""
    
 />
+<img src="../../../public/final_img_2.png"/>
 <div style={{width:"27%",maxWidth:"358px"}}>
 {isRegisterProp ? <Register/> : <Login/> }
 </div>
