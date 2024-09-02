@@ -1,40 +1,41 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Login from "../loginPage/login";
-import Register  from "../registerPage/register";
-import "./introPage.scss"
-const IntroPage = ({  isRegister }) => {
-   
-    const [isRegisterProp, setIsRegister] = useState(false);
-   
+import Register from "../registerPage/register";
+import "./introPage.scss";
+const IntroPage = ({ isRegister }) => {
+  const [isRegisterProp, setIsRegister] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
+    if (isRegister) {
+      setIsRegister(true);
+    } else {
+      setIsRegister(false);
+    }
+  }, [isRegister]);
+
+  const dots = Array.from({ length: 5 }, (_, index) => (
+    <div className="dot" key={index}></div>
+));
+
+  return (
+    <div className="register_login">
+      <div className="register_login_img_div">
+        
+        <img src="../../../public/final_img_1.jpg" alt="" />
       
-        if(isRegister)
-        {
-            setIsRegister(true);
-        }
-        else{
-            setIsRegister(false);
+        <div className="dots">
+            {dots}
+        </div>
+        <img src="../../../public/final_img_2.png" />
+      
+       
+       
+      </div>
 
-        }
-
-    }, [isRegister])
-
-
-
-return (<div className="register_login">
-<img
-    src="../../../public/final_img_1.jpg"
-    alt=""
-   
-/>
-<img src="../../../public/final_img_2.png"/>
-<div style={{width:"27%",maxWidth:"358px"}}>
-{isRegisterProp ? <Register/> : <Login/> }
-</div>
-</div>
-);
-    
-
-}
+      <div style={{ width: "27%", maxWidth: "358px" }}>
+        {isRegisterProp ? <Register /> : <Login />}
+      </div>
+    </div>
+  );
+};
 export default IntroPage;
