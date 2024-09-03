@@ -4,7 +4,7 @@
 
 $genericBlueColor:rgb(12, 69, 125);
 $buttonHoverColor:rgb(38 98 157);
-$input_Button_Height:40px;
+$input_Button_Height:45px;
 $input_Button_Border_Radius:50px;
 $fontColor:white;
 $genericBackgroundColor:black;
@@ -15,7 +15,7 @@ $input_Font_Size:16px;
 body{
 color:var($fontColor);
 font-family: "Nunito","sans-serif";
-background: rgb(40, 40, 40);
+background: black;
 overflow-y: hidden;
 }
 
@@ -38,6 +38,7 @@ overflow-y: hidden;
 
 .user-card .text-content {
   width: 170px;
+  color: white;
 }
 
 .user-card .name {
@@ -98,7 +99,7 @@ overflow-y: hidden;
 
 .submit-button{
   border-radius: 50px;
-  height: 40px;
+  height: $input_Button_Height;
     background-color: rgb(12, 69, 125);
     border: unset;
 }
