@@ -514,7 +514,15 @@ function testingGetMessageTimeLine(messages)
          
             if(items.length>0)
             {
-                finalArray.push({date:messageTimeline[testCount++],items:items});
+                const dateObject = moment(prevDate, 'Do MMMM, YYYY').toDate();
+
+                let date= await checkForDays(dateObject);
+                if(typeof date == "object")
+                {
+                    date= moment(date).format("Do MMMM, YYYY");
+                }
+                        
+                finalArray.push({date:date,items:items});
             }
     
            

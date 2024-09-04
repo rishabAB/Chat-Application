@@ -21,7 +21,7 @@ const IntroPage = ({ isRegister }) => {
     <div className="register_login">
       <div className="register_login_img_div">
         
-        <img src="../../../public/chat_application_2.png" alt="" />
+        <img src="../../../public/3394897.jpg" alt="" />
 {/*       
         <div className="dots">
             {dots}

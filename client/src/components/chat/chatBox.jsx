@@ -260,7 +260,7 @@ const goToBottom = useCallback(async()=>
         return (
           <Stack direction="vertical" className="messages_flex">
          
-         <div className="flex justify-center mb-3 top-0 pos_sticky">
+         <div className="flex justify-center mb-3  pos_sticky" style={{"top":"16px"}}>
               <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
                 {date}
               </span>
@@ -270,8 +270,7 @@ const goToBottom = useCallback(async()=>
             
               ( <Stack  ref={ index === items.length-1 ? divRef : null} key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
                 <span>{msg.text} </span>
-                <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
-                {/* <div  ></div> */}
+                <span className="message-footer">{moment(msg.createdAt).format("LT")}</span>
               </Stack>)
 
             )}
@@ -324,7 +323,7 @@ const goToBottom = useCallback(async()=>
     <Stack direction="vertical" style={{"justifyContent": "flex-end"}}  >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 
-      <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="20" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down svg-icon" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg"  width="40" height="30" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down svg-icon" viewBox="0 0 16 16">
   <path fillRule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
   <path fillRule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 </svg>

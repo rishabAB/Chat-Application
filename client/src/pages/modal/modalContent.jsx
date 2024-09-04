@@ -20,7 +20,8 @@ const ModalContent = () =>
           background:"black",
           color:"white",
           border:"unset",
-          borderRadius:"30px"
+          borderRadius:"30px",
+          border: "2px solid rgb(12, 69, 125)"
         },
       };
 
