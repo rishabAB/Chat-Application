@@ -13,22 +13,12 @@ const IntroPage = ({ isRegister }) => {
     }
   }, [isRegister]);
 
-  const dots = Array.from({ length: 5 }, (_, index) => (
-    <div className="dot" key={index}></div>
-));
 
   return (
     <div className="register_login">
       <div className="register_login_img_div">
         
         <img src="../../../public/3394897.jpg" alt="" />
-{/*       
-        <div className="dots">
-            {dots}
-        </div>
-        <img src="../../../public/final_img_2.png" /> */}
-      
-       
        
       </div>
 

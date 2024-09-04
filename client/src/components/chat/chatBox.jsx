@@ -226,7 +226,18 @@ const goToBottom = useCallback(async()=>
     return (<Stack gap={4} className="chat-box alignment_center" >Loading Chats...</Stack>)
   }
   const sendMessage = (event) => {
+   
+    const emojiRegex = /\p{Emoji}/u;
+   if(emojiRegex.test(textMessage?.charCodeAt(0)))
+   {
+    console.log("only Emoji");
 
+   }
+ 
+    // if(textMessage?.length ==1 && textMessage?.charCodeAt(0) > 55000)
+    // {
+    //   console.log("only Emoji");
+    // }
     if (event.key === "Enter") {
       sendTextMessage(textMessage, user, currentChat._id, sendTextMessage);
       setTextMessage("");
