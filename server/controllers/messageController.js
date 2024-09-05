@@ -6,10 +6,10 @@ const moment = require("moment");
 
 const createMessage = async(req,res) =>
 {
-    const {chatId,senderId,text} = req.body;
+    const {chatId,senderId,text,isOnlyEmoji} = req.body;
 
     const message = new messageModel({
-        chatId,senderId,text
+        chatId,senderId,text,isOnlyEmoji
     });
     try {
         const response = await message.save();

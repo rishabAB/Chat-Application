@@ -403,11 +403,11 @@ const getAudioInstance = useCallback(() => {
     },[user])
 
   
-    const sendTextMessage = useCallback(async(textMessage,sender,currentChatId)=>
+    const sendTextMessage = useCallback(async(textMessage,sender,currentChatId,isOnlyEmoji)=>
     {
         if(!textMessage) return console.log("You must type something");
 
-        const response= await postRequest(`${baseUrl}/messages/createMessage`,JSON.stringify({chatId:currentChatId,senderId:sender._id,text:textMessage}));
+        const response= await postRequest(`${baseUrl}/messages/createMessage`,JSON.stringify({chatId:currentChatId,senderId:sender._id,text:textMessage,isOnlyEmoji}));
 
         if(response.error)
         {
