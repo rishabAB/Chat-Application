@@ -292,8 +292,8 @@ const goToBottom = useCallback(async()=>
                (
                  msg?.isOnlyEmoji ? ( 
                  <Stack ref={ index === items.length-1 ? divRef : null} key={index}>
-                  <span className="text only-emoji">{msg?.text} </span> 
-                  <span className={` message flex-grow-0 ${msg?.senderId === user?._id  ? " self align-self-end " : " align-self-start"}`}>{moment(msg.createdAt).format("LT")}</span>
+                  <span className={`text only-emoji ${msg?.senderId === user?._id  ? " self align-self-end " : " align-self-start"}`}>{msg?.text} </span> 
+                  <span className={` message only-time flex-grow-0 ${msg?.senderId === user?._id  ? " self align-self-end " : " align-self-start"}`}>{moment(msg.createdAt).format("LT")}</span>
                   </Stack> 
                   ) :
                    ( 
