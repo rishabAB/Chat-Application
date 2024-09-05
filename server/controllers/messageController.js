@@ -441,7 +441,7 @@ function testingGetMessageTimeLine(messages)
                 let currentMsgDate = moment(msg).format("Do MMMM, YYYY");
                 let currentDateFormat = new Date(currentMsgDate);
 
-                const dateObject = moment(currentDateFormat, 'Do MMMM, YYYY').toDate();
+                const dateObject = moment(currentMsgDate, 'Do MMMM, YYYY').toDate();
                 
                 let date = await checkForDays(dateObject);
                 if(typeof date == "object")
@@ -449,7 +449,8 @@ function testingGetMessageTimeLine(messages)
                    date= moment(date).format("Do MMMM, YYYY");
                 }
                 messageTimeline.push(date);
-                items.push(messages);
+                items.push(messages[0]);
+                finalArray.push({date:date,items:items});
 
             }
             else{
@@ -512,7 +513,7 @@ function testingGetMessageTimeLine(messages)
             }
           
          
-            if(items.length>0)
+            if(items.length>0  && messages?.length>1)
             {
                 const dateObject = moment(prevDate, 'Do MMMM, YYYY').toDate();
 
