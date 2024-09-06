@@ -1,3 +1,5 @@
+@import "../../index.scss";
+
 .register_login{
     display: flex;
     // margin-top: 3%;
@@ -19,11 +21,33 @@
          
           height: 100%;
         }
+
+        @media screen and (max-width: $responsiveFrameSize1) {
+          display: none;
+         
+        }
     }
 
     div:nth-child(2){
       width: 27%;
       max-width: 358px;
+
+      @media screen and (max-width: $responsiveFrameSize1) {
+        width: 100%;
+       
+      }
+      @media screen and (max-width: 600px) {
+        width:58%;
+       
+      }
+
+     
+    }
+
+    @media screen and (max-width: $responsiveFrameSize1) {
+     justify-content: center;
+     height: calc(100vh - 3.4rem);
+     
     }
 
 }

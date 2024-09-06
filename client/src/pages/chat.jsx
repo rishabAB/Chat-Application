@@ -77,6 +77,24 @@ const Chat = () => {
 
     },[pRef?.current])
 
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+  
+      window.addEventListener('resize', handleResize);
+  
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+  
+    useEffect(() => {
+      console.log("Check width", windowWidth);
+    }, [windowWidth]);
+
       
 
 

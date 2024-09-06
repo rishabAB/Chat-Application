@@ -2,6 +2,11 @@
 
 /* CHAT BOX */
 
+// Generic display none 
+
+.display-none{
+  display: none !important;
+}
 .chat-box {
     /* max-height: calc(100vh - 10rem); */
     /* overflow-y: auto; */
@@ -9,7 +14,15 @@
     max-height: calc(100vh - 3.4rem);
     background: black;
     border-radius: 10px;
-    max-width: 50%
+    max-width: 50%;
+
+
+    // @media screen and (max-width: $responsiveFrameSize1) {
+    //   display: none !important;
+     
+    // }
+
+
   }
 
   .alignment_center{
@@ -22,6 +35,15 @@
     height:calc(100vh - 3.4rem);
     width: 35%;
     border: 2px solid green;
+
+    @media screen and (max-width: $responsiveFrameSize1) {
+    //  width: 100%;
+     background-color: black;
+     overflow-y: auto;
+    overflow-x: hidden;
+     
+    }
+
   }
   .svg-icon{
     position: fixed;

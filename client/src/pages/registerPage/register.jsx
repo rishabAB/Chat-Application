@@ -107,7 +107,7 @@ const Register = () => {
 
                             <div className="gender">
                                 <Form.Label>Gender*:</Form.Label>
-                                <Form.Check className="cursor" ref={maleRadioRef}
+                                <Form.Check className="cursor gender_male" ref={maleRadioRef}
                                     onChange={
                                         () => updateRegisterInfo({
                                             ...registerInfo,
@@ -130,7 +130,7 @@ const Register = () => {
                                     label={`Female`}></Form.Check>
                             </div>
                             {/* <div > */}
-                                <Form.Label className="picture_label">Profile picture:</Form.Label>
+                                {/* <Form.Label className="picture_label">Profile picture:</Form.Label> */}
 
                                 <ProfilePicture placeholder="Profile Picture"
                                     onChange={updateRegisterInfo} onErrorObj={registerError}
