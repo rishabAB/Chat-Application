@@ -78,7 +78,7 @@ const PotentialChats = () =>
                 })
             }
         </div>
-        {isMultipleChats && <div style={{"display":"flex",justifyContent:"center"}}><button onClick={createChats} className="btnn" style={{"width":"25%"}}>Continue</button></div>}
+        {isMultipleChats && <div className="multiple-chats"><button onClick={createChats} className="btnn" >Continue</button></div>}
         </>
       
     )

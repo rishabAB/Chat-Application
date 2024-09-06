@@ -273,15 +273,14 @@ const goToBottom = useCallback(async()=>
     </div> */}
          
 
-         {/* TESTING FOR TIMELINE */}
-         <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
+         <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler}  >
     {messages?.length == 0  &&  <h5 >Start a Conversation</h5> }
     {messages?.length>0 && !moreMessagesAvailable && <h5 >Beggining of the conversation</h5> }
       {messages && messages.map(({date, items}) => {
         return (
           <Stack direction="vertical" className="messages_flex">
          
-         <div className="flex justify-center mb-3  pos_sticky" style={{"top":"16px"}}>
+         <div className="flex justify-center mb-3  pos_sticky" >
               <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
                 {date}
               </span>
@@ -320,42 +319,7 @@ const goToBottom = useCallback(async()=>
      
     </Stack>
 
-         {/* ---------- */}
-
-      {/* ORIGINAL ONES */}
-    {/* <Stack gap={3} className="messages" ref={checkScroll} onScroll={onWheelCaptureHandler} style={{alignSelf:"unset !important"}}  >
-    {messages?.length == 0  &&  <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"rgb(12, 69, 125)","cursor":"unset !important" }}>Start a Conversation</h5> }
-    {messages?.length>0 && !moreMessagesAvailable && <h5 style={{textAlign:"center",paddingBottom: "1rem","fontFamily":"system-ui","color":"rgb(12, 69, 125)","cursor":"unset !important" }}>Beggining of the conversation</h5> }
-      {messages && messages.map((msg, index) => {
-        return (
-          <Stack direction="vertical" style={{alignSelf:"unset !important",display:"contents"}}>
-         
-            {msg?.date && 
-            // (<div className = {`${msg?.date ? "timeline" : null}`} ref={timelineRef} >
-            //   {msg?.date} 
-            //  </div>)
-            (  <div className="flex justify-center mb-4 sticky top-0">
-              <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
-                {msg?.date}
-              </span>
-            </div>)
-             } 
-        { !msg.date  &&  (<Stack key={index} className={`${msg?.senderId === user?._id  ? "message self align-self-end flex-grow-0" : "message align-self-start flex-grow-0"}`}>
-            <span>{msg.text} </span>
-            <span className="message-footer">{moment(msg.createdAt).format("LLL")}</span>
-            <div ref={ index === messages.length-1 ? divRef : null}></div>
-          </Stack>) }
-
-         </Stack>
-         
-        
-        )
-      })}
-    
-      
-     
-    </Stack> */}
-    <Stack direction="vertical" style={{"justifyContent": "flex-end"}}  >
+    <Stack direction="vertical" className="flex-end"  >
     {isScrollButton && 
     // <button style = {{backgroundColor:"unset",border:"unset"}} > 
       <svg xmlns="http://www.w3.org/2000/svg"  width="40" height="30" fill="currentColor" onClick={goToBottom} className="bi bi-chevron-double-down svg-icon" viewBox="0 0 16 16">

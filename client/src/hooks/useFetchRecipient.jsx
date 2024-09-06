@@ -17,10 +17,10 @@ export const useFetchRecipientUser = (chat,user) =>
         {
             
             if(!recipientId || !user) 
-                {
-                    setRecipientUser(null);
-                    return;
-                }
+            {
+                setRecipientUser(null);
+                return;
+            }
 
             const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
 

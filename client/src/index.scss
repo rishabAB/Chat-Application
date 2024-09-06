@@ -51,6 +51,14 @@ overflow-y: hidden;
   color: rgb(180, 180, 180);
 }
 
+.user-img{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+}
+
 
 
 
@@ -250,6 +258,12 @@ i.rishab {
     background-color: #d3d0ca !important;
   }
 
+}
+.loading-chats{
+  justify-content: space-between;
+  gap: 4.5rem;
+  height: 100vh;
+  background: rgb(25, 25, 25);
 }
 
 

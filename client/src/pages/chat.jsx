@@ -105,7 +105,7 @@ const Chat = () => {
                     <>  
                     {/* <button onClick={openModal}>New Chats</button>
                         {isModalOpen && (<ModalContent isOpen={true} />)} */}
-                        <Stack direction="horizontal" className="align-items-start" style={{ justifyContent: 'space-between', gap: '4.5rem', height: "100vh" ,background: "rgb(25, 25, 25)" }}>
+                        <Stack direction="horizontal" className="align-items-start loading-chats">
                         <div className="messages-box flex-grow-0">
                             {
                                 isUserChatLoading && <p>Loading Chats...</p>

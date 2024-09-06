@@ -22,7 +22,7 @@ const IntroPage = ({ isRegister }) => {
        
       </div>
 
-      <div style={{ width: "27%", maxWidth: "358px" }}>
+      <div >
         {isRegisterProp ? <Register /> : <Login />}
       </div>
     </div>

@@ -120,7 +120,7 @@ const NavBar = () => {
             <Container className="navbar_main_container" >
             {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer} className="user_img" alt="" />) }
                 <h2>
-                    {/* <img src="../../../public/icon.png" style={{height:"30px",width:"30px"}}/> */}
+                 
                     <Link to="/" className="link-light text-decoration-none">ChattApp</Link>
                 </h2>
                 {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}

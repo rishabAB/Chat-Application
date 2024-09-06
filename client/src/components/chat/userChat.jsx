@@ -163,10 +163,10 @@ const loadImage = useCallback(async()=>
         <Stack direction="horizontal"
             gap={3}
             className="user-card align-items-center p-2 justify-content-between" role="button">
-            <div className="d-flex" style={{alignItems:"center"}}>
+            <div className="d-flex align-items-center" >
               
                 <div className="me-2">
-                <img src={userImageArray?.[0] } onClick = {handleImageViewer}style={{height:"50px",width:"50px",borderRadius:"50%",cursor:"pointer",alignItems:" center"}} alt="" />
+                <img src={userImageArray?.[0] } onClick = {handleImageViewer} className="user-img" alt="" />
                 </div>
                 <div className="text-content">
                     <div className="name">
