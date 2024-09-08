@@ -41,9 +41,18 @@
      background-color: black;
      overflow-y: auto;
     overflow-x: hidden;
+    width: 100%;
      
     }
 
+  }
+  .full-width{
+    width: 100%;
+    max-width: unset;
+  }
+
+  .resize-svg-icon{
+    right: 50% !important;
   }
   .svg-icon{
     position: fixed;

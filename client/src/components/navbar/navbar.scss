@@ -4,6 +4,14 @@
 $img_height:50px;
 $img_width:50px;
 $z_index:4;
+
+.content-center{
+    justify-content: center !important;
+}
+
+.right-margin-unset{
+    margin-right: unset !important;
+}
 .navbar_main{
     height: 3.4rem;
     padding: 0 4%;
@@ -17,6 +25,7 @@ $z_index:4;
     .added-flex{
         display: flex;
         gap: 2rem;
+        align-items: center;
     }
 
     &_container{
@@ -33,17 +42,26 @@ $z_index:4;
         z-index:$z_index;
 
     }
+    .fa-arrow{
+        position: absolute;
+        left: 10px;
+        cursor: pointer;
+    }
+
+   
 
     .recipient {
         display: flex;
         margin-right: 21%;
         gap: 1.2rem; 
         align-items: center;
+        color: $fontColor;
+        // position: relative;
     
         // Target the first child span
-        span:first-child {
-            color: $fontColor;
-        }
+        // span:first-child {
+        //     color: $fontColor;
+        // }
 
         img{
             height: $img_height;

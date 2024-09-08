@@ -497,12 +497,47 @@ const getAudioInstance = useCallback(() => {
     },[])
         
 
+    const [isChatBoxOpened,setIsChatBoxOpened] = useState(false);
     const updateCurrentChat = useCallback((chat)=>
     {
         setCurrentChat(chat);
+        setIsChatBoxOpened(true);
         currentChatRef.current=chat;
 
     },[])
+
+    const updateChatBox = useCallback(()=>
+    {
+        setIsChatBoxOpened(false);
+
+    },[])
+
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    const [responsizeFrame1,setResponsiveFrame1] = useState(false);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+  
+      window.addEventListener('resize', handleResize);
+  
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+  
+    useEffect(() => {
+      console.log("Check width", windowWidth);
+      if(windowWidth < 1000)
+      {
+        setResponsiveFrame1(true);
+      }
+      else{
+        setResponsiveFrame1(false);
+      }
+    }, [windowWidth]);
 
     // --Modal
 
@@ -582,7 +617,10 @@ const getAudioInstance = useCallback(() => {
         messageTimeline,
         isModalOpen,
         updateModal,
-        isUserNew
+        isUserNew,
+        isChatBoxOpened,
+        responsizeFrame1,
+        updateChatBox
     }
     }> {children}</ChatContext.Provider>)
 }

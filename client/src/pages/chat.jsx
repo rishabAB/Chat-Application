@@ -10,7 +10,7 @@ import ModalContent from "./modal/modalContent";
 const Chat = () => {
     const {user} = useContext(AuthContext);
 
-    const {userChats, isUserChatLoading,updateCurrentChat,updateModal,isUserNew} = useContext(ChatContext);
+    const {userChats, isUserChatLoading,updateCurrentChat,updateModal,isUserNew,isChatBoxOpened,responsizeFrame1} = useContext(ChatContext);
 
     const openModal= useCallback(()=>
     {
@@ -77,23 +77,7 @@ const Chat = () => {
 
     },[pRef?.current])
 
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-    useEffect(() => {
-      const handleResize = () => {
-        setWindowWidth(window.innerWidth);
-      };
   
-      window.addEventListener('resize', handleResize);
-  
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
-  
-    useEffect(() => {
-      console.log("Check width", windowWidth);
-    }, [windowWidth]);
 
       
 
@@ -124,7 +108,7 @@ const Chat = () => {
                     {/* <button onClick={openModal}>New Chats</button>
                         {isModalOpen && (<ModalContent isOpen={true} />)} */}
                         <Stack direction="horizontal" className="align-items-start loading-chats">
-                        <div className="messages-box flex-grow-0">
+                        <div className={`messages-box flex-grow-0 ${isChatBoxOpened && responsizeFrame1 ? "display-none" : ""} `}>
                             {
                                 isUserChatLoading && <p>Loading Chats...</p>
                             }
@@ -139,7 +123,13 @@ const Chat = () => {
                                 })
                             }
                         </div>
-                        <ChatBox />
+                        {
+                            responsizeFrame1 && isChatBoxOpened  ?  <ChatBox /> :  ""
+                        }
+                        {
+                            !responsizeFrame1 ?  <ChatBox /> :  ""
+                        }
+                      
 
                     </Stack></>
                    

@@ -6,12 +6,15 @@ import ImageViewer from 'react-simple-image-viewer';
 import {useCallback, useContext,useEffect,useState} from "react";
 import {AuthContext} from "../../context/authContext";
 import {ChatContext} from "../../context/chatContext";
-import avatar from "../../assets/avatar.svg";
+
 import "./navbar.scss";
 import ModalContent from "../../pages/modal/modalContent";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 const NavBar = () => {
     const {user,logoutUser} = useContext(AuthContext);
-    const { currentChat,updateModal,isModalOpen,isUserNew } = useContext(ChatContext);
+    const { currentChat,updateModal,isModalOpen,isUserNew,isChatBoxOpened ,responsizeFrame1,updateChatBox} = useContext(ChatContext);
     const {recipientUser,imageUrl} = useFetchRecipientUser(currentChat,user);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
@@ -114,10 +117,10 @@ const NavBar = () => {
            
     return (
         <Navbar 
-           className="navbar_main">
+           className={`navbar_main ${isChatBoxOpened && responsizeFrame1 ? "content-center" : ""}`}>
             {isModalOpen && (<ModalContent isOpen={true} />)}
             {/* {user && <div onClick={openModal} className="modal_nav add-hover">Open Modal</div>} */}
-            <Container className="navbar_main_container" >
+            <Container className={`navbar_main_container ${isChatBoxOpened && responsizeFrame1 ? "display-none" : ""}`} >
             {user && ( <img src={userImageArray?.[0] } onClick = {handleImageViewer} className="user_img" alt="" />) }
                 <h2>
                  
@@ -173,7 +176,8 @@ const NavBar = () => {
 
 
             {  recipientUser && (<>
-            <span className="recipient">
+            <span className={` recipient ${!isChatBoxOpened && responsizeFrame1 ? "display-none  " : ""} ${isChatBoxOpened && responsizeFrame1 ? "right-margin-unset" : ""}`}>
+                {isChatBoxOpened && responsizeFrame1 ? (<span> <FontAwesomeIcon icon={faArrowLeft} className="fa-arrow" onClick={updateChatBox} /></span>) : ""}
                 <span >{recipientUser.name}</span>
                 <span>
                 <img src={recipientUserArray?.[0] } onClick = {handleRecipientImageViewer} alt="" />
