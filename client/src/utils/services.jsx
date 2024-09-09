@@ -1,5 +1,5 @@
-export const baseUrl = "http://localhost:5000/api";
-
+export const baseUrl = "https://64fb-125-21-216-158.ngrok-free.app/api";
+// http://localhost:5000/api
 export const postRequest = async(url,body) =>
 {
     const response=await fetch(url,
@@ -32,7 +32,15 @@ export const postRequest = async(url,body) =>
 
 export const getRequest = async(url) =>
 {
-    const response = await fetch(url);
+    const response = await fetch(url,
+        {
+            method:"GET",
+            headers : {
+                "Content-Type":"application/json",
+                'ngrok-skip-browser-warning':  '69420',
+            },
+           
+        });
 
     const data = await response.json();
 

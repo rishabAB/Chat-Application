@@ -465,31 +465,40 @@ const getAudioInstance = useCallback(() => {
     {
         return new Promise(async(fulfill,reject)=>
         {
-            const response = await getRequest(`${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`);
+            try{
+                const response = await getRequest(`${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`);
 
-            if(response?.error)
-            {
-                return setPartialMessagesError(response)
-            }
-            console.log("response",response);
-            setMessageTimeline(response?.messageTimeline);
-            setMessages((prev) =>{
-                if(prev?.length>0 && prev[0]?.items[0].chatId == currentChatId)
+                if(response?.error)
                 {
-                    // return ([...prev,...response?.messages])
-                    messageRef.current=([...response?.messages,...prev]);
-                    return ([...response?.messages,...prev])
+                    return setPartialMessagesError(response)
                 }
-                else{
-                    messageRef.current = (response?.messages);
-                    return (response?.messages);
+                console.log("response",response);
+                setMessageTimeline(response?.messageTimeline);
+                setMessages((prev) =>{
+                    if(prev?.length>0 && prev[0]?.items[0].chatId == currentChatId)
+                    {
+                        // return ([...prev,...response?.messages])
+                        messageRef.current=([...response?.messages,...prev]);
+                        return ([...response?.messages,...prev])
+                    }
+                    else{
+                        messageRef.current = (response?.messages);
+                        return (response?.messages);
+    
+                    }
+                })
+                // messageRef.current=messages;
+                // setMessages(response?.messages);
+                fulfill({isActionSuccess:true});
+                setMoreMessagesAvailable(response?.moreMessagesAvailable)
 
-                }
-            })
-            // messageRef.current=messages;
-            // setMessages(response?.messages);
-            fulfill({isActionSuccess:true});
-            setMoreMessagesAvailable(response?.moreMessagesAvailable)
+            }
+            catch(ex)
+            {
+                console.error(ex);
+                reject(ex);
+            }
+          
 
         })
         
