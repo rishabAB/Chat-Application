@@ -1,4 +1,4 @@
-export const baseUrl = "https://64fb-125-21-216-158.ngrok-free.app/api";
+export const baseUrl = "http://localhost:5000/api";
 // http://localhost:5000/api
 export const postRequest = async(url,body) =>
 {

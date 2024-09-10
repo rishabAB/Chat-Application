@@ -262,6 +262,8 @@ const goToBottom = useCallback(async()=>
 
   };
 
+  const outerheight = window.outerHeight ;
+
 
 
   if (!recipientUser) {

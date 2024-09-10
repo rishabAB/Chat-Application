@@ -523,7 +523,19 @@ const getAudioInstance = useCallback(() => {
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+    // const [windowheight,setWindowheight] = useState(window.outerHeight);
     const [responsizeFrame1,setResponsiveFrame1] = useState(false);
+
+    // useEffect(()=>
+    // {
+    //     const handleResize = () => {
+    //         setWindowheight(window.outerHeight);
+    //       };
+    //     console.log("windowheight",windowheight);
+
+    //     window.addEventListener('resize', handleResize);
+
+    // },[windowheight])
 
     useEffect(() => {
       const handleResize = () => {
