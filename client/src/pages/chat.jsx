@@ -124,11 +124,9 @@ const Chat = () => {
                             }
                         </div>
                         {
-                            responsizeFrame1 && isChatBoxOpened  ?  <ChatBox /> :  ""
+                            (responsizeFrame1 && isChatBoxOpened) || !responsizeFrame1  ?  <ChatBox /> :  ""
                         }
-                        {
-                            !responsizeFrame1 ?  <ChatBox /> :  ""
-                        }
+                        
                       
 
                     </Stack></>

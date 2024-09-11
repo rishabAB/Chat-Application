@@ -262,14 +262,15 @@ const goToBottom = useCallback(async()=>
 
   };
 
-  const outerheight = window.outerHeight ;
+  const height = `${window.outerHeight - (window.outerHeight-window.innerHeight) } - 3.4rem ` ;
+  console.log("outerheight",height);
 
 
 
   if (!recipientUser) {
     return (<Stack gap={4} className="chat-box alignment_center" >No conversation selected yet ...</Stack>)
   }
-  return (<Stack gap={4} className={`chat-box ${ isChatBoxOpened && responsizeFrame1 ? "full-width" : ""}`} >
+  return (<Stack className={`chat-box ${ isChatBoxOpened && responsizeFrame1 ? "full-width" : ""}`} >
     {/* <div className="chat-header">
       <strong>{recipientUser.name}</strong>
     </div> */}
