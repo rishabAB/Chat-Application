@@ -11,7 +11,7 @@ import {AuthContext} from "../../context/authContext";
 import CustomInput from "../../customComponents/customInput/customInput";
 import ProfilePicture from "../../customComponents/profilePicture/profilePicture";
 import "./register.scss";
-import toasts from "../toaster/toaster";
+import toasts from "../../customComponents/toaster/toaster";
 const Register = () => {
     const {
         user,

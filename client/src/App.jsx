@@ -2,11 +2,10 @@
 import {Routes,Route,Navigate} from "react-router-dom";
 
 import Chat from "./pages/chat";
-import Login from "./pages/loginPage/login";
-import Register from "./pages/registerPage/register";
+
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import {Container} from "react-bootstrap";
+
 
 import NavBar from "./components/navbar/navbar";
 import {useContext} from "react";
@@ -19,7 +18,7 @@ import IntroPage from "./pages/introPage/introPage";
   import 'react-toastify/dist/ReactToastify.css';
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
-  import Toaster from './pages/toaster/toaster';
+ 
 function App() {
  const {user} = useContext(AuthContext);
  const isRegister=true;

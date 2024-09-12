@@ -6,7 +6,7 @@ import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";
 
 
-import toasts from "../toaster/toaster";
+import toasts from "../../customComponents/toaster/toaster";
 
 const Login = () => {
     const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);

@@ -6,7 +6,7 @@ import {postRequest,baseUrl} from "../utils/services";
 
 import avatar from "../assets/avatar.svg";
 
-import toasts from "../pages/toaster/toaster";
+import toasts from "../customComponents/toaster/toaster";
 
 export const AuthContextProvider = ({children}) =>
 {
