@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 
 import NavBar from "./components/navbar/navbar";
-import {useContext} from "react";
+import React,{useContext} from "react";
 import {AuthContext} from "./context/authContext";
 
 import {ChatContextProvider} from "./context/chatContext";

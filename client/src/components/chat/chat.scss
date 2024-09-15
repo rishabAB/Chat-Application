@@ -11,7 +11,9 @@
     /* max-height: calc(100vh - 10rem); */
     /* overflow-y: auto; */
     /* max-height: calc(90vh); */
-    max-height: calc(100vh - 3.4rem);
+     height: calc(100vh - 3.4rem);
+    // height: 100vh;
+   
     background: black;
     border-radius: 10px;
     max-width: 50%;
@@ -84,10 +86,13 @@
   /* Messages */
   .messages {
     // max-height: calc(100vh - 10rem);
-     overflow-y: auto;
+     overflow-y: scroll;
     padding: 0 2rem;
-    overflow-x: hidden;
+    // overflow-x: hidden;
     align-self: unset !important;
+    flex: unset !important;
+    // max-height: 83%;
+    // max-height: calc(100% - 67px ) !important;
    
     h5{
         text-align: center;
@@ -103,6 +108,7 @@
         flex-direction: column;
         align-self: unset !important;
         gap: 1.5rem;
+        flex: unset !important;
     }
 
     .pos_sticky{
@@ -125,7 +131,7 @@
   .messages::-webkit-scrollbar-thumb {
     background-color: $genericBlueColor;
     border-radius: 10px;
-    min-height: 180px;
+    min-height: 100px;
   }
   
   .message {
@@ -177,9 +183,14 @@
     width: 100%;
     // background: rgb(30, 30, 30);
     //  background-color: #00bd9b;
+    flex-shrink: 0; 
     padding: 0.4rem;
     display: flex;
+    flex-shrink: 0 !important;
     align-items: center;
+    flex-grow: 1; /* Prevent it from growing */
+    // background: white;
+    // padding: 1rem; /* Adjust padding as needed */
     
   }
   /* .customFileInput {
@@ -200,9 +211,9 @@
     }
   }
 
-  .flex-end{
-    justify-content: flex-end;
-  }
+  // .flex-end{
+  //   justify-content: flex-end;
+  // }
   
   
   

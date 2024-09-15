@@ -1,4 +1,4 @@
-import {createContext,useState,useCallback,useEffect} from "react";
+import React,{createContext,useState,useCallback,useEffect} from "react";
 
 export const AuthContext=createContext();
 
@@ -8,6 +8,7 @@ import avatar from "../assets/avatar.svg";
 
 import toasts from "../customComponents/toaster/toaster";
 
+import PropTypes from "prop-types";
 export const AuthContextProvider = ({children}) =>
 {
     const [user,setUser] = useState(null);
@@ -228,4 +229,8 @@ export const AuthContextProvider = ({children}) =>
         }}>
         {children}
     </AuthContext.Provider>)
+}
+
+AuthContextProvider.propTypes = {
+    children : PropTypes.object
 }

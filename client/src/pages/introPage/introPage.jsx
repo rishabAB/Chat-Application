@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import Login from "../loginPage/login";
 import Register from "../registerPage/register";
 import "./introPage.scss";

@@ -1,5 +1,5 @@
 import "./profilePicture.scss"
-import { useState,useCallback, useEffect} from "react";
+import React,{ useState,useCallback, useEffect} from "react";
 const ProfilePicture = (props) =>
 {
     const {placeholder,onChange,obj,propName,onErrorObj} =props;

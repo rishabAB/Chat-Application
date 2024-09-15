@@ -1,7 +1,9 @@
-import {createContext, useState,useEffect, useCallback,useRef} from "react";
+import React,{createContext, useState,useEffect, useCallback,useRef} from "react";
 import {getRequest, postRequest, baseUrl} from "../utils/services";
 import {io} from "socket.io-client";
 import sound from "../assets/sound.wav";
+
+import PropTypes from "prop-types";
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({children, user}) => {
@@ -52,8 +54,15 @@ export const ChatContextProvider = ({children, user}) => {
     // Forming a connection with socket
     useEffect(()=>
     {
-        const newSocket= io("http://localhost:3000")
-        setSocket(newSocket);
+        const socketOptions = {
+            extraHeaders: {
+              'ngrok-skip-browser-warning': '69420'
+            }
+          };
+          
+        //   const newSocket = io("https://5c09-2409-40d1-1a-ab3d-22af-5c32-e87d-bd4d.ngrok-free.app", socketOptions);
+        const newSocket = io("http://localhost:3000");
+          setSocket(newSocket);
         
 
         return(()=>
@@ -644,4 +653,9 @@ const getAudioInstance = useCallback(() => {
         updateChatBox
     }
     }> {children}</ChatContext.Provider>)
+}
+
+ChatContextProvider.prototypes = {
+    children:PropTypes.object,
+    user:PropTypes.object
 }

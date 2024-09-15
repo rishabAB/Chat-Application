@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import ImageViewer from "react-simple-image-viewer";
-import { useCallback, useContext, useEffect, useState } from "react";
+import React,{ useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { ChatContext } from "../../context/chatContext";
 

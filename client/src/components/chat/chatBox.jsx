@@ -245,20 +245,34 @@ const ChatBox = () => {
     }
   };
 
-  const height = `${
-    window.outerHeight - (window.outerHeight - window.innerHeight)
-  } - 3.4rem `;
-  console.log("outerheight", height);
+
+ const test1 = useRef();
+  useEffect(()=>
+  {
+    if(isChatBoxOpened && responsizeFrame1 && test1 && test1.current)
+    {
+      const t=`calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
+      console.log(t);
+      const height = t;
+      console.log("height", height);
+      
+      test1.current.style.height=height;
+      
+    }
+
+  },[responsizeFrame1,test1.current])
 
   if (!recipientUser) {
     return (
-      <Stack gap={4} className="chat-box alignment_center">
+      <Stack gap={4} className={`chat-box alignment_center ${
+        isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
+      }`}>
         No conversation selected yet ...
       </Stack>
     );
   }
   return (
-    <Stack
+    <Stack ref={test1}
       className={`chat-box ${
         isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
       }`}
@@ -278,9 +292,9 @@ const ChatBox = () => {
           <h5>Beggining of the conversation</h5>
         )}
         {messages &&
-          messages.map(({ date, items }) => {
+          messages.map(({ date, items }, messageIndex) => {
             return (
-              <Stack direction="vertical" className="messages_flex">
+              <div key={messageIndex} direction="vertical" className="messages_flex">
                 <div className="flex justify-center mb-3  pos_sticky">
                   <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
                     {date}
@@ -330,12 +344,12 @@ const ChatBox = () => {
                       </Stack>
                     )
                   )}
-              </Stack>
+              </div>
             );
           })}
       </Stack>
 
-      <Stack direction="vertical" className="flex-end">
+      <Stack direction="vertical" >
         {
           isScrollButton && (
             // <button style = {{backgroundColor:"unset",border:"unset"}} >
@@ -364,7 +378,7 @@ const ChatBox = () => {
         }
 
         <div
-          direction="horizontal"
+         
           className="chat-input flex-grow-0"
           onKeyUp={(e) => sendMessage(e)}
         >

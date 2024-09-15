@@ -1,13 +1,14 @@
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
 import avatar from "../../assets/avatar.svg";
-import { useState, useContext, useEffect, useCallback, useRef } from "react";
+import React,{ useState, useContext, useEffect, useCallback, useRef } from "react";
 import { ChatContext } from "../../context/chatContext";
 import moment from "moment";
 
 import sound from "../../assets/sound.wav";
 import ImageViewer from "react-simple-image-viewer";
 import "./chat.scss";
+import PropTypes from "prop-types";
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser, imageUrl } = useFetchRecipientUser(chat, user);
@@ -154,7 +155,7 @@ const UserChat = ({ chat, user }) => {
 
           {showNotification?.map((notify, index) =>
             notify.senderId === recipientUser?._id ? (
-              <div className="text">{notify.text}</div>
+              <div  key ={index} className="text">{notify.text}</div>
             ) : null
           )}
         </div>
@@ -164,14 +165,14 @@ const UserChat = ({ chat, user }) => {
         {showNotification &&
           showNotification?.map((notify, index) =>
             notify.senderId === recipientUser?._id ? (
-              <div className="date">{moment(notify.createdAt).calendar()}</div>
+              <div key={index} className="date">{moment(notify.createdAt).calendar()}</div>
             ) : null
           )}
 
         {showNotification &&
           showNotification?.map((notify, index) =>
             notify.senderId === recipientUser?._id ? (
-              <div className="this-user-notifications">{notify.count}</div>
+              <div key={index} className="this-user-notifications">{notify.count}</div>
             ) : null
           )}
 
@@ -191,5 +192,10 @@ const UserChat = ({ chat, user }) => {
     </Stack>
   );
 };
+
+UserChat.propTypes =  {
+  chat:PropTypes.object,
+  user:PropTypes.object
+}
 
 export default UserChat;

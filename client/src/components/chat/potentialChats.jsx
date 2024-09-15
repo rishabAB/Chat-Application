@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useRef } from "react";
+import React,{ useCallback, useContext, useState, useRef } from "react";
 import { ChatContext } from "../../context/chatContext";
 import { AuthContext } from "../../context/authContext";
 import "./chat.scss";

@@ -1,6 +1,6 @@
 import {Alert,Button,Form,Row,Col,Stack} from "react-bootstrap";
 
-import {useCallback, useContext,useEffect,useRef,useState} from "react";
+import React,{useCallback, useContext,useEffect,useRef,useState} from "react";
 import {AuthContext} from "../../context/authContext";
 import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";

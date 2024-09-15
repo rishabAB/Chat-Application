@@ -1,4 +1,4 @@
-import {useContext,useState,useCallback,useRef, useEffect} from "react";
+import React,{useContext,useState,useCallback,useRef, useEffect} from "react";
 import {Container, Stack} from "react-bootstrap";
 import {ChatContext} from "../context/chatContext";
 import {AuthContext} from "../context/authContext";

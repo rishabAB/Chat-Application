@@ -6,7 +6,7 @@ import {
     Col,
     Stack
 } from "react-bootstrap";
-import {useCallback, useContext, useEffect,useRef} from "react";
+import React,{useCallback, useContext, useEffect,useRef} from "react";
 import {AuthContext} from "../../context/authContext";
 import CustomInput from "../../customComponents/customInput/customInput";
 import ProfilePicture from "../../customComponents/profilePicture/profilePicture";
