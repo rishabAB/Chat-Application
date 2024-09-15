@@ -1,5 +1,12 @@
-const {Server} =require("socket.io");
+const { Server } = require("socket.io");
 
+// const io = new Server({
+//   cors: {
+//     origin: "https://b734-2409-40d1-1a-ab3d-22af-5c32-e87d-bd4d.ngrok-free.app",
+//     allowedHeaders: ["ngrok-skip-browser-warning"],
+    
+//   },
+// });
 const io=new Server({cors:["http://localhost:5173/"]});
 
 
