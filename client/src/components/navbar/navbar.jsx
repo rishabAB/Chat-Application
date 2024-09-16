@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import ImageViewer from "react-simple-image-viewer";
-import React,{ useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { ChatContext } from "../../context/chatContext";
 
@@ -22,6 +22,7 @@ const NavBar = () => {
     isChatBoxOpened,
     responsizeFrame1,
     updateChatBox,
+    potentialChats,
   } = useContext(ChatContext);
   const { recipientUser, imageUrl } = useFetchRecipientUser(currentChat, user);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -119,7 +120,7 @@ const NavBar = () => {
         )}
         <h2>
           <Link to="/" className="link-light text-decoration-none">
-            ChattApp
+            Talkapp
           </Link>
         </h2>
         {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}
@@ -134,14 +135,18 @@ const NavBar = () => {
                 >
                   Logout
                 </Link>
-                <div
-                  onClick={openModal}
-                  className={`modal_nav ${
-                    isModalOpen ? "underline " : "add-hover"
-                  }`}
-                >
-                  Potential Chats
-                </div>
+                {potentialChats?.length > 0 ? (
+                  <div
+                    onClick={openModal}
+                    className={`modal_nav ${
+                      isModalOpen ? "underline " : "add-hover"
+                    }`}
+                  >
+                    Potential Chats
+                  </div>
+                ) : (
+                  ""
+                )}
               </span>
             )}
             {!user && (

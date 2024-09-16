@@ -57,7 +57,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  const [isUserNew, setIsUserNew] = useState(false);
+  const [isUserNew, setIsUserNew] = useState(null);
 
   console.log("chatConTEXT");
   // Forming a connection with socket

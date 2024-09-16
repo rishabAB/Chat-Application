@@ -48,7 +48,6 @@ export const AuthContextProvider = ({ children }) => {
     });
   }
 
-
   const updateRegisterInfo = useCallback(async (info) => {
     console.log("ingo ", info);
     if (info?.profile && info?.profile?.name) {
@@ -96,7 +95,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const getImageUrl = (user) => {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise( async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
         if (user) {
           if (user?.profile) {

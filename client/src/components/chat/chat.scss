@@ -37,7 +37,7 @@
   .messages-box {
     height:calc(100vh - 3.4rem);
     width: 35%;
-    border: 2px solid green;
+    border: 2px solid rgb(12, 69, 125);
 
     @media screen and (max-width: $responsiveFrameSize1) {
     //  width: 100%;
@@ -164,6 +164,10 @@
   
   #ReactSimpleImageViewer > div > div > img{
     max-height: 50%;
+    max-width: 50%;
+  }
+  #ReactSimpleImageViewer > span{
+    display: none !important;
   }
   .message.self {
     background-color: rgb(40 95 149);
