@@ -1,7 +1,13 @@
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
-import avatar from "../../assets/avatar.svg";
-import React,{ useState, useContext, useEffect, useCallback, useRef } from "react";
+
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { ChatContext } from "../../context/chatContext";
 import moment from "moment";
 
@@ -19,10 +25,7 @@ const UserChat = ({ chat, user }) => {
   // recipient user is the list of users with whom we can chat which are there on left side
   // when we click our messages appear
   const [showNotification, setShowNotification] = useState([]);
-  const [myAudio, setMyAudio] = useState(null);
 
-  const buttonref = useRef(null);
-  const audioRef = useRef(null);
   // AUDIO POOL TO AVOID AUDIO LAGGING
 
   const audioPool = useRef([]);
@@ -36,29 +39,12 @@ const UserChat = ({ chat, user }) => {
     }
   }, []);
 
-  const getAudioInstance = useCallback(() => {
-    for (let audio of audioPool.current) {
-      if (audio.paused) {
-        return audio;
-      }
-    }
-    return null;
-  }, []);
+
 
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
   }, []);
 
-  const playAudio = useCallback(() => {
-    const audio = getAudioInstance();
-    if (audio) {
-      audio
-        .play()
-        .catch((error) => console.error("Error playing audio:", error));
-    } else {
-      console.warn("No available audio instances");
-    }
-  }, [getAudioInstance]);
 
   // -------------------------
 
@@ -85,42 +71,6 @@ const UserChat = ({ chat, user }) => {
     }
   }, [notification, recipientUser, currentChat]);
 
-  // ----Images Part-------
-  //   const bufferToUrl = (bufferArray,imageType) => {
-  //     return new Promise((resolve,reject)=>
-  //     {
-  //         const byteArray = new Uint8Array(bufferArray.data);
-  //         const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
-  //         const imageUrl = URL.createObjectURL(blob);
-  //         console.log("url ",imageUrl)
-  //         resolve(imageUrl);
-
-  //     })
-
-  // };
-  // let [imageArray,setImageArray] = useState([]);
-
-  //     let imageObjectUrl;
-  // const loadImage = useCallback(async()=>
-  //     {
-  //         imageObjectUrl= await bufferToUrl(recipientUser?.profile,recipientUser?.imageType)
-  //         setImageArray([imageObjectUrl]);
-
-  //     },[recipientUser])
-
-  // useEffect(()=>
-  //     {
-  //         if(recipientUser)
-  //         {
-  //             if(recipientUser?.profile)
-  //             loadImage();
-  //             else{
-  //                 setImageArray([avatar]);
-
-  //              }
-  //         }
-
-  //     },[recipientUser])
 
   let [userImageArray, setUserImageArray] = useState();
   const loadImage = useCallback(async () => {
@@ -155,7 +105,9 @@ const UserChat = ({ chat, user }) => {
 
           {showNotification?.map((notify, index) =>
             notify.senderId === recipientUser?._id ? (
-              <div  key ={index} className="text">{notify.text}</div>
+              <div key={index} className="text">
+                {notify.text}
+              </div>
             ) : null
           )}
         </div>
@@ -165,14 +117,18 @@ const UserChat = ({ chat, user }) => {
         {showNotification &&
           showNotification?.map((notify, index) =>
             notify.senderId === recipientUser?._id ? (
-              <div key={index} className="date">{moment(notify.createdAt).calendar()}</div>
+              <div key={index} className="date">
+                {moment(notify.createdAt).calendar()}
+              </div>
             ) : null
           )}
 
         {showNotification &&
           showNotification?.map((notify, index) =>
             notify.senderId === recipientUser?._id ? (
-              <div key={index} className="this-user-notifications">{notify.count}</div>
+              <div key={index} className="this-user-notifications">
+                {notify.count}
+              </div>
             ) : null
           )}
 
@@ -193,9 +149,9 @@ const UserChat = ({ chat, user }) => {
   );
 };
 
-UserChat.propTypes =  {
-  chat:PropTypes.object,
-  user:PropTypes.object
-}
+UserChat.propTypes = {
+  chat: PropTypes.object,
+  user: PropTypes.object,
+};
 
 export default UserChat;

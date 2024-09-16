@@ -4,8 +4,6 @@ import {
   useEffect,
   useRef,
   useCallback,
-  useLayoutEffect,
-  createElement,
   React,
 } from "react";
 import { AuthContext } from "../../context/authContext";
@@ -41,7 +39,7 @@ const ChatBox = () => {
   const divRef = useRef(null);
 
   const checkScroll = useRef(null);
-  const [offset, setOffset] = useState(2);
+  // const [offset, setOffset] = useState(2);
   const offsetRef = useRef(2);
   // let timelineRef = useRef(null);
 
@@ -58,9 +56,6 @@ const ChatBox = () => {
 
   const isFetchingRef = useRef(false);
   // ------------
-  const [messageTimelineIndex, setMessageTimelineIndex] = useState(null);
-
-  let timelineIndex = 1;
 
   let isOnlyEmoji = false;
 
@@ -81,9 +76,8 @@ const ChatBox = () => {
     ) {
       if (test == 1 || test !== messages[0]?.items[0].chatId) {
         setTest(messages[0]?.items[0].chatId);
-        setOffset(2);
+        // setOffset(2);
         offsetRef.current = 2;
-        timelineIndex = 1;
         // console.log("Scroll getting affected",divRef?.current?.style);
         // divRef.current.style?.padding="unset";
         divRef?.current?.scrollIntoView({
@@ -112,6 +106,7 @@ const ChatBox = () => {
   }
 
   const [currentScrollPosition, setCurrentScrollPosition] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [isPartialLoading, setIspartialLoading] = useState(true);
 
   // The below code is for scroll bar to set it below when component mounts (reloads)
@@ -173,7 +168,7 @@ const ChatBox = () => {
       );
 
       await getPartialMessages(50, offsetRef.current, currentChat._id);
-      setOffset((prev) => prev + 1);
+      // setOffset((prev) => prev + 1);
 
       offsetRef.current += 1;
       await delay(800);
@@ -245,34 +240,33 @@ const ChatBox = () => {
     }
   };
 
-
- const test1 = useRef();
-  useEffect(()=>
-  {
-    if(isChatBoxOpened && responsizeFrame1 && test1 && test1.current)
-    {
-      const t=`calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
+  const test1 = useRef();
+  useEffect(() => {
+    if (test1 && test1.current) {
+      const t = `calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
       console.log(t);
       const height = t;
       console.log("height", height);
-      
-      test1.current.style.height=height;
-      
-    }
 
-  },[responsizeFrame1,test1.current])
+      test1.current.style.height = height;
+    }
+  }, [test1.current]);
 
   if (!recipientUser) {
     return (
-      <Stack gap={4} className={`chat-box alignment_center ${
-        isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
-      }`}>
+      <Stack
+        gap={4}
+        className={`chat-box alignment_center ${
+          isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
+        }`}
+      >
         No conversation selected yet ...
       </Stack>
     );
   }
   return (
-    <Stack ref={test1}
+    <Stack
+      ref={test1}
       className={`chat-box ${
         isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
       }`}
@@ -294,7 +288,11 @@ const ChatBox = () => {
         {messages &&
           messages.map(({ date, items }, messageIndex) => {
             return (
-              <div key={messageIndex} direction="vertical" className="messages_flex">
+              <div
+                key={messageIndex}
+                direction="vertical"
+                className="messages_flex"
+              >
                 <div className="flex justify-center mb-3  pos_sticky">
                   <span className="text-sm border px-2 rounded-full bg-white border-gray-300">
                     {date}
@@ -349,7 +347,7 @@ const ChatBox = () => {
           })}
       </Stack>
 
-      <Stack direction="vertical" >
+      <Stack direction="vertical">
         {
           isScrollButton && (
             // <button style = {{backgroundColor:"unset",border:"unset"}} >
@@ -377,11 +375,7 @@ const ChatBox = () => {
           // </button>
         }
 
-        <div
-         
-          className="chat-input flex-grow-0"
-          onKeyUp={(e) => sendMessage(e)}
-        >
+        <div className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)}>
           <EmojiPicker
             value={textMessage}
             onChange={setTextMessage}

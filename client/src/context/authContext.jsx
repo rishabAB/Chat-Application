@@ -1,219 +1,175 @@
-import React,{createContext,useState,useCallback,useEffect} from "react";
+import React, { createContext, useState, useCallback, useEffect } from "react";
 
-export const AuthContext=createContext();
+export const AuthContext = createContext();
 
-import {postRequest,baseUrl} from "../utils/services";
+import { postRequest, baseUrl } from "../utils/services";
 
 import avatar from "../assets/avatar.svg";
 
 import toasts from "../customComponents/toaster/toaster";
 
 import PropTypes from "prop-types";
-export const AuthContextProvider = ({children}) =>
-{
-    const [user,setUser] = useState(null);
-   
-    const [registerError,setRegisterError]= useState(null);
+export const AuthContextProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-    const [isRegisterLoading,setIsRegisterLoading] = useState(false);
+  const [registerError, setRegisterError] = useState(null);
 
-    const [registerInfo,setRegisterInfo] = useState({name :"",email:"",password:"",profile:"",gender:""});
+  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
 
-    const [loginInfo,setLoginInfo] = useState({email:"",password:""});
+  const [registerInfo, setRegisterInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+    profile: "",
+    gender: "",
+  });
 
-    const [loginError,setLoginError] = useState(null);
+  const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
 
-    const [isLoginLoading,setIsLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState(null);
 
-    function readFileDataAsBase64(file) {
-        // const file = e.target.files[0];
-    
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-    
-            reader.onload = (event) => {
-                resolve(event.target.result);
-            };
-    
-            reader.onerror = (err) => {
-                reject(err);
-            };
-    
-            reader.readAsDataURL(file);
-        });
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+  function readFileDataAsBase64(file) {
+    // const file = e.target.files[0];
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+
+      reader.onerror = (err) => {
+        reject(err);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  const updateRegisterInfo = useCallback(async (info) => {
+    console.log("ingo ", info);
+    if (info?.profile && info?.profile?.name) {
+      let res = await readFileDataAsBase64(info.profile);
+      info.profile = res;
     }
+    setRegisterInfo(info);
+  }, []);
 
-    function readFileDataAsUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-    
-            reader.onload = (event) => {
-                // Create a URL for the file
-                const fileUrl = URL.createObjectURL(file);
-                resolve(fileUrl);
-            };
-    
-            reader.onerror = (err) => {
-                reject(err);
-            };
-    
-            reader.readAsArrayBuffer(file); // or readAsDataURL(file), either will trigger onload
-        });
-    }
-    
-    const updateRegisterInfo = useCallback(async(info) =>
-    {
-        console.log("ingo ",info);
-        if(info?.profile && info?.profile?.name)
-        {
-            let res = await  readFileDataAsBase64(info.profile);
-            info.profile = res;   
+  const updateLoginInfo = useCallback((info) => {
+    console.log("info", info);
+    setLoginInfo(info);
+  }, []);
+
+  const registerUser = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setIsRegisterLoading(true);
+      setRegisterError(null);
+      const response = await postRequest(
+        `${baseUrl}/users/register`,
+        JSON.stringify(registerInfo)
+      );
+      setIsRegisterLoading(false);
+
+      if (response.error) {
+        return setRegisterError(response);
+      } else {
+        if (response?.profile) {
+          response.imageUrl = await bufferToUrl(
+            response?.profile,
+            response?.imageType
+          );
+        } else {
+          response.imageUrl = avatar;
         }
-        setRegisterInfo(info);
-        
-    }, []);
-   
+        toasts.success("User Registered successfully");
 
-    const updateLoginInfo = useCallback((info) =>
-    {
-        console.log("info",info);
-        setLoginInfo(info);
-        
-    }, []);
-  
-    const registerUser = useCallback(async(e) =>
-    {  
-        e.preventDefault();
-        setIsRegisterLoading(true);
-        setRegisterError(null);
-        const response =await postRequest(`${baseUrl}/users/register`,JSON.stringify(registerInfo));
-        setIsRegisterLoading(false);
+        localStorage.setItem("user", JSON.stringify(response));
+        setUser(response);
+      }
+    },
+    [registerInfo]
+  );
 
-        if(response.error)
-        {
-            return setRegisterError(response);
+  const getImageUrl = (user) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise( async(resolve, reject) => {
+      try {
+        if (user) {
+          if (user?.profile) {
+            user.imageUrl = await bufferToUrl(user?.profile, user?.imageType);
+          } else {
+            user.imageUrl = avatar;
+          }
+          delete user.profile;
+          resolve(user);
         }
-        else{
-            if(response?.profile)
-            {
-                response.imageUrl = await bufferToUrl(response?.profile,response?.imageType);
-            }
-            else
-            {
-                response.imageUrl = avatar;
-            }
-            toasts.success("User Registered successfully");
+      } catch (error) {
+        console.error(error);
+        reject(error);
+      }
+    });
+  };
 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    // console.log("user",user);
+    getImageUrl(JSON.parse(user)).then((userWithUrl) => {
+      setUser(userWithUrl);
+    });
+  }, []);
 
-            localStorage.setItem("user",JSON.stringify(response));
-            setUser(response);
+  const logoutUser = useCallback((e) => {
+    e.preventDefault();
+    setUser(null);
+    localStorage.removeItem("user");
+  }, []);
 
-        }
-        
+  const bufferToUrl = (bufferArray, imageType) => {
+    return new Promise((resolve) => {
+      const byteArray = new Uint8Array(bufferArray.data);
+      const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
+      const imageUrl = URL.createObjectURL(blob);
+      resolve(imageUrl);
+    });
+  };
 
-    },[registerInfo])
+  const loginUser = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setIsLoginLoading(true);
+      const response = await postRequest(
+        `${baseUrl}/users/login`,
+        JSON.stringify(loginInfo)
+      );
+      setIsLoginLoading(false);
 
+      if (response?.profile) {
+        response.imageUrl = await bufferToUrl(
+          response?.profile,
+          response?.imageType
+        );
+      } else {
+        response.imageUrl = avatar;
+      }
 
-    const getImageUrl = useCallback((user)=>
-    {
-        return new Promise(async(resolve,reject)=>
-        {
-            try{
-          if(user)
-            {
-                if(user?.profile)
-                    {
-                        user.imageUrl = await bufferToUrl(user?.profile,user?.imageType)
-                    }
-                else{
-                    
-                        user.imageUrl = avatar;
-                    }
-                    delete user.profile;
-                    resolve( user);
+      if (response.error) {
+        return setLoginError(response);
+      } else {
+        toasts.success("Login Successfull");
+        localStorage.setItem("user", JSON.stringify(response));
+        setUser(response);
+      }
+    },
+    [loginInfo]
+  );
 
-            }     
-          
-
-            }
-            catch(error)
-            {
-                console.error(error);
-                reject(error);
-            }
-            
-
-        })
-      
-
-    },[])
-
-    useEffect(() =>
-    {
-   
-        const user=localStorage.getItem("user");
-        // console.log("user",user);
-       getImageUrl(JSON.parse(user)).then((userWithUrl)=>
-    {
-        setUser(userWithUrl);
-
-    })
-       
-    },[])
-
-    const logoutUser = useCallback((e)=>
-    {
-       e.preventDefault();
-        setUser(null);
-        localStorage.removeItem("user")
-
-    },[])
-
-    const bufferToUrl = (bufferArray,imageType) => {
-        return new Promise((resolve,reject)=>
-        {
-            const byteArray = new Uint8Array(bufferArray.data);
-            const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
-            const imageUrl = URL.createObjectURL(blob);
-            resolve(imageUrl);
-    
-        })
-       
-    };
-
-
-    const loginUser = useCallback(async (e) =>
-    {
-        e.preventDefault();
-        setIsLoginLoading(true);
-        const response =await postRequest(`${baseUrl}/users/login`,JSON.stringify(loginInfo));
-        setIsLoginLoading(false);
-
-        if(response?.profile)
-        {
-            response.imageUrl = await bufferToUrl(response?.profile,response?.imageType)
-        }
-        else{
-            response.imageUrl = avatar;
-        }
-
-        if(response.error)
-        {
-            return setLoginError(response);
-          
-        }
-        else{
-            toasts.success("Login Successfull");
-            localStorage.setItem("user",JSON.stringify(response));
-            setUser(response);
-
-        }
-       
-    },[loginInfo]);
-    
-
-    return (
-    <AuthContext.Provider value={{
+  return (
+    <AuthContext.Provider
+      value={{
         user,
         registerInfo,
         updateRegisterInfo,
@@ -225,12 +181,14 @@ export const AuthContextProvider = ({children}) =>
         loginInfo,
         loginError,
         updateLoginInfo,
-        isLoginLoading
-        }}>
-        {children}
-    </AuthContext.Provider>)
-}
+        isLoginLoading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 AuthContextProvider.propTypes = {
-    children : PropTypes.object
-}
+  children: PropTypes.object,
+};

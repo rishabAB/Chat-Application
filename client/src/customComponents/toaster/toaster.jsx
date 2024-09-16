@@ -1,8 +1,8 @@
 import "./toaster.scss";
 
-import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const toastOptions = {
   position: "top-right",
@@ -15,27 +15,23 @@ const toastOptions = {
   theme: "colored",
 };
 
-class Toaster{
-success = (message) =>
-{
-  toast.success(message,{
-    ...toastOptions
-  })
-};
-error = (message) =>
-  {
-    toast.error(message,{
-      ...toastOptions
-    })
+class Toaster {
+  success = (message) => {
+    toast.success(message, {
+      ...toastOptions,
+    });
+  };
+  error = (message) => {
+    toast.error(message, {
+      ...toastOptions,
+    });
   };
 
-warning = (message) =>
-{
-  toast.warning(message,{
-    ...toastOptions
-  })
-}
-
+  warning = (message) => {
+    toast.warning(message, {
+      ...toastOptions,
+    });
+  };
 }
 const toasts = new Toaster();
 export default toasts;

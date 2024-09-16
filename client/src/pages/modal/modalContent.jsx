@@ -1,5 +1,5 @@
 import "./modalContent.scss";
-import React,{useContext,useState,useEffect} from "react";
+import React,{useContext} from "react";
 import Modal from 'react-modal';
 import PotentialChats from "../../components/chat/potentialChats";
 import {ChatContext} from "../../context/chatContext";
@@ -19,19 +19,13 @@ const ModalContent = () =>
           transform: 'translate(-50%, -50%)',
           background:"black",
           color:"white",
-          border:"unset",
           borderRadius:"30px",
           border: "2px solid rgb(12, 69, 125)"
         },
       };
 
      
-
-      function openModal() {
-        // setIsOpen(true);
-        updateModal(true);
-      }
-    
+  
       function afterOpenModal() {
         // references are now sync'd and can be accessed.
         // subtitle.style.color = '#f00';

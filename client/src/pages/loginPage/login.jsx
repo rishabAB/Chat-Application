@@ -1,6 +1,6 @@
-import {Alert,Button,Form,Row,Col,Stack} from "react-bootstrap";
+import {Button,Form,Row,Col,Stack} from "react-bootstrap";
 
-import React,{useCallback, useContext,useEffect,useRef,useState} from "react";
+import React,{useCallback, useContext,useEffect} from "react";
 import {AuthContext} from "../../context/authContext";
 import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";
@@ -9,9 +9,10 @@ import CustomInput from "../../customComponents/customInput/customInput";
 import toasts from "../../customComponents/toaster/toaster";
 
 const Login = () => {
-    const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);
+    const {loginUser,loginInfo,updateLoginInfo,loginError} = useContext(AuthContext);
 
     const email_regex =
+  // eslint-disable-next-line no-useless-escape
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   const password_regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;

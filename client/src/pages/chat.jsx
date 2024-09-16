@@ -1,26 +1,18 @@
-import React,{useContext,useState,useCallback,useRef, useEffect} from "react";
-import {Container, Stack} from "react-bootstrap";
+import React,{useContext,useCallback,useRef, useEffect} from "react";
+import {Stack} from "react-bootstrap";
 import {ChatContext} from "../context/chatContext";
 import {AuthContext} from "../context/authContext";
 import UserChat from "../components/chat/userChat";
 
 import ChatBox from "../components/chat/chatBox";
 
-import ModalContent from "./modal/modalContent";
 const Chat = () => {
     const {user} = useContext(AuthContext);
 
-    const {userChats, isUserChatLoading,updateCurrentChat,updateModal,isUserNew,isChatBoxOpened,responsizeFrame1} = useContext(ChatContext);
-
-    const openModal= useCallback(()=>
-    {
-      updateModal(true)
-
-    },[])
+    const {userChats, isUserChatLoading,updateCurrentChat,isUserNew,isChatBoxOpened,responsizeFrame1} = useContext(ChatContext);
 
     const pRef=useRef(null);
-    const test_ref =useRef(null);
-
+   
     // ---------------
     const textEffect = useCallback((animationName,txt)=>
     {
@@ -30,7 +22,6 @@ const Chat = () => {
             chars = text.length,
             newText = '',
             animation = animationName,
-            char,
             i;
     
         for (i = 0; i < chars; i += 1) {
