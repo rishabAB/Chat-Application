@@ -18,7 +18,6 @@ const NavBar = () => {
     currentChat,
     updateModal,
     isModalOpen,
-    isUserNew,
     isChatBoxOpened,
     responsizeFrame1,
     updateChatBox,
@@ -36,17 +35,11 @@ const NavBar = () => {
   const openModal = useCallback(() => {
     updateModal(true);
   }, []);
+  // ../../../public/female_user.png
+  // ../../../public/male_user.png
+
 
   useEffect(() => {
-    if (isUserNew) {
-      setTimeout(() => {
-        openModal();
-      }, 7000);
-    }
-  }, [isUserNew]);
-
-  useEffect(() => {
-    // console.log("window",window.location.pathname);
     if (
       (isCssAffected && window.location.pathname == "/") ||
       window.location.pathname == "/login"
@@ -118,11 +111,9 @@ const NavBar = () => {
             alt=""
           />
         )}
-        <h2>
-          <Link to="/" className="link-light text-decoration-none">
+          <Link to="/" className="link-light text-decoration-none navbar_main_container-app-title">
             Talkapp
           </Link>
-        </h2>
         {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}
         <Nav>
           <Stack direction="horizontal" gap="3">
@@ -199,7 +190,7 @@ const NavBar = () => {
       {recipientUser && (
         <>
           <span
-            className={` recipient ${
+            className={`recipient ${
               !isChatBoxOpened && responsizeFrame1 ? "display-none  " : ""
             } ${
               isChatBoxOpened && responsizeFrame1 ? "right-margin-unset" : ""

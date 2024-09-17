@@ -57,7 +57,6 @@ const PotentialChats = () => {
                     </span>
                   )}
                   <span
-                    style={{ width: "100%" }}
                     key={index}
                     onClick={() => createChat(user._id, u._id)}
                   >

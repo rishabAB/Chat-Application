@@ -331,7 +331,7 @@ export const ChatContextProvider = ({ children, user }) => {
     } else {
       setIsUserNew(false);
     }
-  }, [potentialChats, userChats]);
+  }, [potentialChats, userChats,user]);
 
   useEffect(() => {
     const getUserChats = async () => {
@@ -349,6 +349,10 @@ export const ChatContextProvider = ({ children, user }) => {
           return setIsUserChatError(response);
         }
         setUserChats(response);
+      }
+      else{
+        setIsUserNew(null); 
+        setCurrentChat(null);       
       }
     };
 

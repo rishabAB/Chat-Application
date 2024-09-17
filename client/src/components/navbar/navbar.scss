@@ -1,82 +1,122 @@
 @import "../../index.scss";
 
+$img_height: 45px;
+$img_width: 45px;
+$z_index: 4;
 
-$img_height:50px;
-$img_width:50px;
-$z_index:4;
-
-.content-center{
-    justify-content: center !important;
+.underline {
+  position: relative;
+  display: inline-block;
+}
+.underline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  border-radius: 50px;
+}
+.add-hover {
+  position: relative;
+  display: inline-block;
 }
 
-.right-margin-unset{
-    margin-right: unset !important;
+.add-hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.5s ease-in-out;
+  border-radius: 50px;
 }
-.navbar_main{
-    height: 3.4rem;
-    padding: 0 4%;
-    background-color: $genericBlueColor;
 
-    .modal_nav{
-        
-        cursor: pointer;
-        color: $fontColor;
+.add-hover:hover::after,
+.add-hover:focus::after {
+  transform: scaleX(1);
+  
+}
+
+.content-center {
+  justify-content: center !important;
+}
+
+.right-margin-unset {
+  margin-right: unset !important;
+}
+.navbar_main {
+  height: 3.4rem;
+  padding: 0 4%;
+  background-color: $genericBlueColor;
+
+  .modal_nav {
+    cursor: pointer;
+    color: $fontColor;
+  }
+  .added-flex {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  &_container {
+    gap: 2rem;
+    justify-content: flex-start !important;
+    margin-left: 1%;
+
+    @media screen and (max-width: 500px) {
+      gap: 1rem;
     }
-    .added-flex{
-        display: flex;
-        gap: 2rem;
-        align-items: center;
+  }
+
+  &_container-app-title {
+    font-size: 25px;
+    @media screen and (max-width: $responsiveFrameSize1) {
+      font-size: 21px;
     }
-
-    &_container{
-        gap: 2rem;
-        justify-content: flex-start !important;
-        margin-left: 1%;
-
-        @media screen and (max-width: 500px)
-        {
-            gap: 1rem;
-        }
-
+    @media screen and (max-width: 500px) {
+      font-size: 17px;
     }
+  }
 
-    .user_img{
-        height: $img_height;
-        width: $img_width;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index:$z_index;
+  .user_img {
+    height: $img_height;
+    width: $img_width;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: $z_index;
+  }
+  .fa-arrow {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    cursor: pointer;
+  }
 
+  .recipient {
+    display: flex;
+    margin-right: 21%;
+    gap: 1.2rem;
+    align-items: center;
+    color: $fontColor;
+    // position: relative;
+
+    // Target the first child span
+    // span:first-child {
+    //     color: $fontColor;
+    // }
+
+    img {
+      height: $img_height;
+      width: $img_width;
+      border-radius: 50%;
+      cursor: pointer;
     }
-    .fa-arrow{
-        position: absolute;
-        left: 10px;
-        top: 20px;
-        cursor: pointer;
-    }
-
-   
-
-    .recipient {
-        display: flex;
-        margin-right: 21%;
-        gap: 1.2rem; 
-        align-items: center;
-        color: $fontColor;
-        // position: relative;
-    
-        // Target the first child span
-        // span:first-child {
-        //     color: $fontColor;
-        // }
-
-        img{
-            height: $img_height;
-            width: $img_width;
-            border-radius: 50%;
-            cursor: pointer;
-            
-        }
-    }
-    
+  }
 }

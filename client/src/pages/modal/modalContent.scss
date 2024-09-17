@@ -1,25 +1,65 @@
 @import "../../index.scss";
 .ReactModal__Overlay {
-    background-color: rgba(0, 0, 0, 0.57) !important;
+  background-color: rgba(0, 0, 0, 0.57) !important;
+}
+.ReactModal__Content {
+  width: unset;
+  @media screen and (max-width: 900px) and (min-width: 700px) {
+    width: 60vw;
+  }
+  @media screen and (max-width: 700px) and (min-width: 600px) {
+    width: 70vw;
+  }
+  @media screen and (max-width: 600px) and (min-width: 500px) {
+    width: 80vw;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 85vw;
+  }
 }
 
-.inline-flex{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.inline-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    .fa-icon{
-        font-size: larger;
-        cursor: pointer;
+  div {
+    font-size: 26px;
+    font-weight: bold;
 
+    @media screen and (max-width: $responsiveFrameSize1) {
+      font-size: 23px;
     }
-    .fa-icon:hover{
-        color: $genericBlueColor;
-        transition: all 0.4s ease-in-out
+
+    @media screen and (max-width: $responsiveFrameSize2) {
+      font-size: 21px;
     }
-   
+  }
+
+  .fa-icon {
+    font-size: larger;
+    cursor: pointer;
+  }
+  .fa-icon:hover {
+    color: $genericBlueColor;
+    transition: all 0.4s ease-in-out;
+  }
 }
 
-h4{
-    margin-bottom: 1rem !important;
+.startConvo {
+  font-size: 23px;
+  font-weight: 400;
+
+  @media screen and (max-width: $responsiveFrameSize1) {
+    font-size: 20px;
+  }
+
+  @media screen and (max-width: $responsiveFrameSize2) {
+    font-size: 18px;
+  }
+}
+
+h4 {
+  margin-bottom: 1rem !important;
 }

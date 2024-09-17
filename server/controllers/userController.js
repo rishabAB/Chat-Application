@@ -96,7 +96,7 @@ const loginUser= async(req,res) =>
 
         const token = createToken(user._id);
     
-        res.status(200).json({_id:user._id,name:user.name,email,token,profile:user.profile,imageType:user?.imageType});
+        res.status(200).json({_id:user._id,name:user.name,email,token,profile:user.profile,imageType:user?.imageType,gender:user?.gender});
 
     }
     catch(error)

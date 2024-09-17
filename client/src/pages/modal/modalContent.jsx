@@ -41,7 +41,7 @@ const ModalContent = () => {
       contentLabel="Example Modal"
     >
       <span className="inline-flex">
-        <h2>Potential Chats</h2>{" "}
+        <div>Potential Chats</div>{" "}
         <FontAwesomeIcon
           icon={faXmark}
           className="fa-icon"
@@ -49,7 +49,7 @@ const ModalContent = () => {
         />
       </span>
 
-      <h4>Please select a chat to start a conversation</h4>
+      <div className="startConvo">Please select a chat to start a conversation</div>
       <PotentialChats />
     </Modal>
   );

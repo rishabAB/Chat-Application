@@ -1,7 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { getRequest, baseUrl } from "../utils/services";
 
-import avatar from "../assets/avatar.svg";
+// import avatar from "../assets/avatar.svg";
+import male_user from "../../public/male_user.svg";
+import female_user from "../../public/female_user.svg";
 export const useFetchRecipientUser = (chat, user) => {
   const [recipientUser, setRecipientUser] = useState(null);
   // const [error, setError] = useState(false);
@@ -56,7 +58,11 @@ export const useFetchRecipientUser = (chat, user) => {
       if (recipientUser?.profile) loadImage();
       else {
         // setImageArray([avatar]);
-        setImageUrl(avatar);
+        // setImageUrl(avatar);
+
+        recipientUser?.gender == "male"
+        ? setImageUrl(male_user)
+        : setImageUrl(female_user);
         // setRecipientUser({...recipientUser,avatar});
       }
     }

@@ -347,7 +347,7 @@ const ChatBox = () => {
           })}
       </Stack>
 
-      <Stack direction="vertical">
+      <Stack direction="vertical" className="flex-end">
         {
           isScrollButton && (
             // <button style = {{backgroundColor:"unset",border:"unset"}} >
