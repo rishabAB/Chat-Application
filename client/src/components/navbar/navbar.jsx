@@ -12,6 +12,7 @@ import ModalContent from "../../pages/modal/modalContent";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
 const NavBar = () => {
   const { user, logoutUser } = useContext(AuthContext);
   const {

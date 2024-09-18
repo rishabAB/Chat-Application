@@ -2,7 +2,6 @@
 
 $img_height: 45px;
 $img_width: 45px;
-$z_index: 4;
 
 .underline {
   position: relative;
@@ -90,7 +89,6 @@ $z_index: 4;
     width: $img_width;
     border-radius: 50%;
     cursor: pointer;
-    z-index: $z_index;
   }
   .fa-arrow {
     position: absolute;
@@ -101,7 +99,7 @@ $z_index: 4;
 
   .recipient {
     display: flex;
-    margin-right: 21%;
+    margin-right: 19%;
     gap: 1.2rem;
     align-items: center;
     color: $fontColor;

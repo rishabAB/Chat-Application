@@ -6,8 +6,11 @@ import { postRequest, baseUrl } from "../utils/services";
 
 import toasts from "../customComponents/toaster/toaster";
 
-import male_user from "../../public/male_user.svg";
-import female_user from "../../public/female_user.svg";
+// import male_user from "../../public/male_user.svg";
+// import female_user from "../../public/female_user.svg";
+
+import female_user_2 from "../../public/female_user_2.svg";
+import male_user_2 from "../../public/male_user_2.svg";
 import PropTypes from "prop-types";
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -83,8 +86,8 @@ export const AuthContextProvider = ({ children }) => {
           );
         } else {
           response?.gender == "male"
-            ? (response.imageUrl = male_user)
-            : (response.imageUrl = female_user);
+            ? (response.imageUrl = male_user_2)
+            : (response.imageUrl = female_user_2);
         }
         toasts.success("User Registered successfully");
 
@@ -105,8 +108,8 @@ export const AuthContextProvider = ({ children }) => {
             user.imageUrl = await bufferToUrl(user?.profile, user?.imageType);
           } else {
             user?.gender == "male"
-              ? (user.imageUrl = male_user)
-              : (user.imageUrl = female_user);
+              ? (user.imageUrl = male_user_2)
+              : (user.imageUrl = female_user_2);
           }
           delete user.profile;
           resolve(user);
@@ -158,8 +161,8 @@ export const AuthContextProvider = ({ children }) => {
         );
       } else {
         response?.gender == "male"
-          ? (response.imageUrl = male_user)
-          : (response.imageUrl = female_user);
+          ? (response.imageUrl = male_user_2)
+          : (response.imageUrl = female_user_2);
       }
 
       if (response.error) {

@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext";
 import "./chat.scss";
 import toasts from "../../customComponents/toaster/toaster";
 const PotentialChats = () => {
-  const { potentialChats, createChat, onlineUsers, createMultipleChats } =
+  const { potentialChats, createChat, createMultipleChats,updateModal } =
     useContext(ChatContext);
   const { user } = useContext(AuthContext);
   const [isMultipleChats, setIsMultipleChats] = useState(false);
@@ -27,6 +27,12 @@ const PotentialChats = () => {
     [user]
   );
 
+function closeModal()
+{
+  updateModal(false);
+}
+
+
   const createChats = useCallback(() => {
     if (chatIds.current.length == 0) {
       toasts.warning("Please select atleast one user");
@@ -34,6 +40,7 @@ const PotentialChats = () => {
       toasts.warning("You cannot select more than 5 users at a time");
     } else {
       createMultipleChats(chatIds.current);
+      closeModal();
     }
   }, [chatIds]);
   // potential chats are those that appear when chat hasn't started db is empty
@@ -61,14 +68,6 @@ const PotentialChats = () => {
                     onClick={() => createChat(user._id, u._id)}
                   >
                     {u.name}
-
-                    <span
-                      className={
-                        onlineUsers?.some((user) => user?.userId === u?._id)
-                          ? "user-online"
-                          : ""
-                      }
-                    ></span>
                   </span>
                 </span>
               </>

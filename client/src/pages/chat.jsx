@@ -5,14 +5,13 @@ import { AuthContext } from "../context/authContext";
 import UserChat from "../components/chat/userChat";
 
 import ChatBox from "../components/chat/chatBox";
-
+import Loader from "../customComponents/loader/loader"
 const Chat = () => {
   const { user } = useContext(AuthContext);
 
   const {
     userChats,
     isUserChatLoading,
-    updateCurrentChat,
     isUserNew,
     isChatBoxOpened,
     responsizeFrame1,
@@ -103,16 +102,17 @@ const Chat = () => {
               <div
                 className={`messages-box flex-grow-0 ${isChatBoxOpened && responsizeFrame1 ? "display-none" : ""} `}
               >
-                {isUserChatLoading && <p>Loading Chats...</p>}
+                {isUserChatLoading && <p><Loader showLoader={true}/></p>}
                 {userChats?.map((chat, index) => {
                   return (
-                    <div key={index} onClick={() => updateCurrentChat(chat)}>
+                    <div key={index}>
                       <UserChat chat={chat} user={user} />
                     </div>
                   );
                 })}
               </div>
               {(responsizeFrame1 && isChatBoxOpened) || !responsizeFrame1 ? (
+                
                 <ChatBox />
               ) : (
                 ""

@@ -24,16 +24,24 @@
   // }
 }
 
+.font-size{
+  font-size: 22px;
+}
 .alignment_center {
   text-align: center;
   width: 100%;
   justify-content: center;
 }
 
+
+
+
 .messages-box {
   height: calc(100vh - 3.4rem);
   width: 35%;
   border: 2px solid rgb(12, 69, 125);
+  overflow-y: auto;
+  overflow-x: hidden;
 
   @media screen and (max-width: $responsiveFrameSize1) {
     //  width: 100%;
@@ -43,6 +51,14 @@
     width: 100%;
   }
 }
+.messages-box::-webkit-scrollbar {
+  width: 3px;
+}
+.messages-box::-webkit-scrollbar-thumb {
+  background-color: $genericBlueColor;
+  border-radius: 10px;
+  min-height: 100px;
+} 
 .full-width {
   width: 100%;
   max-width: unset;
@@ -116,7 +132,7 @@
 }
 
 .messages::-webkit-scrollbar {
-  width: 7px;
+  width: 5px;
 }
 .messages::-webkit-scrollbar-thumb {
   background-color: $genericBlueColor;
@@ -147,12 +163,21 @@
   /* background-color: rgba(0, 0, 0, 0.57) !important; */
 }
 #ReactSimpleImageViewer {
-  background-color: rgba(0, 0, 0, 0.57) !important;
+  background-color: rgb(48 47 47 / 57%) !important;
 }
 
 #ReactSimpleImageViewer > div > div > img {
-  max-height: 50%;
-  max-width: 50%;
+  max-height: 30vw;
+  max-width: 30vw;
+  @media screen and (max-width:$responsiveFrameSize1) and (min-width:700px) {
+    max-height: 40vw;
+    max-width: 40vw;
+  }
+
+  @media screen and (max-width:700px)  {
+    max-height: 50vw;
+    max-width: 50vw;
+  }
 }
 #ReactSimpleImageViewer > span {
   display: none !important;
@@ -371,8 +396,8 @@
   border-radius: 50%;
   background: rgb(0, 219, 0);
   position: absolute;
-  top: -3px;
-  right: -3px;
+  top: 8px;
+  right: 12px;
   z-index: 2;
 }
 

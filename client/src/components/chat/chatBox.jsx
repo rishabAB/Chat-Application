@@ -15,6 +15,8 @@ import moment from "moment";
 import EmojiPicker from "react-input-emoji";
 
 import "./chat.scss";
+// eslint-disable-next-line no-unused-vars
+import Loader from "../../customComponents/loader/loader"
 
 // import { InfiniteLoader, List } from 'react-virtualized';
 
@@ -31,6 +33,7 @@ const ChatBox = () => {
     messageTimeline,
     isChatBoxOpened,
     responsizeFrame1,
+    wrapEmojis
   } = useContext(ChatContext);
 
   const emojiRegex =
@@ -185,20 +188,7 @@ const ChatBox = () => {
     }
   });
 
-  const wrapEmojis = (text) => {
-    const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
-    const parts = text.split(emojiRegex);
 
-    return parts.map((part, index) =>
-      emojiRegex.test(part) ? (
-        <span key={index} className="emoji">
-          {part}
-        </span>
-      ) : (
-        <span key={index}>{part}</span>
-      )
-    );
-  };
 
   const goToBottom = useCallback(async () => {
     divRef?.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -256,7 +246,7 @@ const ChatBox = () => {
     return (
       <Stack
         gap={4}
-        className={`chat-box alignment_center ${
+        className={`chat-box alignment_center font-size ${
           isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
         }`}
       >
@@ -281,6 +271,7 @@ const ChatBox = () => {
         ref={checkScroll}
         onScroll={onWheelCaptureHandler}
       >
+        <Loader showLoader={true}/>
         {messages?.length == 0 && <h5>Start a Conversation</h5>}
         {messages?.length > 0 && !moreMessagesAvailable && (
           <h5>Beggining of the conversation</h5>
@@ -348,6 +339,7 @@ const ChatBox = () => {
       </Stack>
 
       <Stack direction="vertical" className="flex-end">
+      
         {
           isScrollButton && (
             // <button style = {{backgroundColor:"unset",border:"unset"}} >

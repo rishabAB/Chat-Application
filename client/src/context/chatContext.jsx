@@ -8,11 +8,14 @@ import React, {
 import { getRequest, postRequest, baseUrl } from "../utils/services";
 import { io } from "socket.io-client";
 import sound from "../assets/sound.wav";
-
+import toasts from "../customComponents/toaster/toaster";
 import PropTypes from "prop-types";
+
+
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children, user }) => {
+  
   const [userChats, setUserChats] = useState(null);
   const [potentialChats, setPotentialChats] = useState([]);
   const [isUserChatLoading, setIsUserChatLoading] = useState(false);
@@ -79,6 +82,21 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [user]);
 
   // User has logged out so by using socket
+
+  const wrapEmojis = (text) => {
+    const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
+    const parts = text.split(emojiRegex);
+
+    return parts.map((part, index) =>
+      emojiRegex.test(part) ? (
+        <span key={index} className="emoji">
+          {part}
+        </span>
+      ) : (
+        <span key={index}>{part}</span>
+      )
+    );
+  };
 
   useEffect(() => {
     console.log("HEY USE EFFECT");
@@ -303,6 +321,7 @@ export const ChatContextProvider = ({ children, user }) => {
       const response = await getRequest(`${baseUrl}/users`);
 
       if (response.error) {
+        toasts.error("An unknown error occured please try again");
         return console.error("Error fetching users", response.error);
       } else {
         const pChats = response.filter((unit) => {
@@ -346,6 +365,7 @@ export const ChatContextProvider = ({ children, user }) => {
         setIsUserChatLoading(false);
 
         if (response.error) {
+          toasts.error("An unknown error occured please try again");
           return setIsUserChatError(response);
         }
         setUserChats(response);
@@ -374,6 +394,7 @@ export const ChatContextProvider = ({ children, user }) => {
       );
 
       if (response.error) {
+        toasts.error("An unknown error occured please try again");
         return setTextMessageError(response);
       }
       setNewMessage(response);
@@ -508,6 +529,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, []);
 
   const createChat = useCallback(async (firstId, secondId) => {
+   
     const response = await postRequest(
       `${baseUrl}/chats/createChat/`,
       JSON.stringify({ firstId, secondId })
@@ -515,9 +537,11 @@ export const ChatContextProvider = ({ children, user }) => {
 
     console.log("single user response", response);
     if (response.error) {
+      toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);
     }
     // setUserChats((prev)=>[...prev,response]);
+    updateModal(false);
     setUserChats((prev) => {
       return prev ? [...prev, response] : [response];
       // if(prev)
@@ -538,6 +562,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
     console.log("response of Multiple chats", response);
     if (response.error) {
+      toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);
     }
     // setUserChats((prev)=>[...prev,response]);
@@ -581,6 +606,7 @@ export const ChatContextProvider = ({ children, user }) => {
         isChatBoxOpened,
         responsizeFrame1,
         updateChatBox,
+        wrapEmojis
       }}
     >
       {" "}
