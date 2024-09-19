@@ -15,8 +15,7 @@ import moment from "moment";
 import EmojiPicker from "react-input-emoji";
 
 import "./chat.scss";
-// eslint-disable-next-line no-unused-vars
-import Loader from "../../customComponents/loader/loader"
+
 
 // import { InfiniteLoader, List } from 'react-virtualized';
 
@@ -271,7 +270,6 @@ const ChatBox = () => {
         ref={checkScroll}
         onScroll={onWheelCaptureHandler}
       >
-        <Loader showLoader={true}/>
         {messages?.length == 0 && <h5>Start a Conversation</h5>}
         {messages?.length > 0 && !moreMessagesAvailable && (
           <h5>Beggining of the conversation</h5>
