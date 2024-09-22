@@ -281,9 +281,20 @@ export const ChatContextProvider = ({ children, user }) => {
         playAudio();
         console.log("PLAY AUDIO");
       }
+
+      if(userChats && message?.length>0)
+      {
+        let arr=userChats;
+        let elem= arr.find((unit) => unit?._id == message[0].chatId);
+        let index = arr.findIndex((unit) => unit?._id == message[0].chatId);
+        arr.splice(index,1);
+        arr.unshift(elem);
+        setUserChats(arr);
+        
+      }
       setNotification(message);
     });
-  }, [socket, currentChatRef]);
+  }, [socket, currentChatRef,userChats]);
 
   // Receive Message
 
@@ -361,6 +372,7 @@ export const ChatContextProvider = ({ children, user }) => {
         const response = await getRequest(
           `${baseUrl}/chats/findUserChats/${user?._id}`
         );
+        console.log("response",response);
 
         setIsUserChatLoading(false);
 
@@ -383,6 +395,15 @@ export const ChatContextProvider = ({ children, user }) => {
     async (textMessage, sender, currentChatId, isOnlyEmoji) => {
       if (!textMessage) return console.log("You must type something");
 
+      console.log("currentChatId beofre SENDING",currentChatId);
+      console.log("userChat",userChats);
+
+      let arr= userChats;
+      let elem= arr.find((elem) => elem._id == currentChatId);
+      let index = arr.findIndex((elem) => elem._id == currentChatId);
+      arr.splice(index,1);
+      arr.unshift(elem);
+
       const response = await postRequest(
         `${baseUrl}/messages/createMessage`,
         JSON.stringify({
@@ -404,7 +425,7 @@ export const ChatContextProvider = ({ children, user }) => {
       // setMessages( (prev) =>[...prev,response]);
       // This setMessages is for someone who is seing the msg
     },
-    []
+    [userChats]
   );
 
   useEffect(() => {
