@@ -7,6 +7,7 @@ import { ChatContext } from "../../context/chatContext";
 import ImageViewer from "react-simple-image-viewer";
 import "./chat.scss";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser, imageUrl } = useFetchRecipientUser(chat, user);
@@ -24,9 +25,12 @@ const UserChat = ({ chat, user }) => {
   // when we click our messages appear
   const [showNotification, setShowNotification] = useState([]);
 
+  const [showLatestMessage,setShowLatestMessage] = useState(false);
+
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
   }, []);
+  console.log("chat is ",chat);
 
   // -------------------------
 
@@ -42,6 +46,8 @@ const UserChat = ({ chat, user }) => {
             removeNotification(notify);
 
             setShowNotification([]);
+            // Here Also lastMessage should come
+            setShowLatestMessage(true);
           } else {
             setShowNotification([{ ...notify, count: notify.count }]);
           }
@@ -49,6 +55,8 @@ const UserChat = ({ chat, user }) => {
       });
     } else {
       setShowNotification([]);
+      setShowLatestMessage(true);
+      // Here Also lastMessage should come
     }
   }, [notification, recipientUser, currentChat]);
 
@@ -86,21 +94,27 @@ const UserChat = ({ chat, user }) => {
           <div className="flex-space-between">
             {showNotification?.map((notify, index) =>
               notify.senderId === recipientUser?._id ? (
-                <div key={index} className="text">
-                  {wrapEmojis(notify.text)}
-                </div>
-              ) : null
-            )}
-
-            {showNotification &&
-              showNotification?.map((notify, index) =>
-                notify.senderId === recipientUser?._id ? (
+                <>
+                  <div key={index} className="text">
+                    {wrapEmojis(notify.text)}
+                  </div>
                   <div key={index} className="this-user-notifications">
                     {notify.count}
                   </div>
-                ) : null
-              )}
+                </>
+              ) : null
+            )}
           </div>
+          {showLatestMessage && chat?.latestMessage ? (
+            <div className="flex-space-between">
+              <div className="text">{(chat?.latestMessage)}</div>
+              <div className="text">
+              { moment(chat?.latestMessageTime).format('LT')}
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       {onlineUsers.some((user) => user.userId === recipientUser?._id) ? (
