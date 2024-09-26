@@ -10,6 +10,7 @@ import { io } from "socket.io-client";
 import sound from "../assets/sound.wav";
 import toasts from "../customComponents/toaster/toaster";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 
 export const ChatContext = createContext();
@@ -386,11 +387,15 @@ export const ChatContextProvider = ({ children, user }) => {
     async (textMessage, sender, currentChatId, isOnlyEmoji) => {
       if (!textMessage) return console.log("You must type something");
 
+      // Here the user who is sending message will come at the top
       let arr= userChats;
       let elem= arr.find((elem) => elem._id == currentChatId);
+      elem.latestMessage=textMessage;
+      elem.latestMessageTime = moment(new Date()).format('ll') 
       let index = arr.findIndex((elem) => elem._id == currentChatId);
       arr.splice(index,1);
       arr.unshift(elem);
+      setUserChats(arr);
 
       const response = await postRequest(
         `${baseUrl}/messages/createMessage`,
