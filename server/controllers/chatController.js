@@ -1,5 +1,6 @@
 const chatModel = require("../models/chatModel");
 const messageModel = require("../models/messageModel");
+const moment = require("moment");
 const createChat = async (req, res) => {
   const { firstId, secondId } = req.body;
 
@@ -81,7 +82,7 @@ const findUserChats = async (req, res) => {
     while (index < latestChats.length) {
       let chatId = latestChats[index]._doc.chatId;
       let latestMessage = latestChats[index]._doc.text;
-      let latestMessageTime = latestChats[index]._doc.createdAt;
+      let latestMessageTime = await convertDateToTimeline(latestChats[index]._doc.createdAt);
       const chat = await chatModel.find({
         _id: chatId,
       });
@@ -133,5 +134,50 @@ const findChat = async () => {
     res.status(500).json(error);
   }
 };
+
+function getDayString(date, locale = 'en-US') {
+  const options = { weekday: 'long' };
+  return new Date(date).toLocaleDateString(locale, options);
+}
+
+const convertDateToTimeline =async(messageDate) =>
+{
+  return new Promise((resolve,reject) =>
+  {
+    let date= "";
+    let currentDate = new Date();
+   
+    if(messageDate.getDate() === currentDate.getDate() && messageDate.getFullYear() === currentDate.getFullYear() && messageDate.getMonth() === currentDate.getMonth())
+    {
+        date="Today";
+    }
+   else if(messageDate.getDate() === currentDate.getDate() -1 && messageDate.getFullYear() === currentDate.getFullYear() && messageDate.getMonth() === currentDate.getMonth())
+        {
+            date="Yesterday";
+        }
+    else if(messageDate.getDate() === currentDate.getDate() -2 && messageDate.getFullYear() === currentDate.getFullYear() && messageDate.getMonth() === currentDate.getMonth())
+        {
+          date=getDayString(messageDate);
+        }
+    else if(messageDate.getDate() === currentDate.getDate() -3 && messageDate.getFullYear() === currentDate.getFullYear() && messageDate.getMonth() === currentDate.getMonth())
+        {
+          date=getDayString(messageDate);
+        }
+    else if(messageDate.getDate() === currentDate.getDate() -4 && messageDate.getFullYear() === currentDate.getFullYear() && messageDate.getMonth() === currentDate.getMonth())
+        {
+            date=getDayString(messageDate);
+        }
+        else if(!date)
+        {
+         date = moment(messageDate).format('ll');  
+        }
+       
+        resolve(date);
+   
+
+  })
+   
+
+}
 
 module.exports = { createChat, createMultipleChats, findUserChats, findChat };

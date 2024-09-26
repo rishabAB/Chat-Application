@@ -30,7 +30,7 @@ const UserChat = ({ chat, user }) => {
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
   }, []);
-  console.log("chat is ",chat);
+  console.log("chat is ",chat?.latestMessageTime);
 
   // -------------------------
 
@@ -109,7 +109,7 @@ const UserChat = ({ chat, user }) => {
             <div className="flex-space-between">
               <div className="text">{(chat?.latestMessage)}</div>
               <div className="text">
-              { moment(chat?.latestMessageTime).format('LT')}
+              {chat?.latestMessageTime}
               </div>
             </div>
           ) : (
