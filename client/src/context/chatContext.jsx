@@ -62,7 +62,6 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const [isUserNew, setIsUserNew] = useState(null);
 
-  console.log("chatConTEXT");
   // Forming a connection with socket
   useEffect(() => {
     // const socketOptions = {
@@ -99,7 +98,6 @@ export const ChatContextProvider = ({ children, user }) => {
   };
 
   useEffect(() => {
-    console.log("HEY USE EFFECT");
     if (socket == null) return;
     socket.emit("addNewUser", user?._id);
 
@@ -169,11 +167,6 @@ export const ChatContextProvider = ({ children, user }) => {
     console.log("messages", messages);
 
     checkTimeline(messages).then(function (result) {
-      if (!result) {
-        // setMessages((prev) => [...prev,{date:"Today"}]);
-        // messageRef.current = [...messages,{date:"Today"}];
-        console.log("messageRef.current", messageRef.current);
-      }
 
       if (newMessageRef?.current) {
         if (!result) {
@@ -223,9 +216,8 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const setSocketTimelineMessage = useCallback(
     (socketRes) => {
-      console.log(" messageRef.current=messages;", messageRef.current);
       if (sendToClientTriggered?.current) {
-        // console.log("messageRef.current",messageRef[0].current)
+      
         checkTimeline(messageRef.current).then(function (result) {
           let arr = [];
           if (!result) {
@@ -301,7 +293,6 @@ export const ChatContextProvider = ({ children, user }) => {
   useEffect(() => {
     if (socket == null) return;
 
-    console.log("messages array", messages);
     socket.on("sendToClient", (res) => {
       // In this if condition if it doesn't match
       // if means user is online but that conversation is not opened so this is the case where we
@@ -395,9 +386,6 @@ export const ChatContextProvider = ({ children, user }) => {
     async (textMessage, sender, currentChatId, isOnlyEmoji) => {
       if (!textMessage) return console.log("You must type something");
 
-      console.log("currentChatId beofre SENDING",currentChatId);
-      console.log("userChat",userChats);
-
       let arr= userChats;
       let elem= arr.find((elem) => elem._id == currentChatId);
       let index = arr.findIndex((elem) => elem._id == currentChatId);
@@ -464,11 +452,7 @@ export const ChatContextProvider = ({ children, user }) => {
           const response = await getRequest(
             `${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`
           );
-
-          // if (response?.error) {
-          //   return setPartialMessagesError(response);
-          // }
-          console.log("response", response);
+ 
           setMessageTimeline(response?.messageTimeline);
           setMessages((prev) => {
             if (prev?.length > 0 && prev[0]?.items[0].chatId == currentChatId) {
@@ -535,7 +519,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Check width", windowWidth);
+    
     if (windowWidth < 1000) {
       setResponsiveFrame1(true);
     } else {
@@ -556,7 +540,6 @@ export const ChatContextProvider = ({ children, user }) => {
       JSON.stringify({ firstId, secondId })
     );
 
-    console.log("single user response", response);
     if (response.error) {
       toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);
@@ -581,7 +564,6 @@ export const ChatContextProvider = ({ children, user }) => {
       JSON.stringify(arrOfObjects)
     );
 
-    console.log("response of Multiple chats", response);
     if (response.error) {
       toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);

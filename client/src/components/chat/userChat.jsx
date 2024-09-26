@@ -7,7 +7,6 @@ import { ChatContext } from "../../context/chatContext";
 import ImageViewer from "react-simple-image-viewer";
 import "./chat.scss";
 import PropTypes from "prop-types";
-import moment from "moment";
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser, imageUrl } = useFetchRecipientUser(chat, user);
@@ -30,8 +29,7 @@ const UserChat = ({ chat, user }) => {
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
   }, []);
-  console.log("chat is ",chat?.latestMessageTime);
-
+  
   // -------------------------
 
   // Here please note in the naming convention in notification get oppsite right in notification.senderId
@@ -50,6 +48,7 @@ const UserChat = ({ chat, user }) => {
             setShowLatestMessage(true);
           } else {
             setShowNotification([{ ...notify, count: notify.count }]);
+            setShowLatestMessage(false);
           }
         }
       });
