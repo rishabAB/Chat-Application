@@ -7,6 +7,7 @@ import { ChatContext } from "../../context/chatContext";
 import ImageViewer from "react-simple-image-viewer";
 import "./chat.scss";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser, imageUrl } = useFetchRecipientUser(chat, user);
@@ -44,6 +45,8 @@ const UserChat = ({ chat, user }) => {
             removeNotification(notify);
 
             setShowNotification([]);
+            chat.latestMessage= notify.text; 
+            chat.latestMessageTime=moment(notify.createdAt).format('ll'); 
             // Here Also lastMessage should come
             setShowLatestMessage(true);
           } else {

@@ -173,8 +173,7 @@ const ChatBox = () => {
       // setOffset((prev) => prev + 1);
 
       offsetRef.current += 1;
-      await delay(800);
-
+      
       isFetchingRef.current = false;
       checkScroll.current.style.pointerEvents = "auto";
       //  await delay(1000).then(()=> checkScroll.current.style.pointerEvents = 'auto');
