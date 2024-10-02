@@ -76,6 +76,15 @@ const Chat = () => {
     if (isUserNew) textEffect("rishab", "Welcome to Rishab's Talkapp");
   }, [pRef?.current]);
 
+  const test1 = useRef();
+  useEffect(() => {
+    if (test1 && test1.current) {
+      const t = `calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
+      const height = t;
+      test1.current.style.height = height;
+    }
+  }, [test1.current]);
+
   // ------------
   return (
     <div>
@@ -99,7 +108,7 @@ const Chat = () => {
               direction="horizontal"
               className="align-items-start loading-chats"
             >
-              <div
+              <div ref={test1}
                 className={`messages-box flex-grow-0 ${isChatBoxOpened && responsizeFrame1 ? "display-none" : ""} `}
               >
                 {isUserChatLoading && <p><Loader showLoader={true}/></p>}

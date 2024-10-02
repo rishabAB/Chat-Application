@@ -18,6 +18,8 @@ const UserChat = ({ chat, user }) => {
     removeNotification,
     updateCurrentChat,
     wrapEmojis,
+    responsizeFrame1,
+    isChatBoxOpened,
   } = useContext(ChatContext);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -42,13 +44,30 @@ const UserChat = ({ chat, user }) => {
         if (recipientUser?._id === notify.senderId) {
           if (currentChat?._id === notify.chatId) {
             console.log("Case where chat is already opened");
-            removeNotification(notify);
-
-            setShowNotification([]);
-            chat.latestMessage= notify.text; 
-            chat.latestMessageTime=moment(notify.createdAt).format('ll'); 
-            // Here Also lastMessage should come
-            setShowLatestMessage(true);
+          
+            if(responsizeFrame1)
+            {
+              if(isChatBoxOpened)
+                {
+                  setShowLatestMessage(true);
+                  removeNotification(notify);
+                  setShowNotification([]);
+                  chat.latestMessage= notify.text; 
+                  chat.latestMessageTime=moment(notify.createdAt).format('ll'); 
+                }
+                else{
+                  setShowLatestMessage(false);
+                  setShowNotification([{ ...notify, count: notify.count }]);
+                }
+            }
+            else{
+              removeNotification(notify);
+              setShowNotification([]);
+              chat.latestMessage= notify.text; 
+              chat.latestMessageTime=moment(notify.createdAt).format('ll'); 
+              // Here Also lastMessage should come
+              setShowLatestMessage(true);
+            }
           } else {
             setShowNotification([{ ...notify, count: notify.count }]);
             setShowLatestMessage(false);
@@ -60,7 +79,7 @@ const UserChat = ({ chat, user }) => {
       setShowLatestMessage(true);
       // Here Also lastMessage should come
     }
-  }, [notification, recipientUser, currentChat]);
+  }, [notification, recipientUser, currentChat,responsizeFrame1,isChatBoxOpened]);
 
   let [userImageArray, setUserImageArray] = useState();
   const loadImage = useCallback(async () => {

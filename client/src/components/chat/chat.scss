@@ -37,7 +37,7 @@
 
 
 .messages-box {
-  height: calc(100vh - 3.4rem);
+  // height: calc(100vh - 3.4rem);
   width: 35%;
   border: 2px solid rgb(12, 69, 125);
   overflow-y: auto;
@@ -64,9 +64,6 @@
   max-width: unset;
 }
 
-.resize-svg-icon {
-  right: 50% !important;
-}
 .svg-icon {
   position: absolute;
   bottom: 100px;
@@ -76,7 +73,12 @@
 }
 
   .resize-svg-icon{
-    right: 48% !important;
+    right: 48% ;
+
+    @media screen and (max-width:$responsiveFrameSize1) 
+    {
+      right: 46% !important;
+    }
   }
   .svg-icon{
     position: fixed;
