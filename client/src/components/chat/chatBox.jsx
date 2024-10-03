@@ -228,17 +228,17 @@ const ChatBox = () => {
     }
   };
 
-  const test1 = useRef();
+  const dynamicHeight = useRef();
   useEffect(() => {
-    if (test1 && test1.current) {
+    if (dynamicHeight && dynamicHeight.current) {
       const t = `calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
       console.log(t);
       const height = t;
       console.log("height", height);
 
-      test1.current.style.height = height;
+      dynamicHeight.current.style.height = height;
     }
-  }, [test1.current]);
+  }, [dynamicHeight.current]);
 
   if (!recipientUser) {
     return (
@@ -254,7 +254,7 @@ const ChatBox = () => {
   }
   return (
     <Stack
-      ref={test1}
+      ref={dynamicHeight}
       className={`chat-box ${
         isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
       }`}
