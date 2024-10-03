@@ -6,12 +6,10 @@ import { postRequest, baseUrl } from "../utils/services";
 
 import toasts from "../customComponents/toaster/toaster";
 
-// import male_user from "../../public/male_user.svg";
-// import female_user from "../../public/female_user.svg";
-
 import female_user_2 from "../../public/female_user_2.svg";
 import male_user_2 from "../../public/male_user_2.svg";
 import PropTypes from "prop-types";
+
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
