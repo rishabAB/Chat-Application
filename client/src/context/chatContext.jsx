@@ -72,7 +72,9 @@ export const ChatContextProvider = ({ children, user }) => {
     // };
 
     //   const newSocket = io("https://5c09-2409-40d1-1a-ab3d-22af-5c32-e87d-bd4d.ngrok-free.app", socketOptions);
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io("https://chat-application-socket-hi4k.onrender.com");
+    // http://localhost:3000
+    
     setSocket(newSocket);
 
     return () => {
