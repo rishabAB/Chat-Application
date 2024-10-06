@@ -6,8 +6,8 @@ import { postRequest, baseUrl } from "../utils/services";
 
 import toasts from "../customComponents/toaster/toaster";
 
-import female_user_2 from "../../public/female_user_2.svg";
-import male_user_2 from "../../public/male_user_2.svg";
+import female_user_2 from "./female_user_2.svg";
+import male_user_2 from "./male_user_2.svg";
 import PropTypes from "prop-types";
 
 export const AuthContextProvider = ({ children }) => {
