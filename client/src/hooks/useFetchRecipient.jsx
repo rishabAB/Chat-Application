@@ -2,10 +2,9 @@ import { useEffect, useState, useCallback } from "react";
 import { getRequest, baseUrl } from "../utils/services";
 
 
-// import female_user_2 from "../../public/female_user_2.svg"
-// import male_user_2 from "../../public/male_user_2.svg";
-import female_user_2 from "./female_user_2.svg"
- import male_user_2 from "./male_user_2.svg";
+import female_user_2 from "../../public/female_user_2.svg"
+import male_user_2 from "../../public/male_user_2.svg";
+
 export const useFetchRecipientUser = (chat, user) => {
   const [recipientUser, setRecipientUser] = useState(null);
   // const [error, setError] = useState(false);
