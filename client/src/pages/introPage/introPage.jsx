@@ -17,7 +17,7 @@ const IntroPage = ({ isRegister }) => {
   return (
     <div className="register_login">
       <div className="register_login_img_div">
-        <img src="../../../public/3394897.jpg" alt="" />
+        <img src="../../assets/3394897.jpg" alt="" />
       </div>
 
       <div>{isRegisterProp ? <Register /> : <Login />}</div>
