@@ -360,6 +360,7 @@ export const ChatContextProvider = ({ children, user }) => {
   useEffect(() => {
     const getUserChats = async () => {
       if (user?._id) {
+        console.time("FINDUSERCHATS");
         setIsUserChatLoading(true);
         setIsUserChatError(null);
 
@@ -375,6 +376,7 @@ export const ChatContextProvider = ({ children, user }) => {
           return setIsUserChatError(response);
         }
         setUserChats(response);
+        console.timeEnd("FINDUSERCHATS");
       }
       else{
         setIsUserNew(null); 

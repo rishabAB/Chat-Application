@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
   }
 
   const updateRegisterInfo = useCallback(async (info) => {
-    console.log("ingo ", info);
+ 
     if (info?.profile && info?.profile?.name) {
       let res = await readFileDataAsBase64(info.profile);
       info.profile = res;
@@ -59,7 +59,6 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const updateLoginInfo = useCallback((info) => {
-    console.log("info", info);
     setLoginInfo(info);
   }, []);
 
@@ -144,6 +143,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const loginUser = useCallback(
     async (e) => {
+      console.time("LOGIN USER");
       e.preventDefault();
       setIsLoginLoading(true);
       const response = await postRequest(
@@ -167,6 +167,7 @@ export const AuthContextProvider = ({ children }) => {
         return setLoginError(response);
       } else {
         toasts.success("Login Successfull");
+        console.timeEnd("LOGIN USER");
         localStorage.setItem("user", JSON.stringify(response));
         setUser(response);
       }

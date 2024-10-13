@@ -93,6 +93,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  console.time("login_time");
   const { email, password } = req.body;
 
   try {
@@ -107,6 +108,7 @@ const loginUser = async (req, res) => {
 
     const token = createToken(user._id);
 
+    console.timeEnd("login_time");
     res
       .status(200)
       .json({
