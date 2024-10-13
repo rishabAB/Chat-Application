@@ -1,11 +1,11 @@
 import React, { useContext, useCallback, useRef, useEffect } from "react";
 import { Stack } from "react-bootstrap";
-import { ChatContext } from "../context/chatContext";
-import { AuthContext } from "../context/authContext";
-import UserChat from "../components/chat/userChat";
+import {ChatContext} from "../../context/chatContext"
+import { AuthContext } from "../../context/authContext";
+import UserChat from "./userChat";
 
-import ChatBox from "../components/chat/chatBox";
-import Loader from "../customComponents/loader/loader";
+import ChatBox from "./chatBox.jsx";
+import Loader from "../../customComponents/loader/loader";
 const Chat = () => {
   const { user } = useContext(AuthContext);
 
@@ -18,11 +18,10 @@ const Chat = () => {
     updateModal,
   } = useContext(ChatContext);
 
-  const animation = useRef(null);
-
-  const textEffect = useCallback(
-    (animationName, txt) => {
-      if (animation && animation.current) {
+  const animationRef = useRef(null);
+console.log("isUserNew",isUserNew);
+  const textEffect = useCallback((animationName, txt) => {
+      console.log("animationName",animationName);
         var text = txt,
           chars = text.length,
           newText = "",
@@ -33,7 +32,8 @@ const Chat = () => {
           newText += "<i>" + text.charAt(i) + "</i>";
         }
 
-        animation.current.innerHTML = newText;
+        console.log("animation.current",animationRef.current);
+        animationRef.current.innerHTML = newText;
 
         var wrappedChars = document.getElementsByTagName("i"),
           wrappedCharsLen = wrappedChars.length,
@@ -56,14 +56,18 @@ const Chat = () => {
         }
 
         addEffect();
-      }
+      
     },
-    [animation?.current]
+    [animationRef?.current]
   );
 
+
   useEffect(() => {
-    if (isUserNew) textEffect("rishab", "Welcome to Rishab's Talkapp");
-  }, [animation?.current]);
+    if (isUserNew && animationRef?.current)
+    {
+      textEffect("rishab", "Welcome to Rishab's Talkapp");
+    } 
+  }, [animationRef?.current,isUserNew]);
 
   const dynamicHeight = useRef();
   useEffect(() => {
@@ -80,7 +84,7 @@ const Chat = () => {
         isUserNew ? (
           <>
             <div>
-              <p className="displayAnimation" ref={animation}></p>
+              <p className="displayAnimation" ref={animationRef}></p>
             </div>
 
           </>

@@ -56,6 +56,7 @@ const createMultipleChats = async (req, res) => {
 };
 
 const findUserChats = async (req, res) => {
+  console.time("api_time");
   const userId = req.params.userId;
 
   try {
@@ -116,6 +117,7 @@ const findUserChats = async (req, res) => {
       index++;
     }
 
+    console.timeEnd("api_time");
     res.status(200).json(finalResponse);
   } catch (error) {
     console.error(error);

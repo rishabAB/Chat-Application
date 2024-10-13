@@ -616,7 +616,7 @@ export const ChatContextProvider = ({ children, user }) => {
         isChatBoxOpened,
         responsizeFrame1,
         updateChatBox,
-        wrapEmojis
+        wrapEmojis,
       }}
     >
       {" "}

@@ -1,7 +1,7 @@
 
 import {Routes,Route,Navigate} from "react-router-dom";
 
-import Chat from "./pages/chat";
+import Chat from "./components/chat/chat";
 
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +14,7 @@ import {AuthContext} from "./context/authContext";
 import {ChatContextProvider} from "./context/chatContext";
 
 import IntroPage from "./pages/introPage/introPage";
+import TestRoute from "./pages/testRoute/TestRoute";
 
   import { ToastContainer} from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +37,7 @@ function App() {
     <Route path="/register" element={user ? <Chat/> : <IntroPage isRegister={isRegister}/>} />
     <Route path="/" element = {user ? <Chat/> : <IntroPage />} />
     <Route path="*" element={<Navigate to ="/" />} />  
+    <Route path="/testing" element={<TestRoute/>}/>
     {/* Here this navigate is the default path that we are passing if url is any random then 
     it will redirected to this / path */}
     </Routes>

@@ -1,9 +1,7 @@
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
-
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { ChatContext } from "../../context/chatContext";
-
 import ImageViewer from "react-simple-image-viewer";
 import "./chat.scss";
 import PropTypes from "prop-types";
