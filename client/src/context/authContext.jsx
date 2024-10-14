@@ -67,10 +67,19 @@ export const AuthContextProvider = ({ children }) => {
       e.preventDefault();
       setIsRegisterLoading(true);
       setRegisterError(null);
-      const response = await postRequest(
-        `${baseUrl}/users/register`,
-        JSON.stringify(registerInfo)
+      const responsePromise = trackPromise(
+        postRequest(`${baseUrl}/users/register`, JSON.stringify(registerInfo))
       );
+
+      setTimeout(() => {
+        if (responsePromise.isPending()) {
+          toasts.warning(
+            "Please wait due to inactivity server may take some time to fetch response"
+          );
+        }
+      }, 5000);
+     
+      const response = await responsePromise;
       setIsRegisterLoading(false);
 
       if (response.error) {
@@ -140,16 +149,46 @@ export const AuthContextProvider = ({ children }) => {
       resolve(imageUrl);
     });
   };
+  function trackPromise(promise) {
+    let isPending = true;
+
+    // Wrap the original promise with another promise that tracks its state
+    const wrappedPromise = promise.then(
+      (value) => {
+        isPending = false;
+        return value;
+      },
+      (error) => {
+        isPending = false;
+        throw error;
+      }
+    );
+    // Add a method to check if the promise is still pending
+    wrappedPromise.isPending = () => isPending;
+
+    return wrappedPromise;
+  }
+  
 
   const loginUser = useCallback(
     async (e) => {
       console.time("LOGIN USER");
       e.preventDefault();
       setIsLoginLoading(true);
-      const response = await postRequest(
-        `${baseUrl}/users/login`,
-        JSON.stringify(loginInfo)
+      const responsePromise = trackPromise(
+        postRequest(`${baseUrl}/users/login`, JSON.stringify(loginInfo))
       );
+
+      setTimeout(() => {
+        if (responsePromise.isPending()) {
+          toasts.warning(
+            "Please wait due to inactivity server may take some time to fetch response"
+          );
+        }
+      }, 5000);
+
+      const response = await responsePromise;
+    
       setIsLoginLoading(false);
 
       if (response?.profile) {
