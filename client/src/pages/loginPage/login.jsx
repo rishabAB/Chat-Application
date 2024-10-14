@@ -4,12 +4,12 @@ import React,{useCallback, useContext,useEffect} from "react";
 import {AuthContext} from "../../context/authContext";
 import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";
-
+import Loader from "../../customComponents/loader/loader";
 
 import toasts from "../../customComponents/toaster/toaster";
 
 const Login = () => {
-    const {loginUser,loginInfo,updateLoginInfo,loginError} = useContext(AuthContext);
+    const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);
 
     const email_regex =
   // eslint-disable-next-line no-useless-escape
@@ -58,6 +58,11 @@ const Login = () => {
     return (
         <>
             {/* <Form  onSubmit={loginUser}> */}
+            {
+                <p>
+                    <Loader showLoader={isLoginLoading} />
+                </p>
+            }
             <Form >
             {/* {showToaster && <Toaster type={toasterType.current} message={toasterMessage.current} />} */}
                 <Row className="login_main_elem">
