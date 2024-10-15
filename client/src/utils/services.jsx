@@ -1,10 +1,29 @@
-export const baseUrl = "https://chat-application-server-roop.onrender.com/api";
+export const baseUrl = "http://localhost:5000/api";
 // https://chat-application-server-roop.onrender.com/api
 // http://localhost:5000/api
 // https://www.talkapp.life/api not working
+ import toasts from "../customComponents/toaster/toaster";
+
+function trackPromise(promise)
+{
+    let isPending =true;
+
+   const wrappedPromise= promise.then(
+    (value) =>
+    {
+        isPending=false;
+        return value;
+    },
+    (error) =>{
+        isPending = false;
+        return error;
+    });
+
+    wrappedPromise.isPending = () => isPending;
+}
 export const postRequest = async(url,body) =>
 {
-    const response=await fetch(url,
+    const promiseResponse=trackPromise(fetch(url,
         {
             method:"POST",
             headers : {
@@ -12,7 +31,17 @@ export const postRequest = async(url,body) =>
             },
             body
         }
-        )
+        ));
+
+        setTimeout(() => {
+            if (promiseResponse.isPending()) {
+              toasts.warning(
+                "Please wait due to inactivity server may take some time to fetch response"
+              );
+            }
+          }, 5000);
+
+          const response = await promiseResponse;
 
         const data = await response.json();
 
@@ -34,7 +63,8 @@ export const postRequest = async(url,body) =>
 
 export const getRequest = async(url) =>
 {
-    const response = await fetch(url,
+    const promiseResponse = trackPromise(
+        fetch(url,
         {
             method:"GET",
             headers : {
@@ -42,7 +72,16 @@ export const getRequest = async(url) =>
                 'ngrok-skip-browser-warning':  '69420',
             },
            
-        });
+        }));
+        setTimeout(() => {
+            if (promiseResponse.isPending()) {
+              toasts.warning(
+                "Please wait due to inactivity server may take some time to fetch response"
+              );
+            }
+          }, 5000);
+
+    const response = await promiseResponse;
 
     const data = await response.json();
 
