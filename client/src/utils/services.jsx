@@ -20,6 +20,7 @@ function trackPromise(promise)
     });
 
     wrappedPromise.isPending = () => isPending;
+    return wrappedPromise;
 }
 export const postRequest = async(url,body) =>
 {
