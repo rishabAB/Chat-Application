@@ -40,7 +40,7 @@ export const postRequest = async(url,body) =>
                 "Please wait due to inactivity server may take some time to fetch response"
               );
             }
-          }, 5000);
+          }, 10000);
 
           const response = await promiseResponse;
 
@@ -80,7 +80,7 @@ export const getRequest = async(url) =>
                 "Please wait due to inactivity server may take some time to fetch response"
               );
             }
-          }, 5000);
+          }, 10000);
 
     const response = await promiseResponse;
 
