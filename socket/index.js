@@ -15,6 +15,8 @@ const io = new Server({
 
 let onlineUsers = [];
 
+let tabNotificationCount = 0;
+
 let notifications = [];
 
 async function notificationLogic(array) {
@@ -76,7 +78,7 @@ io.on("connection", (socket) => {
           (user) => user.userId === userMessages[0].recipientId
         );
         let array = await notificationLogic(userMessages);
-        io.to(user.socketId).emit("sendNotification", array);
+        io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
       }
     }
   });
@@ -141,11 +143,14 @@ io.on("connection", (socket) => {
       //  let message_Array=userMessages.slice(-1);
       //  console.log("test",...message_Array);
 
-      const updated_Array = final_array.map((item) => ({
+      const array = final_array.map((item) => ({
         ...item,
         notificationTone: true,
       }));
-      io.to(isUserOnline[0].socketId).emit("sendNotification", updated_Array);
+
+      tabNotificationCount ++;
+     
+      io.to(isUserOnline[0].socketId).emit("sendNotification", {array,tabNotificationCount});
     } else {
       // user is offline
     }
@@ -157,28 +162,40 @@ io.on("connection", (socket) => {
     );
     notifications = removeNotification;
 
-    console.log("updated notification", notifications);
+    tabNotificationCount -= message.count;
     // In this line we check wthere is online or not
     const user = onlineUsers.find(
       (user) => user.userId === message.recipientId
     );
     if (user && user.socketId) {
       // This is the logic that the messages that we have in notifications is it for the same recipient user or not
-      let my_array = [];
+      let updatedNotification = [];
       notifications.forEach((notify) => {
         if (notify.recipientId === message.recipientId) {
-          my_array.push(notify);
+          updatedNotification.push(notify);
         }
       });
       let array;
-      if (my_array && my_array.length > 0) {
+
+      if (updatedNotification && updatedNotification.length > 0) {
         array = await notificationLogic(notifications);
       }
+    if(array?.length > 0)
+    {
+      let obj = array[0];
+      array[0] = {...obj,removeNotification:true};
+    }
+    else if(updatedNotification?.length > 0)
+    {
+      let obj = updatedNotification[0];
+      updatedNotification[0] = {...obj,removeNotification:true};
+    }
 
       if (array && array.length > 0) {
-        io.to(user.socketId).emit("sendNotification", array);
+        io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
       } else {
-        io.to(user.socketId).emit("sendNotification", my_array);
+        array = updatedNotification;
+        io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
       }
     }
   });

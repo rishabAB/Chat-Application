@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useRef, useEffect } from "react";
+import React, { useContext, useCallback, useRef, useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
 import {ChatContext} from "../../context/chatContext"
 import { AuthContext } from "../../context/authContext";
@@ -8,6 +8,7 @@ import ChatBox from "./chatBox.jsx";
 import Loader from "../../customComponents/loader/loader";
 const Chat = () => {
   const { user } = useContext(AuthContext);
+  const [showAnimation,setShowAnimation] = useState(false);
 
   const {
     userChats,
@@ -46,12 +47,12 @@ console.log("isUserNew",isUserNew);
             if (j < wrappedCharsLen) {
               addEffect();
             } else {
+              setShowAnimation(false);
               setTimeout(() => {
                 updateModal(true);
               }, 5000);
 
-              console.timeEnd("myTimer");
-            }
+           }
           }, 100);
         }
 
@@ -63,8 +64,9 @@ console.log("isUserNew",isUserNew);
 
 
   useEffect(() => {
-    if (isUserNew && animationRef?.current)
+    if (isUserNew && animationRef?.current && showAnimation == false)
     {
+      setShowAnimation(true);
       textEffect("rishab", "Welcome to Rishab's Talkapp");
     } 
   }, [animationRef?.current,isUserNew]);

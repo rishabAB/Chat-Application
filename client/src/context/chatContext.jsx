@@ -63,6 +63,8 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const [isUserNew, setIsUserNew] = useState(null);
 
+  const [tabNotificationCount,setTabNotificationCount] = useState(0);
+
   // Forming a connection with socket
   useEffect(() => {
     // const socketOptions = {
@@ -130,6 +132,23 @@ export const ChatContextProvider = ({ children, user }) => {
     },
     [messages, messageRef.current]
   );
+
+  // Tab Notification 
+  useEffect(()=>
+    {
+      const elem = document.querySelector("#tab-title");
+      if(tabNotificationCount!= 0)
+      {  
+        let innerText = `Talkapp (${tabNotificationCount})`;
+        elem.innerText = innerText;
+      }
+      else{  
+        console.log("Notify count 0");
+        elem.innerText="Talkapp";
+      }
+     
+    },[tabNotificationCount])
+
 
   // AUDIO POOL TO AVOID AUDIO LAGGING
 
@@ -270,24 +289,29 @@ export const ChatContextProvider = ({ children, user }) => {
       if (
         currentChatRef.current &&
         message &&
-        message.length > 0 &&
-        message[0]?.notificationTone
+        message.array.length > 0 &&
+        message.array[0]?.notificationTone
       ) {
         playAudio();
         console.log("PLAY AUDIO");
       }
+       if(message?.tabNotificationCount || message?.tabNotificationCount == 0)
+       {
+        setTabNotificationCount(message?.tabNotificationCount);
+       }
 
-      if(userChats && message?.length>0)
+      if(userChats && message.array?.length>0 &&  !message.array[0]?.removeNotification)
       {
+      
         let arr=userChats;
-        let elem= arr.find((unit) => unit?._id == message[0].chatId);
-        let index = arr.findIndex((unit) => unit?._id == message[0].chatId);
+        let elem= arr.find((unit) => unit?._id == message.array[0].chatId);
+        let index = arr.findIndex((unit) => unit?._id == message.array[0].chatId);
         arr.splice(index,1);
         arr.unshift(elem);
         setUserChats(arr);
         
       }
-      setNotification(message);
+      setNotification(message.array);
     });
   }, [socket, currentChatRef,userChats]);
 
