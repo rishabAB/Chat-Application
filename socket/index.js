@@ -8,16 +8,58 @@ const { Server } = require("socket.io");
 //   },
 // });
 const io = new Server({
-  cors: ["https://chat-application-client-va28.onrender.com/"],
+  cors: ["http://localhost:5173/"],
 });
 // https://chat-application-client-va28.onrender.com/
 // http://localhost:5173/
 
 let onlineUsers = [];
 
-let tabNotificationCount = 0;
+let tabNotification = [];
+
 
 let notifications = [];
+
+async function updateTabNotifications(recipientId,addOrRemove,count = 0)
+{
+  return new Promise((resolve,reject) =>
+  {
+    if(addOrRemove == "add")
+      {
+        let tempCount =1;
+        const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
+        if(elem)
+        {
+          tempCount = elem.count +1;
+          const index = tabNotification.findIndex((elem) => elem.recipientId == recipientId);
+          tabNotification.splice(index,1);
+          tabNotification.push({recipientId:recipientId,count:tempCount});
+        }
+        else{
+          tabNotification.push({recipientId:recipientId,count:tempCount});
+        }
+        resolve(tempCount);
+       
+    
+      }
+      else if(addOrRemove == "remove"){
+    
+        const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
+        let tempCount = elem.count - count;
+        tempCount > 0 ? tempCount : 0;
+        if(elem)
+        {
+          const index = tabNotification.findIndex((elem) => elem.recipientId == recipientId);
+          tabNotification.splice(index,1);
+          tabNotification.push({recipientId,count:tempCount})
+        }
+        resolve(tempCount);
+    
+      }
+
+  })
+ 
+}
 
 async function notificationLogic(array) {
   return new Promise((fulfill, reject) => {
@@ -116,6 +158,8 @@ io.on("connection", (socket) => {
         count++;
       }
     });
+    const tabNotificationCount = await updateTabNotifications(message.recipientId,"add");
+
 
     notifications.push({ ...message, count });
 
@@ -147,8 +191,6 @@ io.on("connection", (socket) => {
         ...item,
         notificationTone: true,
       }));
-
-      tabNotificationCount ++;
      
       io.to(isUserOnline[0].socketId).emit("sendNotification", {array,tabNotificationCount});
     } else {
@@ -162,7 +204,7 @@ io.on("connection", (socket) => {
     );
     notifications = removeNotification;
 
-    tabNotificationCount -= message.count;
+    const tabNotificationCount = await updateTabNotifications(message.recipientId,"remove",message.count);
     // In this line we check wthere is online or not
     const user = onlineUsers.find(
       (user) => user.userId === message.recipientId
