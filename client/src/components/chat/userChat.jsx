@@ -25,7 +25,7 @@ const UserChat = ({ chat, user }) => {
   // when we click our messages appear
   const [showNotification, setShowNotification] = useState([]);
 
-  const [showLatestMessage,setShowLatestMessage] = useState(false);
+  const [showLatestMessage,setShowLatestMessage] = useState(true);
 
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
@@ -38,7 +38,7 @@ const UserChat = ({ chat, user }) => {
   useEffect(() => {
     
     if (notification && notification.length > 0) {
-      notification.forEach((notify) => {
+      notification.forEach(async(notify) => {
         if (recipientUser?._id === notify.senderId) {
           if (currentChat?._id === notify.chatId) {
             console.log("Case where chat is already opened");
@@ -51,7 +51,7 @@ const UserChat = ({ chat, user }) => {
                   removeNotification(notify);
                   setShowNotification([]);
                   chat.latestMessage= notify.text; 
-                  chat.latestMessageTime=moment(notify.createdAt).format('ll'); 
+                  chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
                 }
                 else{
                   setShowLatestMessage(false);
@@ -62,7 +62,7 @@ const UserChat = ({ chat, user }) => {
               removeNotification(notify);
               setShowNotification([]);
               chat.latestMessage= notify.text; 
-              chat.latestMessageTime=moment(notify.createdAt).format('ll'); 
+              chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
               // Here Also lastMessage should come
               setShowLatestMessage(true);
             }
@@ -88,6 +88,61 @@ const UserChat = ({ chat, user }) => {
   useEffect(() => {
     if (imageUrl) loadImage();
   }, [imageUrl]);
+
+
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  function getDayString(date, locale = "en-US") {
+    const options = { weekday: "long" };
+    return new Date(date).toLocaleDateString(locale, options);
+  }
+  
+
+  const convertDateToTimeline = async (messageDate) => {
+    // eslint-disable-next-line no-unused-vars
+    return new Promise((resolve, reject) => {
+      let date = "";
+      let currentDate = new Date();
+      
+      if (
+        messageDate.getDate() === currentDate.getDate() &&
+        messageDate.getFullYear() === currentDate.getFullYear() &&
+        messageDate.getMonth() === currentDate.getMonth()
+      ) {
+        date = "Today";
+      } else if (
+        messageDate.getDate() === currentDate.getDate() - 1 &&
+        messageDate.getFullYear() === currentDate.getFullYear() &&
+        messageDate.getMonth() === currentDate.getMonth()
+      ) {
+        date = "Yesterday";
+      } else if (
+        messageDate.getDate() === currentDate.getDate() - 2 &&
+        messageDate.getFullYear() === currentDate.getFullYear() &&
+        messageDate.getMonth() === currentDate.getMonth()
+      ) {
+        date = getDayString(messageDate);
+      } else if (
+        messageDate.getDate() === currentDate.getDate() - 3 &&
+        messageDate.getFullYear() === currentDate.getFullYear() &&
+        messageDate.getMonth() === currentDate.getMonth()
+      ) {
+        date = getDayString(messageDate);
+      } else if (
+        messageDate.getDate() === currentDate.getDate() - 4 &&
+        messageDate.getFullYear() === currentDate.getFullYear() &&
+        messageDate.getMonth() === currentDate.getMonth()
+      ) {
+        date = getDayString(messageDate);
+      } else if (!date) {
+        date = moment(messageDate).format("ll");
+      }
+  
+      resolve(date);
+    });
+  };
 
   //------------
 

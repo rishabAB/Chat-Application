@@ -10,7 +10,6 @@ import { io } from "socket.io-client";
 import sound from "../assets/sound.wav";
 import toasts from "../customComponents/toaster/toaster";
 import PropTypes from "prop-types";
-import moment from "moment";
 
 
 export const ChatContext = createContext();
@@ -74,7 +73,7 @@ export const ChatContextProvider = ({ children, user }) => {
     // };
 
     //   const newSocket = io("https://5c09-2409-40d1-1a-ab3d-22af-5c32-e87d-bd4d.ngrok-free.app", socketOptions);
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io("https://chat-application-socket-hi4k.onrender.com");
     // http://localhost:3000
     // https://chat-application-socket-hi4k.onrender.com"
     
@@ -287,6 +286,10 @@ export const ChatContextProvider = ({ children, user }) => {
     if (!socket) return;
 
     socket.on("sendNotification", (message) => {
+      if(message?.tabNotificationCount || message?.tabNotificationCount == 0)
+        {
+         setTabNotificationCount(message?.tabNotificationCount);
+        }
       if (
         currentChatRef.current &&
         message &&
@@ -296,10 +299,7 @@ export const ChatContextProvider = ({ children, user }) => {
         playAudio();
         console.log("PLAY AUDIO");
       }
-       if(message?.tabNotificationCount || message?.tabNotificationCount == 0)
-       {
-        setTabNotificationCount(message?.tabNotificationCount);
-       }
+      
 
       if(userChats && message.array?.length>0 &&  !message.array[0]?.removeNotification)
       {
@@ -420,7 +420,7 @@ export const ChatContextProvider = ({ children, user }) => {
       let arr= userChats;
       let elem= arr.find((elem) => elem._id == currentChatId);
       elem.latestMessage=textMessage;
-      elem.latestMessageTime = moment(new Date()).format('ll') 
+      elem.latestMessageTime ="Today";
       let index = arr.findIndex((elem) => elem._id == currentChatId);
       arr.splice(index,1);
       arr.unshift(elem);

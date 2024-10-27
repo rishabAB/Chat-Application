@@ -8,7 +8,7 @@ const { Server } = require("socket.io");
 //   },
 // });
 const io = new Server({
-  cors: ["http://localhost:5173/"],
+  cors: ["https://chat-application-client-va28.onrender.com/"],
 });
 // https://chat-application-client-va28.onrender.com/
 // http://localhost:5173/
@@ -20,11 +20,11 @@ let tabNotification = [];
 
 let notifications = [];
 
-async function updateTabNotifications(recipientId,addOrRemove,count = 0)
+async function updateTabNotifications(recipientId,action,count = 0)
 {
   return new Promise((resolve,reject) =>
   {
-    if(addOrRemove == "add")
+    if(action == "add")
       {
         let tempCount =1;
         const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
@@ -42,7 +42,7 @@ async function updateTabNotifications(recipientId,addOrRemove,count = 0)
        
     
       }
-      else if(addOrRemove == "remove"){
+      else if(action == "remove"){
     
         const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
         let tempCount = elem.count - count;
@@ -55,6 +55,11 @@ async function updateTabNotifications(recipientId,addOrRemove,count = 0)
         }
         resolve(tempCount);
     
+      }
+      else{
+        const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
+        resolve( elem.count ? elem.count : 0);
+
       }
 
   })
@@ -120,6 +125,7 @@ io.on("connection", (socket) => {
           (user) => user.userId === userMessages[0].recipientId
         );
         let array = await notificationLogic(userMessages);
+        const tabNotificationCount = await updateTabNotifications(user.userId,"get");
         io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
       }
     }
@@ -161,7 +167,7 @@ io.on("connection", (socket) => {
     const tabNotificationCount = await updateTabNotifications(message.recipientId,"add");
 
 
-    notifications.push({ ...message, count });
+    notifications.push({ ...message, count});
 
     // ----------
 
