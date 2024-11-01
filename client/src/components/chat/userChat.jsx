@@ -180,9 +180,9 @@ const UserChat = ({ chat, user }) => {
             )}
           </div>
           {showLatestMessage && chat?.latestMessage ? (
-            <div className="flex-space-between">
-              <div className="text">{(chat?.latestMessage)}</div>
-              <div className="text">
+            <div className="flex-space-between ">
+              <div className="text ellipsis ">{(chat?.latestMessage)}</div>
+              <div className="text ">
               {chat?.latestMessageTime}
               </div>
             </div>

@@ -42,7 +42,7 @@ const Register = () => {
         );
       } else if (!registerInfo.gender) {
         toasts.warning("Please fill your gender");
-      } else {
+      } else if(!isRegisterLoading) {
         registerUser(e);
       }
     },
@@ -88,6 +88,7 @@ const Register = () => {
                 placeholder="Email:*"
                 onChange={updateRegisterInfo}
                 obj={registerInfo}
+                maxLength={40}
                 onErrorObj={registerError}
                 propName="email"
               />
@@ -97,6 +98,7 @@ const Register = () => {
                 placeholder="Password:*"
                 onChange={updateRegisterInfo}
                 obj={registerInfo}
+                maxLength={25}
                 onErrorObj={registerError}
                 propName="password"
               />
@@ -142,6 +144,7 @@ const Register = () => {
               {/* </div> */}
               <Button
                 className="submit-button"
+                disabled={isRegisterLoading}
                 varient="primary"
                 onKeyDown={(e) =>
                   e.key == "Enter" ? onSubmitRegister(e) : null

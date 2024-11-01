@@ -96,85 +96,16 @@ const partialMessages = async (req, res) => {
     let messages;
     let messageTimeline;
     const exists = myCache.has(currentChatId);
-    // if(exists)
-    // {
-    //     messages = myCache.get(currentChatId);
-
-    // }
-    // else{
+  
     messages = await messageModel.find({ chatId: currentChatId });
     let completeResponse = await testingGetMessageTimeLine(messages);
 
-    // myCache.set(currentChatId, messages);
-
-    // }
-    //    TESTING FOR TIMELINE
-    // messages = response?.finalArray;
-    // let response=[];
-    // if(offset ==0)
-    // {
-    //     // response.push(completeResponse[0]);
-    //     response.push(completeResponse[1]);
-    //     response.push(completeResponse[2]);
-    //     // completeResponse[3].date="Tuesday";
-    //     response.push(completeResponse[3]);
-    //     // completeResponse[4].date="Yesterday";
-    //     response.push(completeResponse[4]);
-
-    // }
-    // else{
-
-    // }
-    // // messageTimeline = response?.messageTimeline;
-    // if(offset == 0)
-    // {
-    //     returnObject.moreMessagesAvailable=true;
-    // }
+ 
     returnObject.messages = completeResponse;
     //  deleteTodaysDate(returnObject.messages);
     res.status(200).json(returnObject);
 
-    // -----------------------
-    // returnObject.messages=messages;
-    // returnObject.messageTimeline=messageTimeline;
-    // returnObject.messages = await getMessageTimeLine(returnObject.messages);
-
-    // if(messages?.length > limit)
-    // {
-
-    //     // New Logic
-    //     if(offset === 0)
-    //     {
-    //         offset =1;
-    //     }
-    //     let startIndex = messages.length-(limit*offset);
-
-    //     let endIndex = messages.length - (limit*(offset-1));
-
-    //     if(startIndex <limit)
-    //     {
-    //       startIndex =0;
-    //     }
-
-    //     filteredMessages = messages.slice(startIndex ,endIndex)
-
-    //     returnObject.moreMessagesAvailable=true;
-    //     returnObject.messages=filteredMessages;
-
-    //     if(limit*offset >= messages.length || startIndex === 0)
-    //     {
-    //         returnObject.moreMessagesAvailable=false;
-    //     }
-    //     console.log(startIndex,endIndex);
-
-    // }
-    // get it Done
-
-    // console.timeEnd();
-
-    // console.log("returnObject.messages",returnObject.messages);
-    //  deleteTodaysDate(returnObject.messages);
-    // res.status(200).json(returnObject);
+ 
   } catch (error) {
     console.error(error);
     res.status(500).json(error);

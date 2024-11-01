@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
-  const { user, logoutUser } = useContext(AuthContext);
+  const { user, logoutUser,updateRegisterInfo,updateLoginInfo } = useContext(AuthContext);
   const {
     currentChat,
     updateModal,
@@ -24,6 +24,7 @@ const NavBar = () => {
     updateChatBox,
     potentialChats,
   } = useContext(ChatContext);
+  
   const { recipientUser, imageUrl } = useFetchRecipientUser(currentChat, user);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
@@ -36,9 +37,7 @@ const NavBar = () => {
   const openModal = useCallback(() => {
     updateModal(true);
   }, []);
-  // ../../../public/female_user.png
-  // ../../../public/male_user.png
-
+  
 
   useEffect(() => {
     if (
@@ -48,10 +47,18 @@ const NavBar = () => {
       setIsLoginStyle(true);
       setIsRegisterStyle(false);
       setIsCssAffected(false);
+      updateRegisterInfo({
+        name: "",
+        email: "",
+        password: "",
+        profile: "",
+        gender: "",
+      });
     } else if (isCssAffected && window.location.pathname == "/register") {
       setIsRegisterStyle(true);
       setIsLoginStyle(false);
       setIsCssAffected(false);
+      updateLoginInfo({email:"",password:""})
     }
   }, [window.location, isCssAffected]);
   const handleImageViewer = useCallback(() => {

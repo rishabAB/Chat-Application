@@ -88,6 +88,14 @@ export const AuthContextProvider = ({ children }) => {
 
         localStorage.setItem("user", JSON.stringify(response));
         setUser(response);
+        setRegisterError(null);
+        setRegisterInfo({
+          name: "",
+          email: "",
+          password: "",
+          profile: "",
+          gender: "",
+        });
       }
     },
     [registerInfo]
@@ -166,6 +174,8 @@ export const AuthContextProvider = ({ children }) => {
         console.timeEnd("LOGIN USER");
         localStorage.setItem("user", JSON.stringify(response));
         setUser(response);
+        setLoginError(null);
+        updateLoginInfo({email:"",password:""})
       }
     },
     [loginInfo]

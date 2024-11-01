@@ -33,10 +33,11 @@ function App() {
   <div className="text-secondary" style={{width: '100%'}}>
   <Routes>
     {/* <Route path="/" element={user ? <Chat /> : <Login/>} /> */}
-    <Route path="/login" element={user ? <Chat/> : <IntroPage />} />
+    <Route path="/login" element={user ? <Chat/>: <IntroPage />} />
     <Route path="/register" element={user ? <Chat/> : <IntroPage isRegister={isRegister}/>} />
     <Route path="/" element = {user ? <Chat/> : <IntroPage />} />
     <Route path="*" element={<Navigate to ="/" />} />  
+    <Route path="/:userId" element={user ? <Chat /> : <Navigate to="/login" />}></Route>
     <Route path="/testing" element={<TestRoute/>}/>
     {/* Here this navigate is the default path that we are passing if url is any random then 
     it will redirected to this / path */}

@@ -1,3 +1,5 @@
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-unused-vars */
 import {
   useContext,
   useState,
@@ -15,9 +17,7 @@ import moment from "moment";
 import EmojiPicker from "react-input-emoji";
 
 import "./chat.scss";
-
-
-// import { InfiniteLoader, List } from 'react-virtualized';
+import Loader from "../../customComponents/loader/loader";
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -41,11 +41,11 @@ const ChatBox = () => {
   const divRef = useRef(null);
 
   const checkScroll = useRef(null);
-  // const [offset, setOffset] = useState(2);
+  
   const offsetRef = useRef(2);
-  // let timelineRef = useRef(null);
+  
 
-  // ---------
+  
 
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   // Here recipient User is the person whom with we are showing the conversation
@@ -54,7 +54,7 @@ const ChatBox = () => {
 
   const [test, setTest] = useState(1);
   // default value for test
-  // const [isFetching, setIsFetching] = useState(false);
+
 
   const isFetchingRef = useRef(false);
   // ------------
@@ -63,12 +63,6 @@ const ChatBox = () => {
 
   // ----------
   useEffect(() => {
-    console.log("messages", messages);
-    console.log("messageTimeline", messageTimeline);
-    // if(messageTimeline)
-    // {
-    //   setMessageTimelineIndex(messageTimeline.length-timelineIndex);
-    // }
 
     if (
       currentChat &&
@@ -78,10 +72,9 @@ const ChatBox = () => {
     ) {
       if (test == 1 || test !== messages[0]?.items[0].chatId) {
         setTest(messages[0]?.items[0].chatId);
-        // setOffset(2);
+       
         offsetRef.current = 2;
-        // console.log("Scroll getting affected",divRef?.current?.style);
-        // divRef.current.style?.padding="unset";
+       
         divRef?.current?.scrollIntoView({
           behavior: "instant",
           block: "nearest",
@@ -133,11 +126,6 @@ const ChatBox = () => {
       });
     }
 
-    // checkScroll?.current?.addEventListener('mousedown', (e)=>
-    //   {
-    //     console.log("e is ",e);
-    //   });
-    // onWheelCaptureHandler();
   }, [checkScroll?.current?.scrollTop]);
 
   const [isScrollButton, setIsScrollButton] = useState(false);
@@ -155,8 +143,7 @@ const ChatBox = () => {
       moreMessagesAvailable &&
       !isFetchingRef.current
     ) {
-      console.log("OnWheelCapture", checkScroll?.current?.scrollTop);
-      console.log("offset ", offsetRef.current);
+    
 
       isFetchingRef.current = true;
       // checkScroll.current('mousedown', checkScroll.current);
@@ -196,7 +183,7 @@ const ChatBox = () => {
 
   useEffect(() => {
     if (newMessage) {
-      console.log("NEW MESSAGE SCORLL AFFECTED");
+     
       divRef?.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [newMessage]);
@@ -205,13 +192,7 @@ const ChatBox = () => {
     setTextMessage("");
   }, [recipientUser]);
 
-  if (isMessagesLoading) {
-    return (
-      <Stack gap={4} className="chat-box alignment_center">
-        Loading Chats...
-      </Stack>
-    );
-  }
+
   const sendMessage = (event) => {
     if (textMessage.length == 2 && emojiRegex.test(textMessage)) {
       isOnlyEmoji = true;
@@ -232,14 +213,13 @@ const ChatBox = () => {
   useEffect(() => {
     if (dynamicHeight && dynamicHeight.current) {
       const t = `calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
-      console.log(t);
       const height = t;
-      console.log("height", height);
+     
 
       dynamicHeight.current.style.height = height;
     }
   }, [dynamicHeight.current]);
-
+ 
   if (!recipientUser) {
     return (
       <Stack
@@ -249,6 +229,14 @@ const ChatBox = () => {
         }`}
       >
         No conversation selected yet ...
+      </Stack>
+    );
+  }
+  else if (isMessagesLoading) {
+    return (
+      <Stack gap={4} className="chat-box alignment_center">
+        {/* Loading Chats... */}
+        <Loader showLoader={true} responsizeFrame1={responsizeFrame1}/>
       </Stack>
     );
   }

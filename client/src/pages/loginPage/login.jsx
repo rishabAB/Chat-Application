@@ -19,9 +19,8 @@ const Login = () => {
    
       const onSubmitLogin = useCallback((e)=>
       {
-        
         if (!loginInfo.email) {
-           
+
             toasts.warning("Please Enter your email");  
         } 
         else if(!loginInfo.email.match(email_regex))
@@ -34,14 +33,14 @@ const Login = () => {
         }
         else if(!loginInfo.password.match(password_regex))
         {
-            toasts.warning("Password must be of atleast 8 letters,should contain one special character,one uppercase,lowercase and a number")
+            toasts.warning("Password must be of atleast 8 letters,should contain one special character,one uppercase,lowercase and a number");
         }
-        else {
+        else if(!isLoginLoading)
+        {
             loginUser(e);
-            // Proceed with login or other actions
         }
 
-      },[loginInfo]) 
+      },[loginInfo,isLoginLoading]) 
      
         useEffect(()=>
         {
@@ -70,13 +69,13 @@ const Login = () => {
                         <Stack gap={3}>
                             <h2>Login</h2>
                            
-                            <CustomInput type = "email" regular="true" placeholder="Email" onErrorObj = {loginError} onChange={updateLoginInfo} obj = {loginInfo} propName="email"/>
-                            <CustomInput type = "password" regular="true" placeholder="Password" onErrorObj = {loginError} onEnter ={onSubmitLogin} onChange={updateLoginInfo} obj = {loginInfo} propName="password"/>
+                            <CustomInput type = "email" regular="true" placeholder="Email"  maxLength={40} onErrorObj = {loginError} onChange={updateLoginInfo} obj = {loginInfo} propName="email"/>
+                            <CustomInput type = "password" regular="true" placeholder="Password" maxLength={25} onErrorObj = {loginError} onEnter ={onSubmitLogin} onChange={updateLoginInfo} obj = {loginInfo} propName="password"/>
                            
                             {/* <Button varient="primary"  type= "submit"className="submit-button" >
                                 Login
                             </Button> */}
-                              <Button varient="primary" onKeyDown = {(e) => e.key=="Enter" ? onSubmitLogin(e) : null} onClick = {(e) =>onSubmitLogin(e)} className="submit-button" >
+                              <Button varient="primary" disabled={isLoginLoading} onKeyDown = {(e) => e.key=="Enter" ? onSubmitLogin(e) : null} onClick = {(e) =>onSubmitLogin(e)} className="submit-button" >
                                 Login
                             </Button>
                             

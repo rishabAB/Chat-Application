@@ -30,6 +30,12 @@ $height: 35px;
   }
 }
 
+.holder-chatbox{
+  position: relative !important;
+  top: unset !important;
+}
+
+
 .panel {
   display: flex;
   flex-direction: row;

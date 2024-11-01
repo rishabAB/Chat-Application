@@ -28,12 +28,13 @@ const Loader = (props)=>
   //   console.log(dots_arr);
 
   // },[])
-  const {showLoader} = props;
+  const {showLoader,responsizeFrame1} = props;
+
   const [dotsArr, setDotsArr] = useState([]);
 
   function loader()
   {
-    return( <div className="holder">
+    return( <div className={responsizeFrame1 == false ? "holder holder-chatbox" : "holder"}>
       <div className="panel">
       {dotsArr.length > 0 && dotsArr.map((dot) => dot.val)}
       </div>

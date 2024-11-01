@@ -3,21 +3,31 @@ import { Stack } from "react-bootstrap";
 import {ChatContext} from "../../context/chatContext"
 import { AuthContext } from "../../context/authContext";
 import UserChat from "./userChat";
+import {useNavigate} from "react-router-dom"
 
 import ChatBox from "./chatBox.jsx";
 import Loader from "../../customComponents/loader/loader";
 const Chat = () => {
   const { user } = useContext(AuthContext);
   const [showAnimation,setShowAnimation] = useState(false);
-
+ 
+  const navigate = useNavigate();
   const {
     userChats,
     isUserChatLoading,
     isUserNew,
     isChatBoxOpened,
     responsizeFrame1,
-    updateModal,
   } = useContext(ChatContext);
+
+  useEffect(()=>
+  {
+    if(user)
+    {
+      navigate(`/${user._id}`);
+    }
+
+  },[user])
 
   const animationRef = useRef(null);
 console.log("isUserNew",isUserNew);
@@ -49,7 +59,12 @@ console.log("isUserNew",isUserNew);
             } else {
               setShowAnimation(false);
               setTimeout(() => {
-                updateModal(true);
+                const elem = document.querySelector("#displayText");
+                if(elem)
+                {
+                  elem.innerText="Please click on Potential Chats button"
+                }
+                // updateModal(true);
               }, 5000);
 
            }
@@ -87,6 +102,7 @@ console.log("isUserNew",isUserNew);
           <>
             <div>
               <p className="displayAnimation" ref={animationRef}></p>
+              <p id="displayText"></p>
             </div>
 
           </>

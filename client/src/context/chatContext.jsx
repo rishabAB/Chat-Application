@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {
   createContext,
   useState,
@@ -27,8 +28,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const currentChatRef = useRef(currentChat);
 
   
-  // eslint-disable-next-line no-unused-vars
-  const [isMessagesLoading, setIsMessagesLoading] = useState(null);
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);
 
 // eslint-disable-next-line no-unused-vars
   const [messagesError, setMessagesError] = useState(null);
@@ -63,6 +63,8 @@ export const ChatContextProvider = ({ children, user }) => {
   const [isUserNew, setIsUserNew] = useState(null);
 
   const [tabNotificationCount,setTabNotificationCount] = useState(0);
+
+  const [isChatBoxOpened, setIsChatBoxOpened] = useState(false);
 
   // Forming a connection with socket
   useEffect(() => {
@@ -394,7 +396,7 @@ export const ChatContextProvider = ({ children, user }) => {
         );
         console.log("response",response);
 
-        setIsUserChatLoading(false);
+         setIsUserChatLoading(false);
 
         if (response.error) {
           toasts.error("An unknown error occured please try again");
@@ -479,10 +481,12 @@ export const ChatContextProvider = ({ children, user }) => {
   // const [partialMessagesError, setPartialMessagesError] = useState(null);
 
   const getPartialMessages = useCallback(
-    async (limit, offset, currentChatId) => {
+     (limit, offset, currentChatId) => {
+    
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (fulfill, reject) => {
         try {
+           setIsMessagesLoading(true);
           const response = await getRequest(
             `${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`
           );
@@ -500,20 +504,21 @@ export const ChatContextProvider = ({ children, user }) => {
               return response?.messages;
             }
           });
-          // messageRef.current=messages;
-          // setMessages(response?.messages);
+        
+           setIsMessagesLoading(false);
           fulfill({ isActionSuccess: true });
           setMoreMessagesAvailable(response?.moreMessagesAvailable);
         } catch (ex) {
           console.error(ex);
+           setIsMessagesLoading(false);
           reject(ex);
         }
       });
     },
-    []
+    [isMessagesLoading]
   );
 
-  const [isChatBoxOpened, setIsChatBoxOpened] = useState(false);
+ 
   const updateCurrentChat = useCallback((chat) => {
     setCurrentChat(chat);
     setIsChatBoxOpened(true);
