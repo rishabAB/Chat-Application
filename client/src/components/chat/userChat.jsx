@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
 import React, { useState, useContext, useEffect, useCallback } from "react";
@@ -8,7 +9,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 
 const UserChat = ({ chat, user }) => {
-  const { recipientUser, imageUrl } = useFetchRecipientUser(chat, user);
+  const { recipientUser, imageUrl ,recipientNotification} = useFetchRecipientUser(chat, user);
   const {
     onlineUsers,
     notification,
@@ -23,7 +24,7 @@ const UserChat = ({ chat, user }) => {
 
   // recipient user is the list of users with whom we can chat which are there on left side
   // when we click our messages appear
-  const [showNotification, setShowNotification] = useState([]);
+  const [showNotification, setShowNotification] = useState();
 
   const [showLatestMessage,setShowLatestMessage] = useState(true);
 
@@ -35,49 +36,79 @@ const UserChat = ({ chat, user }) => {
 
   // Here please note in the naming convention in notification get oppsite right in notification.senderId
   // becomes the recipientid and the recipientid becomes the senderid that's why in html we are comparing like that
-  useEffect(() => {
+  // useEffect(() => {
     
-    if (notification && notification.length > 0) {
-      notification.forEach(async(notify) => {
-        if (recipientUser?._id === notify.senderId) {
-          if (currentChat?._id === notify.chatId) {
-            console.log("Case where chat is already opened");
+  //   if (notification && notification.length > 0) {
+  //     notification.forEach(async(notify) => {
+  //       if (recipientUser?._id === notify.senderId) {
+  //         if (currentChat?._id === notify.chatId) {
+  //           console.log("Case where chat is already opened");
           
-            if(responsizeFrame1)
+  //           if(responsizeFrame1)
+  //           {
+  //             if(isChatBoxOpened)
+  //               {
+  //                 setShowLatestMessage(true);
+  //                 removeNotification(notify);
+  //                 setShowNotification([]);
+  //                 chat.latestMessage= notify.text; 
+  //                 chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
+  //               }
+  //               else{
+  //                 setShowLatestMessage(false);
+  //                 setShowNotification([{ ...notify, count: notify.count }]);
+  //               }
+  //           }
+  //           else{
+  //             removeNotification(notify);
+  //             setShowNotification([]);
+  //             chat.latestMessage= notify.text; 
+  //             chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
+  //             // Here Also lastMessage should come
+  //             setShowLatestMessage(true);
+  //           }
+  //         } else {
+  //           setShowNotification([{ ...notify, count: notify.count }]);
+  //           setShowLatestMessage(false);
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     setShowNotification([]);
+  //     setShowLatestMessage(true);
+  //     // Here Also lastMessage should come
+  //   }
+  // }, [notification, recipientUser, currentChat,responsizeFrame1,isChatBoxOpened]);
+  
+
+  useEffect(()=>
+  {
+    if(recipientNotification)
+    {
+            
+        if(currentChat?._id == recipientNotification?.chatId)
+          {
+            console.log("Case where chat is already opened");
+            removeNotification(recipientNotification);
+            setShowNotification(null);
+            convertDateToTimeline(recipientNotification.createdAt).then(function(result) 
             {
-              if(isChatBoxOpened)
-                {
-                  setShowLatestMessage(true);
-                  removeNotification(notify);
-                  setShowNotification([]);
-                  chat.latestMessage= notify.text; 
-                  chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
-                }
-                else{
-                  setShowLatestMessage(false);
-                  setShowNotification([{ ...notify, count: notify.count }]);
-                }
-            }
-            else{
-              removeNotification(notify);
-              setShowNotification([]);
-              chat.latestMessage= notify.text; 
-              chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
-              // Here Also lastMessage should come
+              chat.latestMessageTime = result;
+              chat.latestMessage= recipientNotification.text; 
               setShowLatestMessage(true);
-            }
-          } else {
-            setShowNotification([{ ...notify, count: notify.count }]);
-            setShowLatestMessage(false);
+            })                    
           }
-        }
-      });
-    } else {
-      setShowNotification([]);
-      setShowLatestMessage(true);
-      // Here Also lastMessage should come
+          else{
+            setShowNotification({...recipientNotification,count:recipientNotification.count});
+            setShowLatestMessage(false);
+            console.log("Some Other chat is opened");
+          }
     }
-  }, [notification, recipientUser, currentChat,responsizeFrame1,isChatBoxOpened]);
+    else{
+      setShowNotification();
+      setShowLatestMessage(true);
+    }
+  },[recipientNotification,currentChat,recipientUser])
 
   let [userImageArray, setUserImageArray] = useState();
   const loadImage = useCallback(async () => {
@@ -100,11 +131,12 @@ const UserChat = ({ chat, user }) => {
   }
   
 
-  const convertDateToTimeline = async (messageDate) => {
+  const convertDateToTimeline = async (msg) => {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
       let date = "";
       let currentDate = new Date();
+      let messageDate = new Date(msg);
       
       if (
         messageDate.getDate() === currentDate.getDate() &&
@@ -166,20 +198,19 @@ const UserChat = ({ chat, user }) => {
           <div className="name">{recipientUser?.name}</div>
 
           <div className="flex-space-between">
-            {showNotification?.map((notify, index) =>
-              notify.senderId === recipientUser?._id ? (
+            {showNotification ? (
                 <>
-                  <div key={index} className="text">
-                    {wrapEmojis(notify.text)}
+                  <div  className="text">
+                    {wrapEmojis(showNotification?.text)}
                   </div>
-                  <div key={index} className="this-user-notifications">
-                    {notify.count}
+                  <div  className="this-user-notifications">
+                    {showNotification?.count}
                   </div>
                 </>
               ) : null
-            )}
+            }
           </div>
-          {showLatestMessage && chat?.latestMessage ? (
+          {showLatestMessage ? (
             <div className="flex-space-between ">
               <div className="text ellipsis ">{(chat?.latestMessage)}</div>
               <div className="text ">

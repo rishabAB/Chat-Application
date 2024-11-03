@@ -37,7 +37,7 @@ export const postRequest = async(url,body) =>
         setTimeout(() => {
             if (promiseResponse.isPending()) {
               toasts.warning(
-                "Please wait due to inactivity server may take some time to fetch response"
+                "Please wait due to inactivity server may take some time to fetch response1"
               );
             }
           }, 10000);
@@ -77,7 +77,7 @@ export const getRequest = async(url) =>
         setTimeout(() => {
             if (promiseResponse.isPending()) {
               toasts.warning(
-                "Please wait due to inactivity server may take some time to fetch response"
+                "Please wait due to inactivity server may take some time to fetch response2"
               );
             }
           }, 10000);

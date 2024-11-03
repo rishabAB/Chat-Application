@@ -487,6 +487,7 @@ export const ChatContextProvider = ({ children, user }) => {
       return new Promise(async (fulfill, reject) => {
         try {
            setIsMessagesLoading(true);
+           console.time("FETCH MESSAGES");
           const response = await getRequest(
             `${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`
           );
@@ -506,6 +507,7 @@ export const ChatContextProvider = ({ children, user }) => {
           });
         
            setIsMessagesLoading(false);
+           console.timeEnd("FETCH MESSAGES");
           fulfill({ isActionSuccess: true });
           setMoreMessagesAvailable(response?.moreMessagesAvailable);
         } catch (ex) {

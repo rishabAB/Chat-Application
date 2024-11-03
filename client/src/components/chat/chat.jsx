@@ -20,17 +20,14 @@ const Chat = () => {
     responsizeFrame1,
   } = useContext(ChatContext);
 
-  useEffect(()=>
-  {
-    if(user)
-    {
+  useEffect(() => {
+    if (user) {
       navigate(`/${user._id}`);
     }
+  }, [user]);
 
-  },[user])
 
   const animationRef = useRef(null);
-console.log("isUserNew",isUserNew);
   const textEffect = useCallback((animationName, txt) => {
       console.log("animationName",animationName);
         var text = txt,
@@ -124,7 +121,7 @@ console.log("isUserNew",isUserNew);
                 {userChats?.map((chat, index) => {
                   return (
                     <div key={index}>
-                      <UserChat chat={chat} user={user} />
+                      <UserChat chat={chat} user={user}  />
                     </div>
                   );
                 })}

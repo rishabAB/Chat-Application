@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { getRequest, baseUrl } from "../utils/services";
 
-
+import { ChatContext } from "../context/chatContext";
 import female_user_2 from "../../public/female_user_2.svg"
 import male_user_2 from "../../public/male_user_2.svg";
 
@@ -11,6 +11,17 @@ export const useFetchRecipientUser = (chat, user) => {
 
 
   const recipientId = chat?.members.find((id) => id !== user?._id);
+  const {notification} = useContext(ChatContext);
+  const [recipientNotification,setRecipientNotification] = useState(null);
+
+  useEffect(() => {
+    setRecipientNotification(null);
+    for (let elem of notification) {
+      if (elem.senderId == recipientUser?._id) {
+        setRecipientNotification(elem);
+      }
+    }
+  }, [notification, recipientUser]);
 
   // Here recipient User is the person whom with we are showing the conversation
   useEffect(() => {
@@ -74,5 +85,6 @@ export const useFetchRecipientUser = (chat, user) => {
   return {
     recipientUser,
     imageUrl,
+    recipientNotification
   };
 };

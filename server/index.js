@@ -34,7 +34,7 @@ app.listen(port, () => {
 mongoose
   .connect(uri, {})
   .then((res) => {
-    global.connection = res?.connection?.db;
+    global.connection = mongoose.connection;
     console.log("Mongodb connection successful");
   })
   .catch((error) => {

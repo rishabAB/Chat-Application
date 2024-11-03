@@ -220,7 +220,15 @@ const ChatBox = () => {
     }
   }, [dynamicHeight.current]);
  
-  if (!recipientUser) {
+  if (isMessagesLoading) {
+    return (
+      <Stack gap={4} className="chat-box alignment_center">
+        {/* Loading Chats... */}
+        <Loader showLoader={true} responsizeFrame1={responsizeFrame1}/>
+      </Stack>
+    );
+  }
+  else if (!recipientUser) {
     return (
       <Stack
         gap={4}
@@ -232,14 +240,7 @@ const ChatBox = () => {
       </Stack>
     );
   }
-  else if (isMessagesLoading) {
-    return (
-      <Stack gap={4} className="chat-box alignment_center">
-        {/* Loading Chats... */}
-        <Loader showLoader={true} responsizeFrame1={responsizeFrame1}/>
-      </Stack>
-    );
-  }
+
   return (
     <Stack
       ref={dynamicHeight}
