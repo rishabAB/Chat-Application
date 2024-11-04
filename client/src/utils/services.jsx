@@ -12,10 +12,12 @@ function trackPromise(promise)
     (value) =>
     {
         isPending=false;
+        console.log("Value is ",value);
         return value;
     },
     (error) =>{
         isPending = false;
+        console.log("Error part");
         return error;
     });
 
