@@ -1,40 +1,20 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import "./loader.scss";
 const Loader = (props)=>
 {
-  // Wrong Implementation
-  // // let dots_arr=[];
-  // const [dots_arr,setDots_arr] = useState(null);
-  
-  // useEffect(()=>
-  // {
-  //   let num=1;
-  //   let elem=`<div className="dot d${num}"></div>`;
-  //   for(let count=1;count<253;count++)
-  //   {
-  //     if(dots_arr?.length>0)
-  //     {
-  //       setDots_arr((prev) => [...prev,{val:elem}]);
-  //       // console.log(dots_arr);
 
-  //     }
-  //     else{
-  //       setDots_arr([{val:elem}]);
-  //     }
-  //     elem=`<div className="dot d${++num}"></div>`;
-  //     console.log("For loop",dots_arr);
-  //     // dots_arr.push({elem})
-  //   }
-  //   console.log(dots_arr);
-
-  // },[])
-  const {showLoader,responsizeFrame1} = props;
+  const {showLoader,responsizeFrame1,customStyle} = props;
 
   const [dotsArr, setDotsArr] = useState([]);
 
   function loader()
   {
-    return( <div className={responsizeFrame1 == false ? "holder holder-chatbox" : "holder"}>
+    return( customStyle ? <div style={customStyle} className="holder-chatbox">
+      <div className="holder_panel">
+      {dotsArr.length > 0 && dotsArr.map((dot) => dot.val)}
+      </div>
+    </div> : <div className={`${responsizeFrame1 == false ? "holder holder-chatbox" : "holder"}` }>
       <div className="panel">
       {dotsArr.length > 0 && dotsArr.map((dot) => dot.val)}
       </div>

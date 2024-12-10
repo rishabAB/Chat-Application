@@ -609,6 +609,9 @@ export const ChatContextProvider = ({ children, user }) => {
       toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);
     }
+    else{
+      toasts.success("Chats Created Successfully");
+    }
     // setUserChats((prev)=>[...prev,response]);
     setUserChats((prev) => {
       return prev ? [...prev, ...response] : [...response];

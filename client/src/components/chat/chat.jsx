@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useCallback, useRef, useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
 import {ChatContext} from "../../context/chatContext"
@@ -7,6 +8,7 @@ import {useNavigate} from "react-router-dom"
 
 import ChatBox from "./chatBox.jsx";
 import Loader from "../../customComponents/loader/loader";
+import { FullLoader } from "../../customComponents/fullLoader/fullLoader.jsx";
 const Chat = () => {
   const { user } = useContext(AuthContext);
   const [showAnimation,setShowAnimation] = useState(false);
@@ -105,6 +107,7 @@ const Chat = () => {
           </>
         ) : (
           <>
+          {isUserChatLoading ?  <FullLoader showLoader={true}/> :
             <Stack
               direction="horizontal"
               className="align-items-start loading-chats"
@@ -113,11 +116,12 @@ const Chat = () => {
                 ref={dynamicHeight}
                 className={`messages-box flex-grow-0 ${isChatBoxOpened && responsizeFrame1 ? "display-none" : ""} `}
               >
-                {isUserChatLoading && (
+                {/* {isUserChatLoading && (
                   <p>
                     <Loader showLoader={true} />
                   </p>
                 )}
+                <FullLoader showLoader={true}/> */}
                 {userChats?.map((chat, index) => {
                   return (
                     <div key={index}>
@@ -132,6 +136,8 @@ const Chat = () => {
                 ""
               )}
             </Stack>
+          }
+            
           </>
         )
       }

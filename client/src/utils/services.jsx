@@ -2,49 +2,18 @@ export const baseUrl = "https://chat-application-server-roop.onrender.com/api";
 // https://chat-application-server-roop.onrender.com/api
 // http://localhost:5000/api
 // https://www.talkapp.life/api not working
- import toasts from "../customComponents/toaster/toaster";
 
-function trackPromise(promise)
-{
-    let isPending =true;
 
-   const wrappedPromise= promise.then(
-    (value) =>
-    {
-        isPending=false;
-        console.log("Value is ",value);
-        return value;
-    },
-    (error) =>{
-        isPending = false;
-        console.log("Error part");
-        return error;
-    });
-
-    wrappedPromise.isPending = () => isPending;
-    return wrappedPromise;
-}
 export const postRequest = async(url,body) =>
 {
-    const promiseResponse=trackPromise(fetch(url,
+    const response=await fetch(url,
         {
             method:"POST",
             headers : {
                 "Content-Type":"application/json"
             },
             body
-        }
-        ));
-
-        setTimeout(() => {
-            if (promiseResponse.isPending()) {
-              toasts.warning(
-                "Please wait due to inactivity server may take some time to fetch response1"
-              );
-            }
-          }, 10000);
-
-          const response = await promiseResponse;
+        })
 
         const data = await response.json();
 
@@ -61,13 +30,11 @@ export const postRequest = async(url,body) =>
             return {error:true,message};
         }
         return data;
-
 }
 
 export const getRequest = async(url) =>
 {
-    const promiseResponse = trackPromise(
-        fetch(url,
+    const response = await fetch(url,
         {
             method:"GET",
             headers : {
@@ -75,16 +42,7 @@ export const getRequest = async(url) =>
                 'ngrok-skip-browser-warning':  '69420',
             },
            
-        }));
-        setTimeout(() => {
-            if (promiseResponse.isPending()) {
-              toasts.warning(
-                "Please wait due to inactivity server may take some time to fetch response2"
-              );
-            }
-          }, 10000);
-
-    const response = await promiseResponse;
+        });
 
     const data = await response.json();
 

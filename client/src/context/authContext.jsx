@@ -101,6 +101,11 @@ export const AuthContextProvider = ({ children }) => {
     [registerInfo]
   );
 
+  const clearError = useCallback(() =>
+  {
+    setRegisterError(null);
+  }) 
+
   const getImageUrl = (user) => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
@@ -156,6 +161,10 @@ export const AuthContextProvider = ({ children }) => {
 
       setIsLoginLoading(false);
 
+      if (response.error) {
+        return setLoginError(response);
+      }
+
       if (response?.profile) {
         response.imageUrl = await bufferToUrl(
           response?.profile,
@@ -167,16 +176,14 @@ export const AuthContextProvider = ({ children }) => {
           : (response.imageUrl = female_user_2);
       }
 
-      if (response.error) {
-        return setLoginError(response);
-      } else {
+    
         toasts.success("Login Successfull");
         console.timeEnd("LOGIN USER");
         localStorage.setItem("user", JSON.stringify(response));
         setUser(response);
         setLoginError(null);
         updateLoginInfo({email:"",password:""})
-      }
+     
     },
     [loginInfo]
   );
@@ -196,6 +203,7 @@ export const AuthContextProvider = ({ children }) => {
         loginError,
         updateLoginInfo,
         isLoginLoading,
+        clearError,
       }}
     >
       {children}

@@ -103,13 +103,18 @@ overflow-y: hidden;
 .submit-button{
   border-radius: 50px;
   height: $input_Button_Height;
-    background-color: rgb(12, 69, 125);
-    border: unset;
+  background-color: rgb(12, 69, 125);
+  border: unset;
 }
 .submit-button:hover{
   background-color: rgb(38 98 157);
 }
 
+.disable-button{
+	cursor: not-allowed !important;
+	background-color: #898686d6  !important;
+	pointer-events: unset !important;
+}
 // ---------------------------
 
 // body {

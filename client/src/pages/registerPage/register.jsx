@@ -1,5 +1,5 @@
 import { Button, Form, Col, Stack } from "react-bootstrap";
-import React, { useCallback, useContext, useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import CustomInput from "../../customComponents/customInput/customInput";
 import ProfilePicture from "../../customComponents/profilePicture/profilePicture";
@@ -12,6 +12,7 @@ const Register = () => {
     registerUser,
     registerError,
     isRegisterLoading,
+    clearError,
   } = useContext(AuthContext);
 
   const email_regex =
@@ -23,6 +24,21 @@ const Register = () => {
 
   const maleRadioRef = useRef(null);
   const femaleRadioRef = useRef(null);
+
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+
+  useEffect(() => {
+    if (
+      registerInfo.name &&
+      registerInfo.email &&
+      registerInfo.password &&
+      registerInfo.gender
+    ) {
+      setIsBtnDisabled(false);
+    } else {
+      setIsBtnDisabled(true);
+    }
+  }, [registerInfo, isBtnDisabled]);
 
   const onSubmitRegister = useCallback(
     (e) => {
@@ -43,7 +59,9 @@ const Register = () => {
       } else if (!registerInfo.gender) {
         toasts.warning("Please fill your gender");
       } else if(!isRegisterLoading) {
+        setIsBtnDisabled(true);
         registerUser(e);
+        setIsBtnDisabled(false);
       }
     },
     [registerInfo]
@@ -61,6 +79,7 @@ const Register = () => {
       });
       maleRadioRef.current.checked = false;
       femaleRadioRef.current.checked = false;
+      clearError();
     }
   }, [registerError]);
 
@@ -143,8 +162,8 @@ const Register = () => {
               />
               {/* </div> */}
               <Button
-                className="submit-button"
-                disabled={isRegisterLoading}
+                className={`submit-button ${isRegisterLoading || isBtnDisabled ? "disable-button" : null}`}
+                disabled={isRegisterLoading || isBtnDisabled}
                 varient="primary"
                 onKeyDown={(e) =>
                   e.key == "Enter" ? onSubmitRegister(e) : null

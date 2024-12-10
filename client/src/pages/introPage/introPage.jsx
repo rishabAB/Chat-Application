@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import Login from "../loginPage/login";
 import Register from "../registerPage/register";
 import "./introPage.scss";
 import PropTypes from "prop-types";
+import {AuthContext} from "../../context/authContext";
+import { FullLoader } from "../../customComponents/fullLoader/fullLoader.jsx";
 const IntroPage = ({ isRegister }) => {
   const [isRegisterProp, setIsRegister] = useState(false);
-
+  const {isLoginLoading,isRegisterLoading} = useContext(AuthContext);
   useEffect(() => {
     if (isRegister) {
       setIsRegister(true);
@@ -14,7 +16,7 @@ const IntroPage = ({ isRegister }) => {
     }
   }, [isRegister]);
 
-  return (
+  return isLoginLoading || isRegisterLoading ? ( <FullLoader showLoader={isLoginLoading} />) :  (
     <div className="register_login">
       <div className="register_login_img_div">
          <img src="./3394897.jpg" alt="" />

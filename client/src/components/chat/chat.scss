@@ -512,10 +512,14 @@
   }
 }
 
-.btnn:hover {
+.addHover:hover{
   background-color: #d3d0ca !important;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out; 
 }
+// .btnn:hover {
+//   background-color: #d3d0ca !important;
+//   transition: all 0.4s ease-in-out;
+// }
 
 .multiple-chats {
   display: flex;

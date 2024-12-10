@@ -1,11 +1,11 @@
 import {Button,Form,Row,Col,Stack} from "react-bootstrap";
 
-import React,{useCallback, useContext,useEffect} from "react";
+import React,{useCallback, useContext,useEffect, useState} from "react";
 import {AuthContext} from "../../context/authContext";
 import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";
 import Loader from "../../customComponents/loader/loader";
-
+import { FullLoader } from "../../customComponents/fullLoader/fullLoader.jsx";
 import toasts from "../../customComponents/toaster/toaster";
 
 const Login = () => {
@@ -16,6 +16,16 @@ const Login = () => {
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   const password_regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+
+  useEffect(() => {
+    if (loginInfo.email && loginInfo.password) {
+      setIsBtnDisabled(false);
+    } else {
+      setIsBtnDisabled(true);
+    }
+  }, [loginInfo]);
    
       const onSubmitLogin = useCallback((e)=>
       {
@@ -75,7 +85,8 @@ const Login = () => {
                             {/* <Button varient="primary"  type= "submit"className="submit-button" >
                                 Login
                             </Button> */}
-                              <Button varient="primary" disabled={isLoginLoading} onKeyDown = {(e) => e.key=="Enter" ? onSubmitLogin(e) : null} onClick = {(e) =>onSubmitLogin(e)} className="submit-button" >
+                              <Button varient="primary" disabled={isLoginLoading || isBtnDisabled} onKeyDown = {(e) => e.key=="Enter" ? onSubmitLogin(e) : null} onClick = {(e) =>onSubmitLogin(e)}
+                                className={`submit-button ${isLoginLoading || isBtnDisabled ? "disable-button" : null}`} >
                                 Login
                             </Button>
                             

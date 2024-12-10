@@ -50,8 +50,13 @@ const registerUser = async (req, res) => {
       binaryImage = await Base64ToBinary(profile);
     }
 
-    let user = await userModel.findOne({ email });
+    let user = await userModel.findOne({email});
+    
+    let nameExists = await userModel.findOne({ name });
 
+    if(nameExists)
+      return res.status(400).json("This Name is already taken");
+    
     if (user)
       return res.status(400).json("This email address is already taken");
 

@@ -9,6 +9,7 @@ const PotentialChats = () => {
   const { user } = useContext(AuthContext);
   const [isMultipleChats, setIsMultipleChats] = useState(false);
 
+  const [isBtnDisabled,setIsBtnDisabled] = useState(true);
   const chatIds = useRef([]);
 
   const selectMultipleChats = useCallback(() => {
@@ -17,12 +18,14 @@ const PotentialChats = () => {
 
   const addChatId = useCallback(
     (chatId) => {
+     
       let index = chatIds.current.findIndex((elem) => elem.chatId == chatId);
       if (index != -1) {
         chatIds.current.splice(index, 1);
       } else {
         chatIds.current.push({ userId: user._id, chatId });
       }
+      chatIds?.current?.length > 1 ?  setIsBtnDisabled(false) :  setIsBtnDisabled(true);
     },
     [user]
   );
@@ -48,7 +51,7 @@ function closeModal()
   return (
     <>
       {potentialChats?.length > 1 && (
-        <button onClick={selectMultipleChats} className="btnn">
+        <button onClick={selectMultipleChats} className="btnn addHover">
           Select Multiple
         </button>
       )}
@@ -60,7 +63,7 @@ function closeModal()
                 <span className="single-user">
                   {isMultipleChats && (
                     <span>
-                      <input type="checkbox" onClick={() => addChatId(u._id)} />
+                      <input type="checkbox" name={u._id} onClick={() => addChatId(u._id)} />
                     </span>
                   )}
                   <span
@@ -76,7 +79,7 @@ function closeModal()
       </div>
       {isMultipleChats && (
         <div className="multiple-chats">
-          <button onClick={createChats} className="btnn">
+          <button onClick={createChats}  disabled={isBtnDisabled}  className={`btnn ${isBtnDisabled ? "disable-button" : "addHover"}`}>
             Continue
           </button>
         </div>
