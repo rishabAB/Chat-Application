@@ -104,6 +104,7 @@ export const AuthContextProvider = ({ children }) => {
   const clearError = useCallback(() =>
   {
     setRegisterError(null);
+    setLoginError(null);
   }) 
 
   const getImageUrl = (user) => {

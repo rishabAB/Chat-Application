@@ -5,11 +5,10 @@ import {AuthContext} from "../../context/authContext";
 import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";
 import Loader from "../../customComponents/loader/loader";
-import { FullLoader } from "../../customComponents/fullLoader/fullLoader.jsx";
 import toasts from "../../customComponents/toaster/toaster";
 
 const Login = () => {
-    const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading} = useContext(AuthContext);
+    const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading,clearError} = useContext(AuthContext);
 
     const email_regex =
   // eslint-disable-next-line no-useless-escape
@@ -58,6 +57,7 @@ const Login = () => {
             {
                 toasts.error(loginError.message);
                 updateLoginInfo({email:"",password:""})
+                clearError();
             }
 
         },[loginError])

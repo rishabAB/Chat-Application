@@ -13,12 +13,45 @@
   color: white;
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
+.word{
+    width: 100vw;
+    text-align: center;
+}
 
 .loading .char {
   animation: jump 2.8s linear infinite;
   animation-delay: calc(1s + (var(--char-index) + 1) * 0.4s);
   animation-timing-function: ease-in-out;
   transform-origin: 50% 100%;
+}
+
+.char{
+    font-size: 140px;
+
+    @media screen and (max-width:1300px) and (min-width:1100px) {
+        font-size: 120px;
+    }
+    @media screen and (max-width:1100px) and (min-width:1000px) {
+        font-size: 110px;
+    }
+    @media screen and (max-width:1000px) and (min-width:850px) {
+        font-size: 100px;
+    }
+    @media screen and (max-width:850px) and (min-width:750px) {
+        font-size: 95px;
+    }
+    @media screen and (max-width:750px) and (min-width:650px) {
+        font-size: 85px;
+    }
+    @media screen and (max-width:650px) and (min-width:550px) {
+        font-size: 80px;
+    }
+    @media screen and (max-width:550px) and (min-width: 350px)  {
+        font-size: 60px;
+    }
+    @media screen and (max-width:350px)  {
+        font-size: 50px;
+    }
 }
 
 @keyframes jump {
