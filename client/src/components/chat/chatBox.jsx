@@ -61,6 +61,8 @@ const ChatBox = () => {
 
   let isOnlyEmoji = false;
 
+  const oneTimeRecipient = useRef(true);
+
   // ----------
   useEffect(() => {
 
@@ -221,6 +223,7 @@ const ChatBox = () => {
   }, [dynamicHeight.current]);
  
   if (isMessagesLoading) {
+    oneTimeRecipient.current = false
     return (
       <Stack gap={4} className="chat-box alignment_center">
         {/* Loading Chats... */}
@@ -228,7 +231,7 @@ const ChatBox = () => {
       </Stack>
     );
   }
-  else if (!recipientUser) {
+  else if (!recipientUser &&  oneTimeRecipient.current) {
     return (
       <Stack
         gap={4}
