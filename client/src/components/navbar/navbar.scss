@@ -79,8 +79,8 @@ $img_width: 45px;
     @media screen and (max-width: $responsiveFrameSize1) {
       font-size: 21px;
     }
-    @media screen and (max-width: 500px) {
-      font-size: 17px;
+    @media screen and (max-width: 500px) and (min-width:400px) {
+      font-size: 20px;
     }
   }
 

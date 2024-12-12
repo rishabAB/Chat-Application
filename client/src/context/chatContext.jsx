@@ -506,14 +506,16 @@ export const ChatContextProvider = ({ children, user }) => {
             }
           });
         
-           setIsMessagesLoading(false);
            console.timeEnd("FETCH MESSAGES");
           fulfill({ isActionSuccess: true });
           setMoreMessagesAvailable(response?.moreMessagesAvailable);
         } catch (ex) {
           console.error(ex);
-           setIsMessagesLoading(false);
+         
           reject(ex);
+        }
+        finally{
+          setIsMessagesLoading(false);
         }
       });
     },

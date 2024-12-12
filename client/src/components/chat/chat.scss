@@ -8,20 +8,17 @@
   display: none !important;
 }
 .chat-box {
-  /* max-height: calc(100vh - 10rem); */
-  /* overflow-y: auto; */
-  /* max-height: calc(90vh); */
-  height: calc(100vh - 3.4rem);
-  // height: 100vh;
+ 
+   height: calc(100vh - 3.4rem);
 
   background: black;
   border-radius: 10px;
   max-width: 50%;
 
-  // @media screen and (max-width: $responsiveFrameSize1) {
-  //   display: none !important;
+  @media screen and (max-width: $responsiveFrameSize1) {
+   max-width: unset !important;
 
-  // }
+  }
 }
 
 .ellipsis{
