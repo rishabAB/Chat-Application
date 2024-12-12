@@ -45,7 +45,6 @@ const ChatBox = () => {
   const offsetRef = useRef(2);
   
 
-  
 
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   // Here recipient User is the person whom with we are showing the conversation

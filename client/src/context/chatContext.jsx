@@ -151,6 +151,13 @@ export const ChatContextProvider = ({ children, user }) => {
      
     },[tabNotificationCount])
 
+    // handle logout 
+    useEffect(() => {
+      if (!user) {
+        setMessages(null);
+      }
+    }, [user]);
+
 
   // AUDIO POOL TO AVOID AUDIO LAGGING
 
@@ -531,6 +538,8 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const updateChatBox = useCallback(() => {
     setIsChatBoxOpened(false);
+    setCurrentChat(null);
+    setMessages(null)
   }, []);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
