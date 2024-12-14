@@ -61,7 +61,7 @@ const NavBar = () => {
       setIsCssAffected(false);
       updateLoginInfo({email:"",password:""})
     }
-  }, [window.location, isCssAffected]);
+  }, [window.location.pathname, isCssAffected]);
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
   }, []);

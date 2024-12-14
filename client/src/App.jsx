@@ -21,7 +21,7 @@ import TestRoute from "./pages/testRoute/TestRoute";
  
 function App() {
  const {user} = useContext(AuthContext);
- const isRegister=true;
+
 
  
   return (
@@ -34,7 +34,7 @@ function App() {
   <Routes>
     {/* <Route path="/" element={user ? <Chat /> : <Login/>} /> */}
     <Route path="/login" element={user ? <Chat/>: <IntroPage />} />
-    <Route path="/register" element={user ? <Chat/> : <IntroPage isRegister={isRegister}/>} />
+    <Route path="/register" element={user ? <Chat/> : <IntroPage isRegister={true}/>} />
     <Route path="/" element = {user ? <Chat/> : <IntroPage />} />
     <Route path="*" element={<Navigate to ="/" />} />  
     <Route path="/:userId" element={user ? <Chat /> : <Navigate to="/login" />}></Route>
