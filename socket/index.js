@@ -8,7 +8,7 @@ const { Server } = require("socket.io");
 //   },
 // });
 const io = new Server({
-  cors: ["http://localhost:5173/"],
+  cors: ["https://chat-application-client-va28.onrender.com/"],
 });
 // https://chat-application-client-va28.onrender.com/
 // http://localhost:5173/
