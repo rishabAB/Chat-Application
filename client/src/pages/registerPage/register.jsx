@@ -5,6 +5,7 @@ import CustomInput from "../../customComponents/customInput/customInput";
 import ProfilePicture from "../../customComponents/profilePicture/profilePicture";
 import "./register.scss";
 import toasts from "../../customComponents/toaster/toaster";
+ import {useKeyPress} from "../../utils/helpers";
 const Register = () => {
   const {
     registerInfo,
@@ -42,29 +43,33 @@ const Register = () => {
 
   const onSubmitRegister = useCallback(
     (e) => {
-      if (!registerInfo.name) {
-        toasts.warning("Please Enter your name");
-      } else if (registerInfo.name.length < 3) {
-        toasts.warning("Name must be of atleast 3 letters");
-      } else if (!registerInfo.email) {
-        toasts.warning("Please Enter your email");
-      } else if (!registerInfo.email.match(email_regex)) {
-        toasts.warning("Please Enter a valid email address");
-      } else if (!registerInfo.password) {
-        toasts.warning("Please Enter your password");
-      } else if (!registerInfo.password.match(password_regex)) {
-        toasts.warning(
-          "Password must be of atleast 8 letters,should contain one special character,one uppercase,lowercase and a number"
-        );
-      } else if (!registerInfo.gender) {
-        toasts.warning("Please fill your gender");
-      } else if(!isRegisterLoading) {
-        setIsBtnDisabled(true);
-        registerUser(e);
-        setIsBtnDisabled(false);
+      if(!isBtnDisabled)
+      {
+        if (!registerInfo.name) {
+          toasts.warning("Please Enter your name");
+        } else if (registerInfo.name.length < 3) {
+          toasts.warning("Name must be of atleast 3 letters");
+        } else if (!registerInfo.email) {
+          toasts.warning("Please Enter your email");
+        } else if (!registerInfo.email.match(email_regex)) {
+          toasts.warning("Please Enter a valid email address");
+        } else if (!registerInfo.password) {
+          toasts.warning("Please Enter your password");
+        } else if (!registerInfo.password.match(password_regex)) {
+          toasts.warning(
+            "Password must be of atleast 8 letters,should contain one special character,one uppercase,lowercase and a number"
+          );
+        } else if (!registerInfo.gender) {
+          toasts.warning("Please fill your gender");
+        } else if(!isRegisterLoading) {
+          setIsBtnDisabled(true);
+          registerUser(e);
+          setIsBtnDisabled(false);
+        }
       }
+ 
     },
-    [registerInfo]
+    [registerInfo,isBtnDisabled,isRegisterLoading]
   );
 
   useEffect(() => {
@@ -83,6 +88,7 @@ const Register = () => {
     }
   }, [registerError]);
 
+    useKeyPress("Enter",onSubmitRegister,[onSubmitRegister])
   return (
     <>
       <Form>

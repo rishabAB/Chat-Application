@@ -1,4 +1,4 @@
-export const baseUrl = "https://chat-application-server-roop.onrender.com/api";
+export const baseUrl = "http://localhost:5000/api";
 // https://chat-application-server-roop.onrender.com/api
 // http://localhost:5000/api
 // https://www.talkapp.life/api not working

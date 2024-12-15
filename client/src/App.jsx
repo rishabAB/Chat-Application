@@ -14,7 +14,6 @@ import {AuthContext} from "./context/authContext";
 import {ChatContextProvider} from "./context/chatContext";
 
 import IntroPage from "./pages/introPage/introPage";
-import TestRoute from "./pages/testRoute/TestRoute";
 
   import { ToastContainer} from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +37,7 @@ function App() {
     <Route path="/" element = {user ? <Chat/> : <IntroPage />} />
     <Route path="*" element={<Navigate to ="/" />} />  
     <Route path="/:userId" element={user ? <Chat /> : <Navigate to="/login" />}></Route>
-    <Route path="/testing" element={<TestRoute/>}/>
+   
     {/* Here this navigate is the default path that we are passing if url is any random then 
     it will redirected to this / path */}
     </Routes>

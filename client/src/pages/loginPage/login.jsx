@@ -6,7 +6,7 @@ import "./login.scss";
 import CustomInput from "../../customComponents/customInput/customInput";
 import Loader from "../../customComponents/loader/loader";
 import toasts from "../../customComponents/toaster/toaster";
-
+import {useKeyPress} from "../../utils/helpers";
 const Login = () => {
     const {loginUser,loginInfo,updateLoginInfo,loginError,isLoginLoading,clearError} = useContext(AuthContext);
 
@@ -28,28 +28,32 @@ const Login = () => {
    
       const onSubmitLogin = useCallback((e)=>
       {
-        if (!loginInfo.email) {
+        if(!isBtnDisabled)
+        {
+            if (!loginInfo.email) {
 
-            toasts.warning("Please Enter your email");  
-        } 
-        else if(!loginInfo.email.match(email_regex))
-        {
-            toasts.warning("Please Enter a valid email address");
-        }
-        else if(!loginInfo.password)
-        {
-            toasts.warning("Please Enter your password");
-        }
-        else if(!loginInfo.password.match(password_regex))
-        {
-            toasts.warning("Password must be of atleast 8 letters,should contain one special character,one uppercase,lowercase and a number");
-        }
-        else if(!isLoginLoading)
-        {
-            loginUser(e);
-        }
+                toasts.warning("Please Enter your email");  
+            } 
+            else if(!loginInfo.email.match(email_regex))
+            {
+                toasts.warning("Please Enter a valid email address");
+            }
+            else if(!loginInfo.password)
+            {
+                toasts.warning("Please Enter your password");
+            }
+            else if(!loginInfo.password.match(password_regex))
+            {
+                toasts.warning("Password must be of atleast 8 letters,should contain one special character,one uppercase,lowercase and a number");
+            }
+            else if(!isLoginLoading)
+            {
+                loginUser(e);
+            }
 
-      },[loginInfo,isLoginLoading]) 
+        }
+     
+      },[loginInfo,isLoginLoading,isBtnDisabled]) 
      
         useEffect(()=>
         {
@@ -64,6 +68,7 @@ const Login = () => {
 
        
 
+          useKeyPress("Enter", onSubmitLogin, [onSubmitLogin]);
     return (
         <>
             {/* <Form  onSubmit={loginUser}> */}
@@ -80,12 +85,12 @@ const Login = () => {
                             <h2>Login</h2>
                            
                             <CustomInput type = "email" regular="true" placeholder="Email"  maxLength={40} onErrorObj = {loginError} onChange={updateLoginInfo} obj = {loginInfo} propName="email"/>
-                            <CustomInput type = "password" regular="true" placeholder="Password" maxLength={25} onErrorObj = {loginError} onEnter ={onSubmitLogin} onChange={updateLoginInfo} obj = {loginInfo} propName="password"/>
+                            <CustomInput type = "password" regular="true" placeholder="Password" maxLength={25} onErrorObj = {loginError}  onChange={updateLoginInfo} obj = {loginInfo} propName="password"/>
                            
                             {/* <Button varient="primary"  type= "submit"className="submit-button" >
                                 Login
                             </Button> */}
-                              <Button varient="primary" disabled={isLoginLoading || isBtnDisabled} onKeyDown = {(e) => e.key=="Enter" ? onSubmitLogin(e) : null} onClick = {(e) =>onSubmitLogin(e)}
+                              <Button varient="primary" disabled={isLoginLoading || isBtnDisabled} onClick = {(e) =>onSubmitLogin(e)}
                                 className={`submit-button ${isLoginLoading || isBtnDisabled ? "disable-button" : null}`} >
                                 Login
                             </Button>
