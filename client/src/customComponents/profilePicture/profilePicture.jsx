@@ -7,7 +7,8 @@ const ProfilePicture = (props) => {
 
   const getFileName = useCallback(
     (event) => {
-      setFileName(event?.target?.files[0].name);
+      let fileName = event?.target?.files[0].name;
+      setFileName(fileName.length > 30 ? `${fileName.substring(0,30)}...` : fileName);
       onChange({ ...obj, [propName]: event?.target?.files[0] });
     },
     [obj]

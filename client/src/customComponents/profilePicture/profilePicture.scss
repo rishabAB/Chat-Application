@@ -30,6 +30,7 @@
     align-items: center;
     font-size: $input_Font_Size;
     color: $genericBlueColor;
+    white-space: nowrap;
 
     &::placeholder{
         color:$genericBlueColor;
