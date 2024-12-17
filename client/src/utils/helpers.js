@@ -5,7 +5,7 @@ export const useKeyPress = (key, action, deps = []) => {
       if (action) {
         const handleKeyPress = (event) => {
           if (event.key === key) {
-            action();
+            action(event);
           }
         };
   

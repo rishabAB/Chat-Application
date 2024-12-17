@@ -383,19 +383,25 @@ export const ChatContextProvider = ({ children, user }) => {
     getUsers();
   }, [userChats]);
 
+  // useEffect(() => {
+  //   if (potentialChats?.length > 0 && userChats?.length == 0) {
+  //     setIsUserNew(true);
+  //   } else {
+  //     setIsUserNew(false);
+  //   }
+  // }, [potentialChats, userChats,user]);
+
   useEffect(() => {
+    setIsUserChatLoading(true);
     if (potentialChats?.length > 0 && userChats?.length == 0) {
       setIsUserNew(true);
     } else {
       setIsUserNew(false);
     }
-  }, [potentialChats, userChats,user]);
-
-  useEffect(() => {
     const getUserChats = async () => {
       if (user?._id) {
         console.time("FINDUSERCHATS");
-        setIsUserChatLoading(true);
+       
         setIsUserChatError(null);
 
         const response = await getRequest(
@@ -403,7 +409,7 @@ export const ChatContextProvider = ({ children, user }) => {
         );
         console.log("response",response);
 
-         setIsUserChatLoading(false);
+         
 
         if (response.error) {
           toasts.error("An unknown error occured please try again");
@@ -419,7 +425,8 @@ export const ChatContextProvider = ({ children, user }) => {
     };
 
     getUserChats();
-  }, [user]);
+    setIsUserChatLoading(false);
+  }, [user,potentialChats,userChats]);
 
   const sendTextMessage = useCallback(
     async (textMessage, sender, currentChatId, isOnlyEmoji) => {
