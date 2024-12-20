@@ -392,23 +392,19 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [potentialChats, userChats,user]);
 
-  const setFullLoader = useCallback((value) => 
-  {
-    setIsUserChatLoading(value);
-  })
 
   useEffect(() => {
     const getUserChats = async () => {
       if (user?._id) {
         console.time("FINDUSERCHATS");
-        setFullLoader(true);
+        setIsUserChatLoading(true);
         setIsUserChatError(null);
 
         const response = await getRequest(
           `${baseUrl}/chats/findUserChats/${user?._id}`
         );
         console.log("response",response);
-        setFullLoader(false);
+        setIsUserChatLoading(false);
 
         //  setIsUserChatLoading(false);
 
@@ -672,7 +668,6 @@ export const ChatContextProvider = ({ children, user }) => {
         responsizeFrame1,
         updateChatBox,
         wrapEmojis,
-        setFullLoader,
       }}
     >
       {" "}

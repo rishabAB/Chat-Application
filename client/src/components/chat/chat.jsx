@@ -20,7 +20,6 @@ const Chat = () => {
     isUserNew,
     isChatBoxOpened,
     responsizeFrame1,
-    setFullLoader,
   } = useContext(ChatContext);
 
   useEffect(() => {
@@ -82,12 +81,8 @@ const Chat = () => {
     if (isUserNew && animationRef?.current && showAnimation == false)
     {
       setShowAnimation(true);
-      setFullLoader(false);
       textEffect("rishab", "Welcome to Rishab's Talkapp");
     }
-    else{
-      setFullLoader(false);
-    } 
   }, [animationRef?.current,isUserNew]);
 
   const dynamicHeight = useRef();
