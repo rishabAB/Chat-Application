@@ -155,6 +155,7 @@ export const ChatContextProvider = ({ children, user }) => {
     useEffect(() => {
       if (!user) {
         setMessages(null);
+        setUserChats(null);
       }
     }, [user]);
 
@@ -407,6 +408,7 @@ export const ChatContextProvider = ({ children, user }) => {
           `${baseUrl}/chats/findUserChats/${user?._id}`
         );
         console.log("response",response);
+        setFullLoader(false);
 
         //  setIsUserChatLoading(false);
 
