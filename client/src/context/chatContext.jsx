@@ -148,8 +148,12 @@ export const ChatContextProvider = ({ children, user }) => {
         console.log("Notify count 0");
         elem.innerText="Talkapp";
       }
+      if(!user)
+      {
+        elem.innerText="Talkapp";
+      }
      
-    },[tabNotificationCount])
+    },[tabNotificationCount,user])
 
     // handle logout 
     useEffect(() => {
