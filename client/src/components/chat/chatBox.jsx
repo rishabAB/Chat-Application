@@ -44,7 +44,7 @@ const ChatBox = () => {
   
   const offsetRef = useRef(2);
   
-
+  const emojiButton = document.querySelector(".react-input-emoji--button");
 
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   // Here recipient User is the person whom with we are showing the conversation
@@ -189,25 +189,51 @@ const ChatBox = () => {
     }
   }, [newMessage]);
 
+  /** Removing disabled on emoji when input is on Focus */
+const inputOnFocus = () => {
+  if (emojiButton) {
+    emojiButton.disabled = false;
+    emojiButton.style.cursor = "pointer";
+  }
+};
+
+/** By default Emoji button should be disabled it will get enabled when user will focus on input tag where 
+ * we write our message */
+
+if (emojiButton) {
+  emojiButton.disabled = true;
+  emojiButton.style.cursor = "not-allowed";
+}
+
+
   useEffect(() => {
     setTextMessage("");
   }, [recipientUser]);
 
 
-  const sendMessage = (event) => {
+  const sendMessage = (value) => {
+   
     if (textMessage.length == 2 && emojiRegex.test(textMessage)) {
       isOnlyEmoji = true;
     }
-
-    if (event.key === "Enter") {
-      sendTextMessage(textMessage, user, currentChat._id, isOnlyEmoji);
-      setTextMessage("");
-      isOnlyEmoji = false;
-    } else if (!event.key && event.type === "click") {
-      sendTextMessage(textMessage, user, currentChat._id, isOnlyEmoji);
-      setTextMessage("");
+    else{
       isOnlyEmoji = false;
     }
+    let str = value.replaceAll("</br>","\n");
+    
+    sendTextMessage(str, user, currentChat._id, isOnlyEmoji);
+    setTextMessage("");
+     
+
+    // if (event.key === "Enter") {
+    //   sendTextMessage(textMessage, user, currentChat._id, isOnlyEmoji);
+    //   setTextMessage("");
+    //   isOnlyEmoji = false;
+    // } else if (!event.key && event.type === "click") {
+    //   sendTextMessage(textMessage, user, currentChat._id, isOnlyEmoji);
+    //   setTextMessage("");
+    //   isOnlyEmoji = false;
+    // }
   };
 
   const dynamicHeight = useRef();
@@ -355,13 +381,18 @@ const ChatBox = () => {
           // </button>
         }
 
-        <div className="chat-input flex-grow-0" onKeyUp={(e) => sendMessage(e)}>
+        <div className="chat-input flex-grow-0">
           <EmojiPicker
+          key={recipientUser}
             value={textMessage}
             onChange={setTextMessage}
-            class="emoji-picker"
+            className="emoji-picker"
             fontFamily="nunito"
+            keepOpened={true}
+            onFocus={inputOnFocus}
+            shouldReturn={true}
             borderColor="rgba(72,112,223,0.2)"
+            onEnter={(e) =>sendMessage(e)}
           />
           <button className="send-btn" onClick={sendMessage}>
             <svg

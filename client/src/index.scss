@@ -78,6 +78,10 @@ overflow-y: hidden;
   font-size: 14px;
   color: rgb(180, 180, 180);
   text-wrap: nowrap;
+ 
+}
+.text > span{
+	white-space: pre-line;
 }
 
 .user-img{

@@ -212,7 +212,7 @@ const UserChat = ({ chat, user }) => {
           </div>
           {showLatestMessage ? (
             <div className="flex-space-between ">
-              <div className="text ellipsis ">{(chat?.latestMessage)}</div>
+              <div className="text ellipsis ">{wrapEmojis(chat?.latestMessage)}</div>
               <div className="text ">
               {chat?.latestMessageTime}
               </div>
