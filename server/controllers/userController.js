@@ -10,10 +10,8 @@ const createToken = (_id) => {
 
 const Base64ToBinary = (base64String) => {
   return new Promise((resolve, reject) => {
-    // console.log("Base64 string is ",base64String);
     const str = base64String.split(";base64")[0];
     const imageType = str.split("/")[1];
-    console.log("imageType", imageType);
     const base64Data = base64String.replace(
       /^data:image\/(png|jpeg);base64,/,
       ""
@@ -32,15 +30,6 @@ const Base64ToBinary = (base64String) => {
   });
 };
 
-const bufferToUrl = (bufferArray, imageType) => {
-  return new Promise((resolve, reject) => {
-    const byteArray = new Uint8Array(bufferArray.data);
-    const blob = new Blob([byteArray], { type: `image/${imageType}` }); // or "image/jpeg"
-    const imageUrl = URL.createObjectURL(blob);
-    console.log("url ", imageUrl);
-    resolve(imageUrl);
-  });
-};
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, profile, gender } = req.body;
@@ -50,13 +39,12 @@ const registerUser = async (req, res) => {
       binaryImage = await Base64ToBinary(profile);
     }
 
-    let user = await userModel.findOne({email});
-    
+    let user = await userModel.findOne({ email });
+
     let nameExists = await userModel.findOne({ name });
 
-    if(nameExists)
-      return res.status(400).json("This Name is already taken");
-    
+    if (nameExists) return res.status(400).json("This Name is already taken");
+
     if (user)
       return res.status(400).json("This email address is already taken");
 
@@ -79,17 +67,15 @@ const registerUser = async (req, res) => {
     const token = createToken(user._id);
 
     profile
-      ? res
-          .status(200)
-          .json({
-            _id: user._id,
-            name,
-            email,
-            token,
-            profile: user.profile,
-            imageType: binaryImage.imageType,
-            gender,
-          })
+      ? res.status(200).json({
+          _id: user._id,
+          name,
+          email,
+          token,
+          profile: user.profile,
+          imageType: binaryImage.imageType,
+          gender,
+        })
       : res.status(200).json({ _id: user._id, name, email, token, gender });
   } catch (error) {
     console.error("An unknown error occurred", error);
@@ -114,17 +100,15 @@ const loginUser = async (req, res) => {
     const token = createToken(user._id);
 
     console.timeEnd("login_time");
-    res
-      .status(200)
-      .json({
-        _id: user._id,
-        name: user.name,
-        email,
-        token,
-        profile: user.profile,
-        imageType: user?.imageType,
-        gender: user?.gender,
-      });
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email,
+      token,
+      profile: user.profile,
+      imageType: user?.imageType,
+      gender: user?.gender,
+    });
   } catch (error) {
     console.error("An unknown error occurred", error);
     return res.status(500).json(error);

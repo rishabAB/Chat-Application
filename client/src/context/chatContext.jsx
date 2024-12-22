@@ -12,11 +12,9 @@ import sound from "../assets/sound.wav";
 import toasts from "../customComponents/toaster/toaster";
 import PropTypes from "prop-types";
 
-
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children, user }) => {
-  
   const [userChats, setUserChats] = useState(null);
   const [potentialChats, setPotentialChats] = useState([]);
   const [isUserChatLoading, setIsUserChatLoading] = useState(false);
@@ -27,10 +25,9 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const currentChatRef = useRef(currentChat);
 
-  
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
 
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const [messagesError, setMessagesError] = useState(null);
 
   const [messages, setMessages] = useState(null);
@@ -39,7 +36,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const [messageTimeline, setMessageTimeline] = useState(null);
 
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const [TextMessageError, setTextMessageError] = useState(null);
 
   const [newMessage, setNewMessage] = useState(null);
@@ -62,7 +59,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const [isUserNew, setIsUserNew] = useState(null);
 
-  const [tabNotificationCount,setTabNotificationCount] = useState(0);
+  const [tabNotificationCount, setTabNotificationCount] = useState(0);
 
   const [isChatBoxOpened, setIsChatBoxOpened] = useState(false);
 
@@ -78,7 +75,7 @@ export const ChatContextProvider = ({ children, user }) => {
     const newSocket = io("https://chat-application-socket-hi4k.onrender.com");
     // http://localhost:3000
     // https://chat-application-socket-hi4k.onrender.com"
-    
+
     setSocket(newSocket);
 
     return () => {
@@ -135,34 +132,27 @@ export const ChatContextProvider = ({ children, user }) => {
     [messages, messageRef.current]
   );
 
-  // Tab Notification 
-  useEffect(()=>
-    {
-      const elem = document.querySelector("#tab-title");
-      if(tabNotificationCount!= 0)
-      {  
-        let innerText = `Talkapp (${tabNotificationCount})`;
-        elem.innerText = innerText;
-      }
-      else{  
-        console.log("Notify count 0");
-        elem.innerText="Talkapp";
-      }
-      if(!user)
-      {
-        elem.innerText="Talkapp";
-      }
-     
-    },[tabNotificationCount,user])
+  // Tab Notification
+  useEffect(() => {
+    const elem = document.querySelector("#tab-title");
+    if (tabNotificationCount != 0) {
+      let innerText = `Talkapp (${tabNotificationCount})`;
+      elem.innerText = innerText;
+    } else {
+      elem.innerText = "Talkapp";
+    }
+    if (!user) {
+      elem.innerText = "Talkapp";
+    }
+  }, [tabNotificationCount, user]);
 
-    // handle logout 
-    useEffect(() => {
-      if (!user) {
-        setMessages(null);
-        setUserChats(null);
-      }
-    }, [user]);
-
+  // handle logout
+  useEffect(() => {
+    if (!user) {
+      setMessages(null);
+      setUserChats(null);
+    }
+  }, [user]);
 
   // AUDIO POOL TO AVOID AUDIO LAGGING
 
@@ -200,10 +190,7 @@ export const ChatContextProvider = ({ children, user }) => {
   // Send Message
 
   useEffect(() => {
-    console.log("messages", messages);
-
     checkTimeline(messages).then(function (result) {
-
       if (newMessageRef?.current) {
         if (!result) {
           // it won't have today
@@ -253,13 +240,10 @@ export const ChatContextProvider = ({ children, user }) => {
   const setSocketTimelineMessage = useCallback(
     (socketRes) => {
       if (sendToClientTriggered?.current) {
-      
         checkTimeline(messageRef.current).then(function (result) {
           let arr = [];
           if (!result) {
             // Today is not there at present
-            // messageRef.current = [...messageRef.current,...socketRes];
-            // setMessages( (prev) =>[...prev,...socketRes]);
             arr.push(socketRes[1]);
 
             messageRef.current = [
@@ -269,8 +253,6 @@ export const ChatContextProvider = ({ children, user }) => {
             setMessages((prev) => [...prev, { date: "Today", items: arr }]);
           } else {
             // Today is already there
-            // messageRef.current = [...messageRef.current,socketRes[1]];
-            // setMessages((prev) => [...prev,socketRes[1]]);
 
             for (let message of messageRef.current) {
               if (message?.date == "Today") {
@@ -300,10 +282,9 @@ export const ChatContextProvider = ({ children, user }) => {
     if (!socket) return;
 
     socket.on("sendNotification", (message) => {
-      if(message?.tabNotificationCount || message?.tabNotificationCount == 0)
-        {
-         setTabNotificationCount(message?.tabNotificationCount);
-        }
+      if (message?.tabNotificationCount || message?.tabNotificationCount == 0) {
+        setTabNotificationCount(message?.tabNotificationCount);
+      }
       if (
         currentChatRef.current &&
         message &&
@@ -311,24 +292,25 @@ export const ChatContextProvider = ({ children, user }) => {
         message.array[0]?.notificationTone
       ) {
         playAudio();
-        console.log("PLAY AUDIO");
       }
-      
 
-      if(userChats && message.array?.length>0 &&  !message.array[0]?.removeNotification)
-      {
-      
-        let arr=userChats;
-        let elem= arr.find((unit) => unit?._id == message.array[0].chatId);
-        let index = arr.findIndex((unit) => unit?._id == message.array[0].chatId);
-        arr.splice(index,1);
+      if (
+        userChats &&
+        message.array?.length > 0 &&
+        !message.array[0]?.removeNotification
+      ) {
+        let arr = userChats;
+        let elem = arr.find((unit) => unit?._id == message.array[0].chatId);
+        let index = arr.findIndex(
+          (unit) => unit?._id == message.array[0].chatId
+        );
+        arr.splice(index, 1);
         arr.unshift(elem);
         setUserChats(arr);
-        
       }
       setNotification(message.array);
     });
-  }, [socket, currentChatRef,userChats]);
+  }, [socket, currentChatRef, userChats]);
 
   // Receive Message
 
@@ -348,7 +330,6 @@ export const ChatContextProvider = ({ children, user }) => {
       sendToClientTriggered.current = true;
       setSocketTimelineMessage(res);
 
-      // setMessages((prev)=> [...prev,res]);
       // This if condition will help us to stop from updating the wrong chat
     });
 
@@ -394,8 +375,7 @@ export const ChatContextProvider = ({ children, user }) => {
     } else {
       setIsUserNew(false);
     }
-  }, [potentialChats, userChats,user]);
-
+  }, [potentialChats, userChats, user]);
 
   useEffect(() => {
     const getUserChats = async () => {
@@ -407,10 +387,7 @@ export const ChatContextProvider = ({ children, user }) => {
         const response = await getRequest(
           `${baseUrl}/chats/findUserChats/${user?._id}`
         );
-        console.log("response",response);
         setIsUserChatLoading(false);
-
-        //  setIsUserChatLoading(false);
 
         if (response.error) {
           toasts.error("An unknown error occured please try again");
@@ -418,10 +395,9 @@ export const ChatContextProvider = ({ children, user }) => {
         }
         setUserChats(response);
         console.timeEnd("FINDUSERCHATS");
-      }
-      else{
-        setIsUserNew(null); 
-        setCurrentChat(null);       
+      } else {
+        setIsUserNew(null);
+        setCurrentChat(null);
       }
     };
 
@@ -433,12 +409,12 @@ export const ChatContextProvider = ({ children, user }) => {
       if (!textMessage) return console.log("You must type something");
 
       // Here the user who is sending message will come at the top
-      let arr= userChats;
-      let elem= arr.find((elem) => elem._id == currentChatId);
-      elem.latestMessage=textMessage;
-      elem.latestMessageTime ="Today";
+      let arr = userChats;
+      let elem = arr.find((elem) => elem._id == currentChatId);
+      elem.latestMessage = textMessage;
+      elem.latestMessageTime = "Today";
       let index = arr.findIndex((elem) => elem._id == currentChatId);
-      arr.splice(index,1);
+      arr.splice(index, 1);
       arr.unshift(elem);
       setUserChats(arr);
 
@@ -467,22 +443,6 @@ export const ChatContextProvider = ({ children, user }) => {
   );
 
   useEffect(() => {
-    // const getMessages = async () => {
-    //   setIsMessagesLoading(true);
-    //   setMessagesError(null);
-
-    //   const response = await getRequest(
-    //     `${baseUrl}/messages/${currentChat?._id}`
-    //   );
-
-    //   setIsMessagesLoading(false);
-
-    //   if (response?.error) {
-    //     return setMessagesError(response);
-    //   }
-    //   setMessages(response?.messages);
-    //   setMoreMessagesAvailable(response?.moreMessagesAvailable);
-    // };
     if (currentChat) {
       getPartialMessages(0, 0, currentChat?._id);
     }
@@ -492,24 +452,20 @@ export const ChatContextProvider = ({ children, user }) => {
     socket.emit("removeNotification", notify);
   });
 
-  // const [partialMessagesError, setPartialMessagesError] = useState(null);
-
   const getPartialMessages = useCallback(
-     (limit, offset, currentChatId) => {
-    
+    (limit, offset, currentChatId) => {
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (fulfill, reject) => {
         try {
-           setIsMessagesLoading(true);
-           console.time("FETCH MESSAGES");
+          setIsMessagesLoading(true);
+          console.time("FETCH MESSAGES");
           const response = await getRequest(
             `${baseUrl}/messages/partialMessages/${currentChatId}?limit=${limit}&offset=${offset}`
           );
- 
+
           setMessageTimeline(response?.messageTimeline);
           setMessages((prev) => {
             if (prev?.length > 0 && prev[0]?.items[0].chatId == currentChatId) {
-              // return ([...prev,...response?.messages])
               // eslint-disable-next-line no-unsafe-optional-chaining
               messageRef.current = [...response?.messages, ...prev];
               // eslint-disable-next-line no-unsafe-optional-chaining
@@ -519,16 +475,15 @@ export const ChatContextProvider = ({ children, user }) => {
               return response?.messages;
             }
           });
-        
-           console.timeEnd("FETCH MESSAGES");
+
+          console.timeEnd("FETCH MESSAGES");
           fulfill({ isActionSuccess: true });
           setMoreMessagesAvailable(response?.moreMessagesAvailable);
         } catch (ex) {
           console.error(ex);
-         
+
           reject(ex);
-        }
-        finally{
+        } finally {
           setIsMessagesLoading(false);
         }
       });
@@ -536,7 +491,6 @@ export const ChatContextProvider = ({ children, user }) => {
     [isMessagesLoading]
   );
 
- 
   const updateCurrentChat = useCallback((chat) => {
     setCurrentChat(chat);
     setIsChatBoxOpened(true);
@@ -546,24 +500,12 @@ export const ChatContextProvider = ({ children, user }) => {
   const updateChatBox = useCallback(() => {
     setIsChatBoxOpened(false);
     setCurrentChat(null);
-    setMessages(null)
+    setMessages(null);
   }, []);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // const [windowheight,setWindowheight] = useState(window.outerHeight);
   const [responsizeFrame1, setResponsiveFrame1] = useState(false);
-
-  // useEffect(()=>
-  // {
-  //     const handleResize = () => {
-  //         setWindowheight(window.outerHeight);
-  //       };
-  //     console.log("windowheight",windowheight);
-
-  //     window.addEventListener('resize', handleResize);
-
-  // },[windowheight])
 
   useEffect(() => {
     const handleResize = () => {
@@ -578,7 +520,6 @@ export const ChatContextProvider = ({ children, user }) => {
   }, []);
 
   useEffect(() => {
-    
     if (windowWidth < 1000) {
       setResponsiveFrame1(true);
     } else {
@@ -586,14 +527,11 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [windowWidth]);
 
-  // --Modal
-
   const updateModal = useCallback((change) => {
     setIsModalOpen(change);
   }, []);
 
   const createChat = useCallback(async (firstId, secondId) => {
-   
     const response = await postRequest(
       `${baseUrl}/chats/createChat/`,
       JSON.stringify({ firstId, secondId })
@@ -603,17 +541,10 @@ export const ChatContextProvider = ({ children, user }) => {
       toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);
     }
-    // setUserChats((prev)=>[...prev,response]);
+
     updateModal(false);
     setUserChats((prev) => {
       return prev ? [...prev, response] : [response];
-      // if(prev)
-      // {
-      //     return [...prev,response];
-      // }
-      // else{
-      //     return [response];
-      // }
     });
   }, []);
 
@@ -626,20 +557,12 @@ export const ChatContextProvider = ({ children, user }) => {
     if (response.error) {
       toasts.error("An unknown error occured please try again");
       return console.error("An error occurred", response.error);
-    }
-    else{
+    } else {
       toasts.success("Chats Created Successfully");
     }
-    // setUserChats((prev)=>[...prev,response]);
+
     setUserChats((prev) => {
       return prev ? [...prev, ...response] : [...response];
-      // if(prev)
-      // {
-      //     return [...prev,response];
-      // }
-      // else{
-      //     return [response];
-      // }
     });
   }, []);
 

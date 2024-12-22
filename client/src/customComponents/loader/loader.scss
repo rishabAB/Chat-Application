@@ -1,11 +1,8 @@
-// @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap");
-
 $dot-count: 285;
 $animation-duration: 5s;
 $active-color: rgb(12, 69, 125);
 $inactive-color: black;
 $height: 35px;
-
 
 .holder {
   display: grid;
@@ -30,11 +27,10 @@ $height: 35px;
   }
 }
 
-.holder-chatbox{
+.holder-chatbox {
   position: relative !important;
   top: unset !important;
 }
-
 
 .panel {
   display: flex;

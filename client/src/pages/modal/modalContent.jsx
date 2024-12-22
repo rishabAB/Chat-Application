@@ -29,7 +29,6 @@ const ModalContent = () => {
 
   function closeModal() {
     updateModal(false);
-    // setIsOpen(false);
   }
 
   return (
@@ -49,7 +48,9 @@ const ModalContent = () => {
         />
       </span>
 
-      <div className="startConvo">Please select a chat to start a conversation</div>
+      <div className="startConvo">
+        Please select a chat to start a conversation
+      </div>
       <PotentialChats />
     </Modal>
   );

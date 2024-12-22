@@ -1,11 +1,17 @@
 import { Button, Form, Col, Stack } from "react-bootstrap";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AuthContext } from "../../context/authContext";
 import CustomInput from "../../customComponents/customInput/customInput";
 import ProfilePicture from "../../customComponents/profilePicture/profilePicture";
 import "./register.scss";
 import toasts from "../../customComponents/toaster/toaster";
- import {useKeyPress} from "../../utils/helpers";
+import { useKeyPress } from "../../utils/helpers";
 const Register = () => {
   const {
     registerInfo,
@@ -43,8 +49,7 @@ const Register = () => {
 
   const onSubmitRegister = useCallback(
     (e) => {
-      if(!isBtnDisabled)
-      {
+      if (!isBtnDisabled) {
         if (!registerInfo.name) {
           toasts.warning("Please Enter your name");
         } else if (registerInfo.name.length < 3) {
@@ -61,15 +66,14 @@ const Register = () => {
           );
         } else if (!registerInfo.gender) {
           toasts.warning("Please fill your gender");
-        } else if(!isRegisterLoading) {
+        } else if (!isRegisterLoading) {
           setIsBtnDisabled(true);
           registerUser(e);
           setIsBtnDisabled(false);
         }
       }
- 
     },
-    [registerInfo,isBtnDisabled,isRegisterLoading]
+    [registerInfo, isBtnDisabled, isRegisterLoading]
   );
 
   useEffect(() => {
@@ -88,11 +92,10 @@ const Register = () => {
     }
   }, [registerError]);
 
-    useKeyPress("Enter",onSubmitRegister,[onSubmitRegister])
+  useKeyPress("Enter", onSubmitRegister, [onSubmitRegister]);
   return (
     <>
       <Form>
-        {/* <Form onSubmit={registerUser}> */}
         <div className="form_main_div">
           <Col>
             <Stack gap={3}>
@@ -157,8 +160,6 @@ const Register = () => {
                   label={`Female`}
                 ></Form.Check>
               </div>
-              {/* <div > */}
-              {/* <Form.Label className="picture_label">Profile picture:</Form.Label> */}
               <ProfilePicture
                 placeholder="Profile Picture"
                 onChange={updateRegisterInfo}
@@ -166,7 +167,6 @@ const Register = () => {
                 obj={registerInfo}
                 propName="profile"
               />
-              {/* </div> */}
               <Button
                 className={`submit-button ${isRegisterLoading || isBtnDisabled ? "disable-button" : null}`}
                 disabled={isRegisterLoading || isBtnDisabled}
@@ -178,13 +178,6 @@ const Register = () => {
               >
                 {isRegisterLoading ? "Creating your account" : "Register"}{" "}
               </Button>
-              {
-                // registerError ?. error && <Alert varient="danger">
-                //     <p>{
-                //         registerError ?. message
-                //     }</p>
-                // </Alert>
-              }{" "}
             </Stack>
           </Col>
         </div>

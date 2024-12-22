@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
 import React, { useState, useContext, useEffect, useCallback } from "react";
@@ -9,16 +8,14 @@ import PropTypes from "prop-types";
 import moment from "moment";
 
 const UserChat = ({ chat, user }) => {
-  const { recipientUser, imageUrl ,recipientNotification} = useFetchRecipientUser(chat, user);
+  const { recipientUser, imageUrl, recipientNotification } =
+    useFetchRecipientUser(chat, user);
   const {
     onlineUsers,
-    notification,
     currentChat,
     removeNotification,
     updateCurrentChat,
     wrapEmojis,
-    responsizeFrame1,
-    isChatBoxOpened,
   } = useContext(ChatContext);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -26,93 +23,41 @@ const UserChat = ({ chat, user }) => {
   // when we click our messages appear
   const [showNotification, setShowNotification] = useState();
 
-  const [showLatestMessage,setShowLatestMessage] = useState(true);
+  const [showLatestMessage, setShowLatestMessage] = useState(true);
 
   const handleImageViewer = useCallback(() => {
     setIsViewerOpen((prevIsViewerOpen) => !prevIsViewerOpen);
   }, []);
-  
-  // -------------------------
 
-  // Here please note in the naming convention in notification get oppsite right in notification.senderId
-  // becomes the recipientid and the recipientid becomes the senderid that's why in html we are comparing like that
-  // useEffect(() => {
-    
-  //   if (notification && notification.length > 0) {
-  //     notification.forEach(async(notify) => {
-  //       if (recipientUser?._id === notify.senderId) {
-  //         if (currentChat?._id === notify.chatId) {
-  //           console.log("Case where chat is already opened");
-          
-  //           if(responsizeFrame1)
-  //           {
-  //             if(isChatBoxOpened)
-  //               {
-  //                 setShowLatestMessage(true);
-  //                 removeNotification(notify);
-  //                 setShowNotification([]);
-  //                 chat.latestMessage= notify.text; 
-  //                 chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
-  //               }
-  //               else{
-  //                 setShowLatestMessage(false);
-  //                 setShowNotification([{ ...notify, count: notify.count }]);
-  //               }
-  //           }
-  //           else{
-  //             removeNotification(notify);
-  //             setShowNotification([]);
-  //             chat.latestMessage= notify.text; 
-  //             chat.latestMessageTime=await convertDateToTimeline(notify.createdAt);
-  //             // Here Also lastMessage should come
-  //             setShowLatestMessage(true);
-  //           }
-  //         } else {
-  //           setShowNotification([{ ...notify, count: notify.count }]);
-  //           setShowLatestMessage(false);
-  //         }
-  //       }
-  //     });
-  //   } else {
-  //     setShowNotification([]);
-  //     setShowLatestMessage(true);
-  //     // Here Also lastMessage should come
-  //   }
-  // }, [notification, recipientUser, currentChat,responsizeFrame1,isChatBoxOpened]);
-  
-
-  useEffect(()=>
-  {
-    if(recipientNotification)
-    {
-            
-        if(currentChat?._id == recipientNotification?.chatId)
-          {
-            console.log("Case where chat is already opened");
-            removeNotification(recipientNotification);
-            setShowNotification(null);
-            convertDateToTimeline(recipientNotification.createdAt).then(function(result) 
-            {
-              chat.latestMessageTime = result;
-              chat.latestMessage= recipientNotification.text; 
-              setShowLatestMessage(true);
-            })                    
+  useEffect(() => {
+    if (recipientNotification) {
+      if (currentChat?._id == recipientNotification?.chatId) {
+        console.log("Case where chat is already opened");
+        removeNotification(recipientNotification);
+        setShowNotification(null);
+        convertDateToTimeline(recipientNotification.createdAt).then(
+          function (result) {
+            chat.latestMessageTime = result;
+            chat.latestMessage = recipientNotification.text;
+            setShowLatestMessage(true);
           }
-          else{
-            setShowNotification({...recipientNotification,count:recipientNotification.count});
-            setShowLatestMessage(false);
-            console.log("Some Other chat is opened");
-          }
-    }
-    else{
+        );
+      } else {
+        setShowNotification({
+          ...recipientNotification,
+          count: recipientNotification.count,
+        });
+        setShowLatestMessage(false);
+        console.log("Some Other chat is opened");
+      }
+    } else {
       setShowNotification();
       setShowLatestMessage(true);
     }
-  },[recipientNotification,currentChat,recipientUser])
+  }, [recipientNotification, currentChat, recipientUser]);
 
   let [userImageArray, setUserImageArray] = useState();
   const loadImage = useCallback(async () => {
-    // imageObjectUrl= await bufferToUrl(user?.profile)
     setUserImageArray([imageUrl]);
   }, [imageUrl]);
 
@@ -120,8 +65,6 @@ const UserChat = ({ chat, user }) => {
     if (imageUrl) loadImage();
   }, [imageUrl]);
 
-
-  
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -129,7 +72,6 @@ const UserChat = ({ chat, user }) => {
     const options = { weekday: "long" };
     return new Date(date).toLocaleDateString(locale, options);
   }
-  
 
   const convertDateToTimeline = async (msg) => {
     // eslint-disable-next-line no-unused-vars
@@ -137,7 +79,7 @@ const UserChat = ({ chat, user }) => {
       let date = "";
       let currentDate = new Date();
       let messageDate = new Date(msg);
-      
+
       if (
         messageDate.getDate() === currentDate.getDate() &&
         messageDate.getFullYear() === currentDate.getFullYear() &&
@@ -171,12 +113,10 @@ const UserChat = ({ chat, user }) => {
       } else if (!date) {
         date = moment(messageDate).format("ll");
       }
-  
+
       resolve(date);
     });
   };
-
-  //------------
 
   return (
     <Stack
@@ -199,23 +139,20 @@ const UserChat = ({ chat, user }) => {
 
           <div className="flex-space-between">
             {showNotification ? (
-                <>
-                  <div  className="text">
-                    {wrapEmojis(showNotification?.text)}
-                  </div>
-                  <div  className="this-user-notifications">
-                    {showNotification?.count}
-                  </div>
-                </>
-              ) : null
-            }
+              <>
+                <div className="text">{wrapEmojis(showNotification?.text)}</div>
+                <div className="this-user-notifications">
+                  {showNotification?.count}
+                </div>
+              </>
+            ) : null}
           </div>
           {showLatestMessage ? (
             <div className="flex-space-between ">
-              <div className="text ellipsis ">{wrapEmojis(chat?.latestMessage)}</div>
-              <div className="text ">
-              {chat?.latestMessageTime}
+              <div className="text ellipsis ">
+                {wrapEmojis(chat?.latestMessage)}
               </div>
+              <div className="text ">{chat?.latestMessageTime}</div>
             </div>
           ) : (
             ""

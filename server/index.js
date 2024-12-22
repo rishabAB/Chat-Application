@@ -21,8 +21,6 @@ app.use("/api/chats", chatRoute);
 
 app.use("/api/messages", messageRoute);
 
-require("./mongoChats");
-
 app.get("/", (req, res) => {
   res.send("welcome to chat api");
 });

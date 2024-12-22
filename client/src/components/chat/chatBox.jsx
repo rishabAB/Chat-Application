@@ -1,5 +1,3 @@
-/* eslint-disable no-constant-condition */
-/* eslint-disable no-unused-vars */
 import {
   useContext,
   useState,
@@ -29,10 +27,9 @@ const ChatBox = () => {
     newMessage,
     moreMessagesAvailable,
     getPartialMessages,
-    messageTimeline,
     isChatBoxOpened,
     responsizeFrame1,
-    wrapEmojis
+    wrapEmojis,
   } = useContext(ChatContext);
 
   const emojiRegex =
@@ -41,9 +38,9 @@ const ChatBox = () => {
   const divRef = useRef(null);
 
   const checkScroll = useRef(null);
-  
+
   const offsetRef = useRef(2);
-  
+
   const emojiButton = document.querySelector(".react-input-emoji--button");
 
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
@@ -54,7 +51,6 @@ const ChatBox = () => {
   const [test, setTest] = useState(1);
   // default value for test
 
-
   const isFetchingRef = useRef(false);
   // ------------
 
@@ -64,7 +60,6 @@ const ChatBox = () => {
 
   // ----------
   useEffect(() => {
-
     if (
       currentChat &&
       messages &&
@@ -73,17 +68,14 @@ const ChatBox = () => {
     ) {
       if (test == 1 || test !== messages[0]?.items[0].chatId) {
         setTest(messages[0]?.items[0].chatId);
-       
+
         offsetRef.current = 2;
-       
+
         divRef?.current?.scrollIntoView({
           behavior: "instant",
           block: "nearest",
         });
 
-        // console.log("divRef.current.clientHeight",checkScroll?.current?.clientHeight)
-        // timelineRef = useRef(null);
-        // divRef.current.marginTop = divRef.current.clientHeight;
         // We are changing below value in a timeout because in the above line we are changing
         // the scroll posiiton to bottom first so it needs to reflect first in order make thigns happen
         setTimeout(function () {
@@ -109,7 +101,6 @@ const ChatBox = () => {
   const [isScrollAllowed, setIsScrollAllowed] = useState(true);
   useEffect(() => {
     if (isScrollAllowed && divRef?.current) {
-      // console.log(checkScroll?.current.clientHeight);
       divRef.current.scrollIntoView({ behavior: "instant", block: "nearest" });
 
       setIsScrollAllowed(false);
@@ -126,7 +117,6 @@ const ChatBox = () => {
         onWheelCaptureHandler();
       });
     }
-
   }, [checkScroll?.current?.scrollTop]);
 
   const [isScrollButton, setIsScrollButton] = useState(false);
@@ -137,34 +127,23 @@ const ChatBox = () => {
         checkScroll?.current?.clientHeight -
         checkScroll?.current?.scrollTop
     );
-    // console.log("TRIGGERING",checkScroll)
 
     if (
       checkScroll?.current?.scrollTop < 1000 &&
       moreMessagesAvailable &&
       !isFetchingRef.current
     ) {
-    
-
       isFetchingRef.current = true;
-      // checkScroll.current('mousedown', checkScroll.current);
-      // console.log(checkScroll.current.removeEventListener);
-      // checkScroll.current.addEventListener('mousedown', doSomething);
-      // document.removeEventListener('mousedown', checkScroll.current);
-      // checkScroll?.current?.removeEventListener("onmousedown",doSomething);
       checkScroll.current.style.pointerEvents = "none";
       setCurrentScrollPosition(
         checkScroll.current.scrollHeight - checkScroll.current.scrollTop
       );
 
       await getPartialMessages(50, offsetRef.current, currentChat._id);
-      // setOffset((prev) => prev + 1);
-
       offsetRef.current += 1;
-      
+
       isFetchingRef.current = false;
       checkScroll.current.style.pointerEvents = "auto";
-      //  await delay(1000).then(()=> checkScroll.current.style.pointerEvents = 'auto');
     } else if (checkScroll?.current) {
       if (bottomScrollHeight > 300) {
         setIsScrollButton(true);
@@ -174,8 +153,6 @@ const ChatBox = () => {
     }
   });
 
-
-
   const goToBottom = useCallback(async () => {
     divRef?.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     await delay(400);
@@ -184,56 +161,40 @@ const ChatBox = () => {
 
   useEffect(() => {
     if (newMessage) {
-     
       divRef?.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [newMessage]);
 
   /** Removing disabled on emoji when input is on Focus */
-const inputOnFocus = () => {
+  const inputOnFocus = () => {
+    if (emojiButton) {
+      emojiButton.disabled = false;
+      emojiButton.style.cursor = "pointer";
+    }
+  };
+
+  /** By default Emoji button should be disabled it will get enabled when user will focus on input tag where
+   * we write our message */
+
   if (emojiButton) {
-    emojiButton.disabled = false;
-    emojiButton.style.cursor = "pointer";
+    emojiButton.disabled = true;
+    emojiButton.style.cursor = "not-allowed";
   }
-};
-
-/** By default Emoji button should be disabled it will get enabled when user will focus on input tag where 
- * we write our message */
-
-if (emojiButton) {
-  emojiButton.disabled = true;
-  emojiButton.style.cursor = "not-allowed";
-}
-
 
   useEffect(() => {
     setTextMessage("");
   }, [recipientUser]);
 
-
   const sendMessage = (value) => {
-   
     if (textMessage.length == 2 && emojiRegex.test(textMessage)) {
       isOnlyEmoji = true;
-    }
-    else{
+    } else {
       isOnlyEmoji = false;
     }
-    let str = value.replaceAll("</br>","\n");
-    
+    let str = value.replaceAll("</br>", "\n");
+
     sendTextMessage(str, user, currentChat._id, isOnlyEmoji);
     setTextMessage("");
-     
-
-    // if (event.key === "Enter") {
-    //   sendTextMessage(textMessage, user, currentChat._id, isOnlyEmoji);
-    //   setTextMessage("");
-    //   isOnlyEmoji = false;
-    // } else if (!event.key && event.type === "click") {
-    //   sendTextMessage(textMessage, user, currentChat._id, isOnlyEmoji);
-    //   setTextMessage("");
-    //   isOnlyEmoji = false;
-    // }
   };
 
   const dynamicHeight = useRef();
@@ -241,22 +202,20 @@ if (emojiButton) {
     if (dynamicHeight && dynamicHeight.current) {
       const t = `calc(${window.outerHeight - (window.outerHeight - window.innerHeight)}px - 3.4rem)`;
       const height = t;
-     
 
       dynamicHeight.current.style.height = height;
     }
   }, [dynamicHeight.current]);
- 
+
   if (isMessagesLoading) {
-    oneTimeRecipient.current = false
+    oneTimeRecipient.current = false;
     return (
       <Stack gap={4} className="chat-box alignment_center">
         {/* Loading Chats... */}
-        <Loader showLoader={true} responsizeFrame1={responsizeFrame1}/>
+        <Loader showLoader={true} responsizeFrame1={responsizeFrame1} />
       </Stack>
     );
-  }
-  else if (!recipientUser &&  oneTimeRecipient.current) {
+  } else if (!recipientUser && oneTimeRecipient.current) {
     return (
       <Stack
         gap={4}
@@ -276,10 +235,6 @@ if (emojiButton) {
         isChatBoxOpened && responsizeFrame1 ? "full-width" : ""
       }`}
     >
-      {/* <div className="chat-header">
-      <strong>{recipientUser.name}</strong>
-    </div> */}
-
       <Stack
         gap={3}
         className="messages"
@@ -353,37 +308,32 @@ if (emojiButton) {
       </Stack>
 
       <Stack direction="vertical" className="flex-end">
-      
-        {
-          isScrollButton && (
-            // <button style = {{backgroundColor:"unset",border:"unset"}} >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="30"
-              fill="currentColor"
-              onClick={goToBottom}
-              className={`bi bi-chevron-double-down svg-icon ${
-                isChatBoxOpened && responsizeFrame1 ? "resize-svg-icon" : ""
-              } `}
-              viewBox="0 0 16 16"
-            >
-              <path
-                fillRule="evenodd"
-                d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
-              />
-              <path
-                fillRule="evenodd"
-                d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
-              />
-            </svg>
-          )
-          // </button>
-        }
+        {isScrollButton && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="30"
+            fill="currentColor"
+            onClick={goToBottom}
+            className={`bi bi-chevron-double-down svg-icon ${
+              isChatBoxOpened && responsizeFrame1 ? "resize-svg-icon" : ""
+            } `}
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+            />
+            <path
+              fillRule="evenodd"
+              d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+            />
+          </svg>
+        )}
 
         <div className="chat-input flex-grow-0">
           <EmojiPicker
-          key={recipientUser}
+            key={recipientUser}
             value={textMessage}
             onChange={setTextMessage}
             className="emoji-picker"
@@ -392,7 +342,7 @@ if (emojiButton) {
             onFocus={inputOnFocus}
             shouldReturn={true}
             borderColor="rgba(72,112,223,0.2)"
-            onEnter={(e) =>sendMessage(e)}
+            onEnter={(e) => sendMessage(e)}
           />
           <button className="send-btn" onClick={sendMessage}>
             <svg

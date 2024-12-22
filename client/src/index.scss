@@ -1,54 +1,43 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap");
 
-$genericBlueColor:rgb(12, 69, 125);
-$buttonHoverColor:rgb(38 98 157);
-$input_Button_Height:45px;
-$input_Button_Border_Radius:50px;
-$fontColor:white;
-$genericBackgroundColor:black;
-$input_Font_Size:16px;
+$genericBlueColor: rgb(12, 69, 125);
+$buttonHoverColor: rgb(38 98 157);
+$input_Button_Height: 45px;
+$input_Button_Border_Radius: 50px;
+$fontColor: white;
+$genericBackgroundColor: black;
+$input_Font_Size: 16px;
 
-// Responsive part 
-$responsiveFrameSize1:1000px;
-$responsiveFrameSize2:500px;
-$modalFontSize1:16px;
-$modalFontSize2:14px;
-$modalFontSize3:13px;
+// Responsive part
+$responsiveFrameSize1: 1000px;
+$responsiveFrameSize2: 500px;
+$modalFontSize1: 16px;
+$modalFontSize2: 14px;
+$modalFontSize3: 13px;
 
-$modalInputSize1:14px;
-$modalInputSize2:12px;
-$modalInputSize3:11px;
+$modalInputSize1: 14px;
+$modalInputSize2: 12px;
+$modalInputSize3: 11px;
 
-
-
-
-
-body{
-color:var($fontColor);
-font-family: "Nunito","sans-serif";
-background: black;
-overflow-y: hidden;
+body {
+  color: var($fontColor);
+  font-family: "Nunito", "sans-serif";
+  background: black;
+  overflow-y: hidden;
 }
-
-
-
-
-
 
 /* User Card */
 .user-card {
- 
   position: relative;
- 
+
   border-bottom: 2px solid rgb(100, 100, 100);
   height: 72px;
   padding-left: 4px;
- 
+
   /* width: 380px; */
 }
-.user-card:hover{
+.user-card:hover {
   background-color: rgb(59, 56, 56);
 }
 
@@ -56,18 +45,17 @@ overflow-y: hidden;
   width: 100%;
   color: white;
   height: 100%;
-// padding-top: 0.75rem;
+  // padding-top: 0.75rem;
 }
-.full-height{
-	height: 100%;
+.full-height {
+  height: 100%;
 }
-.text-content{
-	padding: 0.5rem;
+.text-content {
+  padding: 0.5rem;
 }
-.name{
-	padding-top: 0.75rem;
+.name {
+  padding-top: 0.75rem;
 }
-
 
 .user-card .name {
   font-weight: 700;
@@ -78,13 +66,12 @@ overflow-y: hidden;
   font-size: 14px;
   color: rgb(180, 180, 180);
   text-wrap: nowrap;
- 
 }
-.text > span{
-	white-space: pre-line;
+.text > span {
+  white-space: pre-line;
 }
 
-.user-img{
+.user-img {
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -92,59 +79,44 @@ overflow-y: hidden;
   align-items: center;
 }
 
-.flex-space-between{
-	display: flex;
-	justify-content: space-between;
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
 }
-
-
-
-
 
 /* ---Navbar */
 
-
-.submit-button{
+.submit-button {
   border-radius: 50px;
   height: $input_Button_Height;
   background-color: rgb(12, 69, 125);
   border: unset;
 }
-.submit-button:hover{
+.submit-button:hover {
   background-color: rgb(38 98 157);
 }
 
-.disable-button{
-	cursor: not-allowed !important;
-	background-color: #898686d6  !important;
-	pointer-events: unset !important;
+.disable-button {
+  cursor: not-allowed !important;
+  background-color: #898686d6 !important;
+  pointer-events: unset !important;
 }
 // ---------------------------
 
-// body {
-// 	overflow: hidden;	
-// 	background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%, rgba(0,0,0,0.44) 100%); /* FF3.6+ */
-// 	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.44))); /* Chrome,Safari4+ */
-// 	background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(0,0,0,0.44) 100%); /* Chrome10+,Safari5.1+ */
-// 	background: -o-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(0,0,0,0.44) 100%); /* Opera 12+ */
-// 	background: -ms-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(0,0,0,0.44) 100%); /* IE10+ */
-// 	background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(0,0,0,0.44) 100%); /* W3C */
-// }
+#displayText {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
 
-#displayText{
-	position: absolute;
-    top: 58%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    text-align: center;
-	font-size: 20px;
-
-	@media screen and (max-width:500px)  {
-		font-size :17px;
-	  }
+  @media screen and (max-width: 500px) {
+    font-size: 17px;
+  }
 }
-.displayAnimation{
+.displayAnimation {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -152,125 +124,121 @@ overflow-y: hidden;
   width: 100%;
   text-align: center;
   color: $genericBlueColor;
-  font-size:35px;
-	line-height: 2em;
+  font-size: 35px;
+  line-height: 2em;
   text-shadow: -2px -1px 1px rgb(12, 69, 125);
 
-  @media screen and (max-width:1000px) and (min-width : 800px) {
-    font-size :29px;
+  @media screen and (max-width: 1000px) and (min-width: 800px) {
+    font-size: 29px;
   }
 
-  @media screen and (max-width:800px) and (min-width:400px) {
-    font-size : 24px
+  @media screen and (max-width: 800px) and (min-width: 400px) {
+    font-size: 24px;
   }
 
-  @media screen and (max-width:400px)  {
-    font-size : 20px
+  @media screen and (max-width: 400px) {
+    font-size: 20px;
   }
-
 }
 
 i {
-	display: inline-block;
-	font-style: normal;
-	padding: 0 0.25em;
-
+  display: inline-block;
+  font-style: normal;
+  padding: 0 0.25em;
 }
 
 i.rishab {
-	 -webkit-animation: rishab 3s 1 ease-in-out;
-	-moz-animation: rishab 3s 1 ease-in-out;
-	-o-animation: rishab 3s 1 ease-in-out;
-	animation: rishab 3s 1 ease-in-out;
-       
+  -webkit-animation: rishab 3s 1 ease-in-out;
+  -moz-animation: rishab 3s 1 ease-in-out;
+  -o-animation: rishab 3s 1 ease-in-out;
+  animation: rishab 3s 1 ease-in-out;
 }
 
 @-webkit-keyframes rishab {
-	0% {
-		-webkit-transform: scale(0) translate3d(0, -1000px, 0);
-		background: rgba(255, 255, 255, 0.3);
-		box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
-		border-radius: 50%;
-	}
-	15%, 85% {
-		color: rgba(255, 255, 255, 0.8);
-		text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-		-webkit-transform: scale(1) translate3d(0, 0, 0);
-		background: transparent;
-		box-shadow: none;
-	}
-	100% {
-    color: unset !important;	
-		-webkit-transform: scale(1) translate3d(0, 0, 0);
-	
-	}
+  0% {
+    -webkit-transform: scale(0) translate3d(0, -1000px, 0);
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+  15%,
+  85% {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    -webkit-transform: scale(1) translate3d(0, 0, 0);
+    background: transparent;
+    box-shadow: none;
+  }
+  100% {
+    color: unset !important;
+    -webkit-transform: scale(1) translate3d(0, 0, 0);
+  }
 }
 
 @-moz-keyframes rishab {
-	0% {
-		-moz-transform: scale(0) translate3d(0, -2000px, 0);
+  0% {
+    -moz-transform: scale(0) translate3d(0, -2000px, 0);
     background: rgba(255, 255, 255, 0.3);
-		box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
-		border-radius: 50%;
-	}
-	15%, 85% {
-		color: rgba(255, 255, 255, 0.8);
-		text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-		-moz-transform: scale(1) translate3d(0, 0, 0);
-		background: transparent;
-		box-shadow: none;
-	}
-	100% {
-  	color: unset !important;	
-		-moz-transform: scale(1) translate3d(0, 0, 0);
-		
-	}
+    box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+  15%,
+  85% {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    -moz-transform: scale(1) translate3d(0, 0, 0);
+    background: transparent;
+    box-shadow: none;
+  }
+  100% {
+    color: unset !important;
+    -moz-transform: scale(1) translate3d(0, 0, 0);
+  }
 }
 
 @-o-keyframes rishab {
-	0% {
-		-o-transform: scale(0) translate3d(0, -2000px, 0);
-		background: rgba(255, 255, 255, 0.3);
-		box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
-		border-radius: 50%;
-	}
-	15%, 85% {
-		color: rgba(255, 255, 255, 0.8);
-		text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-		-o-transform: scale(1) translate3d(0, 0, 0);
-		background: transparent;
-		box-shadow: none;
-	}
-	100% {
-		color: unset !important;	
-		-o-transform:  scale(1) translate3d(0, 0, 0);
-		
-	}
+  0% {
+    -o-transform: scale(0) translate3d(0, -2000px, 0);
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+  15%,
+  85% {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    -o-transform: scale(1) translate3d(0, 0, 0);
+    background: transparent;
+    box-shadow: none;
+  }
+  100% {
+    color: unset !important;
+    -o-transform: scale(1) translate3d(0, 0, 0);
+  }
 }
 
 @keyframes rishab {
-	0% {
-		transform: scale(0) translate3d(0, -2000px, 0);
-		background: rgba(255, 255, 255, 0.3);
-		box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
-		border-radius: 50%;
-	}
-	15%, 85% {
-		color: rgba(255, 255, 255, 0.8);
-		text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-		transform: scale(1) translate3d(0, 0, 0);
-		background: transparent;
-		box-shadow: none;
-	}
-	100% {
-		color: unset !important;	
-		transform: scale(1) translate3d(0, 0, 0);
-		
-	}
+  0% {
+    transform: scale(0) translate3d(0, -2000px, 0);
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+  15%,
+  85% {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    transform: scale(1) translate3d(0, 0, 0);
+    background: transparent;
+    box-shadow: none;
+  }
+  100% {
+    color: unset !important;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
 }
 
-
-.pos_abs{
+.pos_abs {
   position: absolute;
   top: 60%;
   left: 50%;
@@ -283,20 +251,12 @@ i.rishab {
   padding: 13px;
   border-radius: 15px;
 
-  &:hover{
+  &:hover {
     background-color: #d3d0ca !important;
   }
-
 }
-.loading-chats{
+.loading-chats {
   justify-content: space-between;
   gap: 4.5rem;
-  // height: 100vh;
   background: rgb(25, 25, 25);
 }
-
-
-// ----------------------------
-
-/* ------ */
-

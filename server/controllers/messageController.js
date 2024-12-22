@@ -48,42 +48,11 @@ const getMessages = async (req, res) => {
   }
 };
 
-function deleteTodaysDate(messages) {
-  console.log("new Date().getDate()", new Date());
-  let currentDate = new Date();
-  let c = 1;
-  messages.forEach((msg) => {
-    date = msg?.date;
-    items = msg.items;
-
-    if (date === "Today") {
-      let index = messages.findIndex((unit) => unit.date == "Today");
-      messages.splice(index, 1);
-      while (index < messages.length) {
-        messages.splice(index, 1);
-        // index++;
-      }
-    } else if (!date) {
-      let index = messages.findIndex((unit) => unit.date == undefined);
-      messages.splice(index, 1);
-      // while(index<messages.length)
-      // {
-      messages.splice(index, 1);
-      // index++;
-      // }
-    }
-  });
-}
-
 const partialMessages = async (req, res) => {
   const { currentChatId } = req.params;
   // myCache.flushAll();
   let limit = req.query?.limit;
   let offset = req.query?.offset;
-  var filteredMessages;
-  let numberOfRecords;
-  // console.log("offset",req.query?.offset);
-  // console.time();
 
   let returnObject = { messages: null, moreMessagesAvailable: false };
 
@@ -94,173 +63,22 @@ const partialMessages = async (req, res) => {
 
   try {
     let messages;
-    let messageTimeline;
     const exists = myCache.has(currentChatId);
-  
+
     messages = await messageModel.find({ chatId: currentChatId });
-    let completeResponse = await testingGetMessageTimeLine(messages);
+    let completeResponse = await getMessageTimeLine(messages);
 
- 
     returnObject.messages = completeResponse;
-    //  deleteTodaysDate(returnObject.messages);
     res.status(200).json(returnObject);
-
- 
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
   }
 };
 
-function checkIfExists(messageTimeline, date) {
-  let response = messageTimeline.find((item) => item.date === date);
-  return response ? true : false;
-}
 function getDayString(date, locale = "en-US") {
   const options = { weekday: "long" };
   return new Date(date).toLocaleDateString(locale, options);
-}
-
-function getMessageTimeLine(messages) {
-  return new Promise((fulfill, reject) => {
-    try {
-      let messageTimeline = [];
-      let currentDate = moment(new Date()).format("LL");
-      const date_format = new Date(currentDate);
-      let prevDate;
-      let count = 1;
-      let isFirst = true;
-
-      // console.log("messages",messages)
-      messages.forEach((message) => {
-        let msg = message._doc.createdAt;
-        let date = moment(msg).format("LL");
-        if (isFirst) {
-          // messageTimeline.push({date,count:1});
-          prevDate = date;
-          isFirst = false;
-        } else {
-          if (prevDate === date) {
-            //    let object = messageTimeline.find((item) => item.date === date);
-
-            //    let index = messageTimeline.findIndex(item => item.date === date);
-
-            //    messageTimeline.splice(index,1)
-
-            //    object.count +=1;
-            //    messageTimeline.push(object);
-            count++;
-          } else if (prevDate !== date) {
-            {
-              let date = prevDate;
-              // let date_format = new date
-              let currentDateFormat = new Date(date);
-              // console.log(currentDateFormat.getDate());
-              if (
-                currentDateFormat.getDate() === date_format.getDate() - 1 &&
-                currentDateFormat.getFullYear() === date_format.getFullYear() &&
-                currentDateFormat.getMonth() === date_format.getMonth()
-              ) {
-                date = "Yesterday";
-              } else if (
-                currentDateFormat.getDate() === date_format.getDate() - 2 &&
-                currentDateFormat.getFullYear() === date_format.getFullYear() &&
-                currentDateFormat.getMonth() === date_format.getMonth()
-              ) {
-                // console.log("currentDateFormat",getDayString(currentDateFormat));
-                date = getDayString(currentDateFormat);
-              } else if (
-                currentDateFormat.getDate() === date_format.getDate() - 3 &&
-                currentDateFormat.getFullYear() === date_format.getFullYear() &&
-                currentDateFormat.getMonth() === date_format.getMonth()
-              ) {
-                // console.log("currentDateFormat",getDayString(currentDateFormat));
-                date = getDayString(currentDateFormat);
-              } else if (
-                currentDateFormat.getDate() === date_format.getDate() - 4 &&
-                currentDateFormat.getFullYear() === date_format.getFullYear() &&
-                currentDateFormat.getMonth() === date_format.getMonth()
-              ) {
-                // console.log("currentDateFormat",getDayString(currentDateFormat));
-                date = getDayString(currentDateFormat);
-              }
-
-              messageTimeline.push({ date, count });
-            }
-
-            prevDate = date;
-            count = 1;
-          }
-        }
-      });
-
-      if (messages?.length > 0) {
-        let date = prevDate;
-        let currentDateFormat = new Date(date);
-        if (date === currentDate) {
-          date = "Today";
-        } else if (
-          currentDateFormat.getDate() === date_format.getDate() - 1 &&
-          currentDateFormat.getFullYear() === date_format.getFullYear() &&
-          currentDateFormat.getMonth() === date_format.getMonth()
-        ) {
-          date = "Yesterday";
-        } else if (
-          currentDateFormat.getDate() === date_format.getDate() - 2 &&
-          currentDateFormat.getFullYear() === date_format.getFullYear() &&
-          currentDateFormat.getMonth() === date_format.getMonth()
-        ) {
-          // console.log("currentDateFormat",getDayString(currentDateFormat));
-          date = getDayString(currentDateFormat);
-        } else if (
-          currentDateFormat.getDate() === date_format.getDate() - 3 &&
-          currentDateFormat.getFullYear() === date_format.getFullYear() &&
-          currentDateFormat.getMonth() === date_format.getMonth()
-        ) {
-          // console.log("currentDateFormat",getDayString(currentDateFormat));
-          date = getDayString(currentDateFormat);
-        } else if (
-          currentDateFormat.getDate() === date_format.getDate() - 4 &&
-          currentDateFormat.getFullYear() === date_format.getFullYear() &&
-          currentDateFormat.getMonth() === date_format.getMonth()
-        ) {
-          // console.log("currentDateFormat",getDayString(currentDateFormat));
-          date = getDayString(currentDateFormat);
-        }
-        messageTimeline.push({ date, count });
-      }
-      // console.log("message timeline",messageTimeline);
-
-      // fulfill(messageTimeline);
-
-      let finalArray = [];
-      let skipIndex = 0;
-      let timelineIndex = 0;
-      let test = true;
-      messages.forEach((message) => {
-        if (test || skipIndex === 0) {
-          finalArray.push(messageTimeline.at(timelineIndex));
-          skipIndex = messageTimeline.at(timelineIndex).count;
-          timelineIndex++;
-          finalArray.push(message);
-          test = false;
-          skipIndex--;
-        } else {
-          finalArray.push(message);
-          skipIndex--;
-          if (skipIndex == 0) {
-            test = true;
-          }
-        }
-      });
-
-      //    console.log("final Array",finalArray);
-
-      fulfill({ finalArray, messageTimeline });
-    } catch (error) {
-      console.error("An error occured in MessageTimeline", error);
-    }
-  });
 }
 
 // Dates part
@@ -303,7 +121,7 @@ async function checkForDays(givenDate) {
 }
 // --------
 
-function testingGetMessageTimeLine(messages) {
+function getMessageTimeLine(messages) {
   return new Promise(async (fulfill, reject) => {
     try {
       let messageTimeline = [];
@@ -342,8 +160,6 @@ function testingGetMessageTimeLine(messages) {
           } else {
             if (prevDate === currentMsgDate) {
               if (index == messages.length - 1) {
-                //  let currentDateFormat = prevDate;
-
                 const dateObject = moment(prevDate, "Do MMMM, YYYY").toDate();
 
                 let date = await checkForDays(dateObject);
@@ -354,7 +170,7 @@ function testingGetMessageTimeLine(messages) {
               }
             } else if (prevDate != currentMsgDate) {
               const dateObject = moment(prevDate, "Do MMMM, YYYY").toDate();
-              // let currentDateFormat = new Date(dateObject);
+
               let date = await checkForDays(dateObject);
               if (typeof date == "object") {
                 date = moment(date).format("Do MMMM, YYYY");

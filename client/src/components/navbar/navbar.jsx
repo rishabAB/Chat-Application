@@ -14,7 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
-  const { user, logoutUser,updateRegisterInfo,updateLoginInfo,isLoginLoading,isRegisterLoading } = useContext(AuthContext);
+  const {
+    user,
+    logoutUser,
+    updateRegisterInfo,
+    updateLoginInfo,
+    isLoginLoading,
+    isRegisterLoading,
+  } = useContext(AuthContext);
   const {
     currentChat,
     updateModal,
@@ -23,9 +30,9 @@ const NavBar = () => {
     responsizeFrame1,
     updateChatBox,
     potentialChats,
-    isUserChatLoading
+    isUserChatLoading,
   } = useContext(ChatContext);
-  
+
   const { recipientUser, imageUrl } = useFetchRecipientUser(currentChat, user);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [isRecipientViewerOpen, setIsRecipientViewerOpen] = useState(false);
@@ -38,7 +45,6 @@ const NavBar = () => {
   const openModal = useCallback(() => {
     updateModal(true);
   }, []);
-  
 
   useEffect(() => {
     if (
@@ -59,7 +65,7 @@ const NavBar = () => {
       setIsRegisterStyle(true);
       setIsLoginStyle(false);
       setIsCssAffected(false);
-      updateLoginInfo({email:"",password:""})
+      updateLoginInfo({ email: "", password: "" });
     }
   }, [window.location.pathname, isCssAffected]);
   const handleImageViewer = useCallback(() => {
@@ -99,136 +105,136 @@ const NavBar = () => {
     if (imageUrl) loadRecipientImage();
   }, [imageUrl]);
 
-  return isUserChatLoading || (isLoginLoading || isRegisterLoading) ? null : ( <Navbar
-    className={`navbar_main ${
-      isChatBoxOpened && responsizeFrame1 ? "content-center" : ""
-    }`}
-  >
-    {isModalOpen && <ModalContent isOpen={true} />}
-    {/* {user && <div onClick={openModal} className="modal_nav add-hover">Open Modal</div>} */}
-    <Container
-      className={`navbar_main_container ${
-        isChatBoxOpened && responsizeFrame1 ? "display-none" : ""
+  return isUserChatLoading || isLoginLoading || isRegisterLoading ? null : (
+    <Navbar
+      className={`navbar_main ${
+        isChatBoxOpened && responsizeFrame1 ? "content-center" : ""
       }`}
     >
-      {user && (
-        <img
-          src={userImageArray?.[0]}
-          onClick={handleImageViewer}
-          className="user_img"
-          alt=""
-        />
-      )}
-        <Link to="/" className="link-light text-decoration-none navbar_main_container-app-title">
+      {isModalOpen && <ModalContent isOpen={true} />}
+      <Container
+        className={`navbar_main_container ${
+          isChatBoxOpened && responsizeFrame1 ? "display-none" : ""
+        }`}
+      >
+        {user && (
+          <img
+            src={userImageArray?.[0]}
+            onClick={handleImageViewer}
+            className="user_img"
+            alt=""
+          />
+        )}
+        <Link
+          to="/"
+          className="link-light text-decoration-none navbar_main_container-app-title"
+        >
           Talkapp
         </Link>
-      {/* {user && (<span className="text-warning">Logged in as {user?.name} </span>) } */}
-      <Nav>
-        <Stack direction="horizontal" gap="3">
-          {user && (
-            <span className="added-flex">
-              <Link
-                onClick={logoutUser}
-                to="/login"
-                className="link-light text-decoration-none add-hover"
-              >
-                Logout
-              </Link>
-              {potentialChats?.length > 0 ? (
-                <div
-                  onClick={openModal}
-                  className={`modal_nav ${
-                    isModalOpen ? "underline " : "add-hover"
+        <Nav>
+          <Stack direction="horizontal" gap="3">
+            {user && (
+              <span className="added-flex">
+                <Link
+                  onClick={logoutUser}
+                  to="/login"
+                  className="link-light text-decoration-none add-hover"
+                >
+                  Logout
+                </Link>
+                {potentialChats?.length > 0 ? (
+                  <div
+                    onClick={openModal}
+                    className={`modal_nav ${
+                      isModalOpen ? "underline " : "add-hover"
+                    }`}
+                  >
+                    Potential Chats
+                  </div>
+                ) : (
+                  ""
+                )}
+              </span>
+            )}
+            {!user && (
+              <>
+                <Link
+                  to="/login"
+                  onClick={handleUnderlineCss}
+                  className={`link-light text-decoration-none ${
+                    isLoginStyle ? "underline " : "add-hover"
                   }`}
                 >
-                  Potential Chats
-                </div>
-              ) : (
-                ""
-              )}
-            </span>
-          )}
-          {!user && (
-            <>
-              {/* <span className="add-hover"> */}
-              <Link
-                to="/login"
-                onClick={handleUnderlineCss}
-                className={`link-light text-decoration-none ${
-                  isLoginStyle ? "underline " : "add-hover"
-                }`}
-              >
-                Login
-              </Link>
-              <span></span>
-              {/* </span> */}
+                  Login
+                </Link>
+                <span></span>
 
-              <Link
-                to="/register"
-                onClick={handleUnderlineCss}
-                className={`link-light text-decoration-none ${
-                  isRegisterStyle ? "underline " : "add-hover"
-                }`}
-              >
-                Register
-              </Link>
-            </>
-          )}
-        </Stack>
-      </Nav>
-    </Container>
-    {isViewerOpen && (
-      <ImageViewer
-        src={userImageArray}
-        disableScroll={false}
-        closeOnClickOutside={true}
-        onClose={handleImageViewer}
-      />
-    )}
+                <Link
+                  to="/register"
+                  onClick={handleUnderlineCss}
+                  className={`link-light text-decoration-none ${
+                    isRegisterStyle ? "underline " : "add-hover"
+                  }`}
+                >
+                  Register
+                </Link>
+              </>
+            )}
+          </Stack>
+        </Nav>
+      </Container>
+      {isViewerOpen && (
+        <ImageViewer
+          src={userImageArray}
+          disableScroll={false}
+          closeOnClickOutside={true}
+          onClose={handleImageViewer}
+        />
+      )}
 
-    {isRecipientViewerOpen && (
-      <ImageViewer
-        src={recipientUserArray}
-        disableScroll={false}
-        closeOnClickOutside={true}
-        onClose={handleRecipientImageViewer}
-      />
-    )}
+      {isRecipientViewerOpen && (
+        <ImageViewer
+          src={recipientUserArray}
+          disableScroll={false}
+          closeOnClickOutside={true}
+          onClose={handleRecipientImageViewer}
+        />
+      )}
 
-    {recipientUser && (
-      <>
-        <span
-          className={`recipient ${
-            !isChatBoxOpened && responsizeFrame1 ? "display-none  " : ""
-          } ${
-            isChatBoxOpened && responsizeFrame1 ? "right-margin-unset" : ""
-          }`}
-        >
-          {isChatBoxOpened && responsizeFrame1 ? (
+      {recipientUser && (
+        <>
+          <span
+            className={`recipient ${
+              !isChatBoxOpened && responsizeFrame1 ? "display-none  " : ""
+            } ${
+              isChatBoxOpened && responsizeFrame1 ? "right-margin-unset" : ""
+            }`}
+          >
+            {isChatBoxOpened && responsizeFrame1 ? (
+              <span>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  className="fa-arrow"
+                  onClick={updateChatBox}
+                />
+              </span>
+            ) : (
+              ""
+            )}
+            <span>{recipientUser.name}</span>
             <span>
-              {" "}
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                className="fa-arrow"
-                onClick={updateChatBox}
+              <img
+                src={recipientUserArray?.[0]}
+                onClick={handleRecipientImageViewer}
+                alt=""
               />
             </span>
-          ) : (
-            ""
-          )}
-          <span>{recipientUser.name}</span>
-          <span>
-            <img
-              src={recipientUserArray?.[0]}
-              onClick={handleRecipientImageViewer}
-              alt=""
-            />
           </span>
-        </span>
-      </>
-    )}
-  </Navbar>);
- 
+        </>
+      )}
+    </Navbar>
+  );
 };
 
 export default NavBar;

@@ -39,7 +39,6 @@ $img_width: 45px;
 .add-hover:hover::after,
 .add-hover:focus::after {
   transform: scaleX(1);
-  
 }
 
 .content-center {
@@ -79,7 +78,7 @@ $img_width: 45px;
     @media screen and (max-width: $responsiveFrameSize1) {
       font-size: 21px;
     }
-    @media screen and (max-width: 500px) and (min-width:400px) {
+    @media screen and (max-width: 500px) and (min-width: 400px) {
       font-size: 20px;
     }
   }
@@ -103,12 +102,6 @@ $img_width: 45px;
     gap: 1.2rem;
     align-items: center;
     color: $fontColor;
-    // position: relative;
-
-    // Target the first child span
-    // span:first-child {
-    //     color: $fontColor;
-    // }
 
     img {
       height: $img_height;

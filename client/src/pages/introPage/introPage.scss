@@ -1,14 +1,11 @@
 @import "../../index.scss";
 
-.register_login{
-    display: flex;
-    // margin-top: 3%;
-    gap:13%;
-    align-items: center;
-    
+.register_login {
+  display: flex;
+  gap: 13%;
+  align-items: center;
 
-    &_img_div {
-    // height:94vh;
+  &_img_div {
     height: calc(100vh - 3.4rem);
     width: 50%;
     display: flex;
@@ -17,38 +14,29 @@
     justify-content: space-evenly;
     position: relative;
 
-        img{
-         
-          height: 100%;
-        }
-
-        @media screen and (max-width: $responsiveFrameSize1) {
-          display: none;
-         
-        }
-    }
-
-    div:nth-child(2){
-      width: 27%;
-      max-width: 358px;
-
-      @media screen and (max-width: $responsiveFrameSize1) {
-        width: 100%;
-       
-      }
-      @media screen and (max-width: 600px) {
-        width:75%;
-       
-      }
-
-     
+    img {
+      height: 100%;
     }
 
     @media screen and (max-width: $responsiveFrameSize1) {
-     justify-content: center;
-     height: calc(100vh - 9.4rem);
-     
+      display: none;
     }
+  }
 
+  div:nth-child(2) {
+    width: 27%;
+    max-width: 358px;
+
+    @media screen and (max-width: $responsiveFrameSize1) {
+      width: 100%;
+    }
+    @media screen and (max-width: 600px) {
+      width: 75%;
+    }
+  }
+
+  @media screen and (max-width: $responsiveFrameSize1) {
+    justify-content: center;
+    height: calc(100vh - 9.4rem);
+  }
 }
-

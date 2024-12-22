@@ -1,44 +1,28 @@
-@import '../../index';
-.select_profile_picture{
-    // text-decoration: none;
-    // outline: none;
-     display: none;
-    // width: 100%;
-    // height: 40px;
-    // transition: all 0.5s ease-in-out !important;
-
-    // &::placeholder{
-    //     color: var($genericBlueColor);
-    //     padding-left: 12px;
-    // }
-    // &:hover,&:focus{
-    //    padding-left: 30px;
-    //    transition: all 0.5s ease-in-out ;
-    //    outline: 3.5px solid var($genericBlueColor);
-       
-    // } 
+@import "../../index";
+.select_profile_picture {
+  display: none;
 }
 
-.label_profile_picture{
-    width: 100%;
-    height: $input_Button_Height;
-    border: 2px solid white;
-    background-color: white;
-    border-radius:$input_Button_Border_Radius;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: $input_Font_Size;
-    color: $genericBlueColor;
-    white-space: nowrap;
+.label_profile_picture {
+  width: 100%;
+  height: $input_Button_Height;
+  border: 2px solid white;
+  background-color: white;
+  border-radius: $input_Button_Border_Radius;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: $input_Font_Size;
+  color: $genericBlueColor;
+  white-space: nowrap;
 
-    &::placeholder{
-        color:$genericBlueColor;
-        padding-left: 12px;
-    }
-    &:hover,&:focus{
-       transition: all 0.5s ease-in-out ;
-       outline: 3.5px solid $genericBlueColor;
-       
-    } 
+  &::placeholder {
+    color: $genericBlueColor;
+    padding-left: 12px;
+  }
+  &:hover,
+  &:focus {
+    transition: all 0.5s ease-in-out;
+    outline: 3.5px solid $genericBlueColor;
+  }
 }

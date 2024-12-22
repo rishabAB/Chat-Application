@@ -32,8 +32,6 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   function readFileDataAsBase64(file) {
-    // const file = e.target.files[0];
-
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -50,7 +48,6 @@ export const AuthContextProvider = ({ children }) => {
   }
 
   const updateRegisterInfo = useCallback(async (info) => {
- 
     if (info?.profile && info?.profile?.name) {
       let res = await readFileDataAsBase64(info.profile);
       info.profile = res;
@@ -67,8 +64,11 @@ export const AuthContextProvider = ({ children }) => {
       e.preventDefault();
       setIsRegisterLoading(true);
       setRegisterError(null);
-      const response = await postRequest(`${baseUrl}/users/register`, JSON.stringify(registerInfo));
- 
+      const response = await postRequest(
+        `${baseUrl}/users/register`,
+        JSON.stringify(registerInfo)
+      );
+
       setIsRegisterLoading(false);
 
       if (response.error) {
@@ -101,18 +101,16 @@ export const AuthContextProvider = ({ children }) => {
     [registerInfo]
   );
 
-  const clearError = useCallback(() =>
-  {
+  const clearError = useCallback(() => {
     setRegisterError(null);
     setLoginError(null);
-  }) 
+  });
 
   const getImageUrl = (user) => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
         if (user) {
-          console.log("User is ", user);
           if (user?.profile) {
             user.imageUrl = await bufferToUrl(user?.profile, user?.imageType);
           } else {
@@ -132,7 +130,6 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    // console.log("user",user);
     getImageUrl(JSON.parse(user)).then((userWithUrl) => {
       setUser(userWithUrl);
     });
@@ -152,13 +149,16 @@ export const AuthContextProvider = ({ children }) => {
       resolve(imageUrl);
     });
   };
-  
+
   const loginUser = useCallback(
     async (e) => {
       console.time("LOGIN USER");
       e.preventDefault();
       setIsLoginLoading(true);
-      const response = await postRequest(`${baseUrl}/users/login`, JSON.stringify(loginInfo));
+      const response = await postRequest(
+        `${baseUrl}/users/login`,
+        JSON.stringify(loginInfo)
+      );
 
       setIsLoginLoading(false);
 
@@ -177,14 +177,12 @@ export const AuthContextProvider = ({ children }) => {
           : (response.imageUrl = female_user_2);
       }
 
-    
-        toasts.success("Login Successfull");
-        console.timeEnd("LOGIN USER");
-        localStorage.setItem("user", JSON.stringify(response));
-        setUser(response);
-        setLoginError(null);
-        updateLoginInfo({email:"",password:""})
-     
+      toasts.success("Login Successfull");
+      console.timeEnd("LOGIN USER");
+      localStorage.setItem("user", JSON.stringify(response));
+      setUser(response);
+      setLoginError(null);
+      updateLoginInfo({ email: "", password: "" });
     },
     [loginInfo]
   );

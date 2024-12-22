@@ -1,18 +1,22 @@
-/* eslint-disable no-unused-vars */
-import React, { useContext, useCallback, useRef, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+} from "react";
 import { Stack } from "react-bootstrap";
-import {ChatContext} from "../../context/chatContext"
+import { ChatContext } from "../../context/chatContext";
 import { AuthContext } from "../../context/authContext";
 import UserChat from "./userChat";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 import ChatBox from "./chatBox.jsx";
-import Loader from "../../customComponents/loader/loader";
 import { FullLoader } from "../../customComponents/fullLoader/fullLoader.jsx";
 const Chat = () => {
   const { user } = useContext(AuthContext);
-  const [showAnimation,setShowAnimation] = useState(false);
- 
+  const [showAnimation, setShowAnimation] = useState(false);
+
   const navigate = useNavigate();
   const {
     userChats,
@@ -28,62 +32,54 @@ const Chat = () => {
     }
   }, [user]);
 
-
   const animationRef = useRef(null);
-  const textEffect = useCallback((animationName, txt) => {
-      console.log("animationName",animationName);
-        var text = txt,
-          chars = text.length,
-          newText = "",
-          animation = animationName,
-          i;
+  const textEffect = useCallback(
+    (animationName, txt) => {
+      var text = txt,
+        chars = text.length,
+        newText = "",
+        animation = animationName,
+        i;
 
-        for (i = 0; i < chars; i += 1) {
-          newText += "<i>" + text.charAt(i) + "</i>";
-        }
+      for (i = 0; i < chars; i += 1) {
+        newText += "<i>" + text.charAt(i) + "</i>";
+      }
 
-        console.log("animation.current",animationRef.current);
-        animationRef.current.innerHTML = newText;
+      animationRef.current.innerHTML = newText;
 
-        var wrappedChars = document.getElementsByTagName("i"),
-          wrappedCharsLen = wrappedChars.length,
-          j = 0;
+      var wrappedChars = document.getElementsByTagName("i"),
+        wrappedCharsLen = wrappedChars.length,
+        j = 0;
 
-        function addEffect() {
-          setTimeout(function () {
-            wrappedChars[j].className = animation;
-            j += 1;
-            if (j < wrappedCharsLen) {
-              addEffect();
-            } else {
-              setShowAnimation(false);
-              setTimeout(() => {
-                const elem = document.querySelector("#displayText");
-                if(elem)
-                {
-                  elem.innerText="Please click on Potential Chats button"
-                }
-                // updateModal(true);
-              }, 5000);
+      function addEffect() {
+        setTimeout(function () {
+          wrappedChars[j].className = animation;
+          j += 1;
+          if (j < wrappedCharsLen) {
+            addEffect();
+          } else {
+            setShowAnimation(false);
+            setTimeout(() => {
+              const elem = document.querySelector("#displayText");
+              if (elem) {
+                elem.innerText = "Please click on Potential Chats button";
+              }
+            }, 5000);
+          }
+        }, 100);
+      }
 
-           }
-          }, 100);
-        }
-
-        addEffect();
-      
+      addEffect();
     },
     [animationRef?.current]
   );
 
-
   useEffect(() => {
-    if (isUserNew && animationRef?.current && showAnimation == false)
-    {
+    if (isUserNew && animationRef?.current && showAnimation == false) {
       setShowAnimation(true);
       textEffect("rishab", "Welcome to Rishab's Talkapp");
     }
-  }, [animationRef?.current,isUserNew]);
+  }, [animationRef?.current, isUserNew]);
 
   const dynamicHeight = useRef();
   useEffect(() => {
@@ -96,18 +92,18 @@ const Chat = () => {
 
   return (
     <div>
-      {
-        isUserNew ? (
-          <>
-            <div>
-              <p className="displayAnimation" ref={animationRef}></p>
-              <p id="displayText"></p>
-            </div>
-
-          </>
-        ) : (
-          <>
-          {isUserChatLoading ?  <FullLoader showLoader={true}/> :
+      {isUserNew ? (
+        <>
+          <div>
+            <p className="displayAnimation" ref={animationRef}></p>
+            <p id="displayText"></p>
+          </div>
+        </>
+      ) : (
+        <>
+          {isUserChatLoading ? (
+            <FullLoader showLoader={true} />
+          ) : (
             <Stack
               direction="horizontal"
               className="align-items-start loading-chats"
@@ -116,16 +112,10 @@ const Chat = () => {
                 ref={dynamicHeight}
                 className={`messages-box flex-grow-0 ${isChatBoxOpened && responsizeFrame1 ? "display-none" : ""} `}
               >
-                {/* {isUserChatLoading && (
-                  <p>
-                    <Loader showLoader={true} />
-                  </p>
-                )}
-                <FullLoader showLoader={true}/> */}
                 {userChats?.map((chat, index) => {
                   return (
                     <div key={index}>
-                      <UserChat chat={chat} user={user}  />
+                      <UserChat chat={chat} user={user} />
                     </div>
                   );
                 })}
@@ -136,11 +126,9 @@ const Chat = () => {
                 ""
               )}
             </Stack>
-          }
-            
-          </>
-        )
-      }
+          )}
+        </>
+      )}
     </div>
   );
 };

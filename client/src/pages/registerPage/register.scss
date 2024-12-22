@@ -1,40 +1,35 @@
-@import '../../index';
+@import "../../index";
 
-.form_main_div{
+.form_main_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $fontColor;
+
+  .gender {
     display: flex;
-    justify-content:center;
-    align-items:center;
-    color: $fontColor;
+    flex-direction: row;
+    gap: 1rem;
+    font-size: $input_Font_Size;
+    max-width: 210px;
+    margin-left: 5%;
 
-    .gender{
-        display:flex;
-        flex-direction:row;
-        gap:1rem;
-        font-size: $input_Font_Size;
-        // height: 30px;
-        max-width: 210px;
-        margin-left: 5%;
-
-        &_male{
-          @media screen and (max-width: $responsiveFrameSize1) {
-            max-width: 80px !important;
-          }
-        }
-
-        @media screen and (max-width: 500px) {
-         flex-direction: column;
-         gap: 0.25rem;
-        }
-        
+    &_male {
+      @media screen and (max-width: $responsiveFrameSize1) {
+        max-width: 80px !important;
       }
+    }
 
-      .picture_label{
-        display: flex;
-        flex-direction: column;
-        font-size: $input_Font_Size;
-        gap: 0.25rem;
-      }
+    @media screen and (max-width: 500px) {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  .picture_label {
+    display: flex;
+    flex-direction: column;
+    font-size: $input_Font_Size;
+    gap: 0.25rem;
+  }
 }
-
-
-

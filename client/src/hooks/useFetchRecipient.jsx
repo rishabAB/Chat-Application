@@ -2,17 +2,15 @@ import { useEffect, useState, useCallback, useContext } from "react";
 import { getRequest, baseUrl } from "../utils/services";
 
 import { ChatContext } from "../context/chatContext";
-import female_user_2 from "../../public/female_user_2.svg"
+import female_user_2 from "../../public/female_user_2.svg";
 import male_user_2 from "../../public/male_user_2.svg";
 
 export const useFetchRecipientUser = (chat, user) => {
   const [recipientUser, setRecipientUser] = useState(null);
-  // const [error, setError] = useState(false);
-
 
   const recipientId = chat?.members.find((id) => id !== user?._id);
-  const {notification} = useContext(ChatContext);
-  const [recipientNotification,setRecipientNotification] = useState(null);
+  const { notification } = useContext(ChatContext);
+  const [recipientNotification, setRecipientNotification] = useState(null);
 
   useEffect(() => {
     setRecipientNotification(null);
@@ -61,30 +59,22 @@ export const useFetchRecipientUser = (chat, user) => {
       recipientUser?.imageType
     );
     setImageUrl(imageObjectUrl);
-    // setRecipientUser({...recipientUser,imageObjectUrl});
-    // console.log("recipientuser",recipientUser);
   }, [recipientUser]);
 
   useEffect(() => {
     if (recipientUser) {
       if (recipientUser?.profile) loadImage();
       else {
-        // setImageArray([avatar]);
-        // setImageUrl(avatar);
-
         recipientUser?.gender == "male"
-        ? setImageUrl(male_user_2)
-        : setImageUrl(female_user_2);
-        // setRecipientUser({...recipientUser,avatar});
+          ? setImageUrl(male_user_2)
+          : setImageUrl(female_user_2);
       }
     }
   }, [recipientUser]);
 
-  //------------
-
   return {
     recipientUser,
     imageUrl,
-    recipientNotification
+    recipientNotification,
   };
 };
