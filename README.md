@@ -27,8 +27,9 @@ If a user has no profile picture, a default picture is shown.
 ### Messaging
 **Text Messages: Send and receive text messages.**  
 **Emojis: Send and receive emojis.**  
+**Shift-Enter:On Shift enter a new line will appear to write a messagein chatbox**
 **Message Timestamps: Each message shows the time it was sent.**  
-**Day Labels  : Messages are grouped by day (e.g., Today, Yesterday). If the message is older than two days, the specific date is shown.**  
+**Day Labels  : Messages are grouped by day (e.g., Today, Yesterday). If the message is older than four days, the specific date is shown.**  
 Scroll to Latest: A downward arrow icon allows you to scroll down to the latest message.
 ## Server Resources and Performance
 Please note that the **server resources for this application are limited. This will result in slower API responses and increased loading times. Due to the free instance, the server might spin down with inactivity. As a result, responses may take 50 seconds or more to be processed**, which is significantly longer than on a well-maintained website.
