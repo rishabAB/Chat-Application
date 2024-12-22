@@ -1,12 +1,5 @@
 const { Server } = require("socket.io");
 
-// const io = new Server({
-//   cors: {
-//     origin: "https://b734-2409-40d1-1a-ab3d-22af-5c32-e87d-bd4d.ngrok-free.app",
-//     allowedHeaders: ["ngrok-skip-browser-warning"],
-
-//   },
-// });
 const io = new Server({
   cors: ["https://chat-application-client-va28.onrender.com/"],
 });
@@ -17,53 +10,47 @@ let onlineUsers = [];
 
 let tabNotification = [];
 
-
 let notifications = [];
 
-async function updateTabNotifications(recipientId,action,count = 0)
-{
-  return new Promise((resolve,reject) =>
-  {
-    if(action == "add")
-      {
-        let tempCount =1;
-        const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
-        if(elem)
-        {
-          tempCount = elem.count +1;
-          const index = tabNotification.findIndex((elem) => elem.recipientId == recipientId);
-          tabNotification.splice(index,1);
-          tabNotification.push({recipientId:recipientId,count:tempCount});
-        }
-        else{
-          tabNotification.push({recipientId:recipientId,count:tempCount});
-        }
-        resolve(tempCount);
-       
-    
+async function updateTabNotifications(recipientId, action, count = 0) {
+  return new Promise((resolve, reject) => {
+    if (action == "add") {
+      let tempCount = 1;
+      const elem = tabNotification.find(
+        (elem) => elem.recipientId == recipientId
+      );
+      if (elem) {
+        tempCount = elem.count + 1;
+        const index = tabNotification.findIndex(
+          (elem) => elem.recipientId == recipientId
+        );
+        tabNotification.splice(index, 1);
+        tabNotification.push({ recipientId: recipientId, count: tempCount });
+      } else {
+        tabNotification.push({ recipientId: recipientId, count: tempCount });
       }
-      else if(action == "remove"){
-    
-        const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
-        let tempCount = elem.count - count;
-        tempCount > 0 ? tempCount : 0;
-        if(elem)
-        {
-          const index = tabNotification.findIndex((elem) => elem.recipientId == recipientId);
-          tabNotification.splice(index,1);
-          tabNotification.push({recipientId,count:tempCount})
-        }
-        resolve(tempCount);
-    
+      resolve(tempCount);
+    } else if (action == "remove") {
+      const elem = tabNotification.find(
+        (elem) => elem.recipientId == recipientId
+      );
+      let tempCount = elem.count - count;
+      tempCount > 0 ? tempCount : 0;
+      if (elem) {
+        const index = tabNotification.findIndex(
+          (elem) => elem.recipientId == recipientId
+        );
+        tabNotification.splice(index, 1);
+        tabNotification.push({ recipientId, count: tempCount });
       }
-      else{
-        const elem = tabNotification.find((elem) => elem.recipientId == recipientId);
-        resolve( elem.count ? elem.count : 0);
-
-      }
-
-  })
- 
+      resolve(tempCount);
+    } else {
+      const elem = tabNotification.find(
+        (elem) => elem.recipientId == recipientId
+      );
+      resolve(elem.count ? elem.count : 0);
+    }
+  });
 }
 
 async function notificationLogic(array) {
@@ -110,7 +97,7 @@ io.on("connection", (socket) => {
     // here in the below line we are chekcing that userid exists in onlineusers array or not if not only
     //then add it in onlineusers
     const response = onlineUsers.some((user) => user.userId === userId);
-    console.log("userid is ", userId);
+
     if (!response && userId) {
       onlineUsers.push({ userId, socketId: socket.id });
       io.emit("showOnlineUsers", onlineUsers);
@@ -125,8 +112,14 @@ io.on("connection", (socket) => {
           (user) => user.userId === userMessages[0].recipientId
         );
         let array = await notificationLogic(userMessages);
-        const tabNotificationCount = await updateTabNotifications(user.userId,"get");
-        io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
+        const tabNotificationCount = await updateTabNotifications(
+          user.userId,
+          "get"
+        );
+        io.to(user.socketId).emit("sendNotification", {
+          array,
+          tabNotificationCount,
+        });
       }
     }
   });
@@ -164,10 +157,12 @@ io.on("connection", (socket) => {
         count++;
       }
     });
-    const tabNotificationCount = await updateTabNotifications(message.recipientId,"add");
+    const tabNotificationCount = await updateTabNotifications(
+      message.recipientId,
+      "add"
+    );
 
-
-    notifications.push({ ...message, count});
+    notifications.push({ ...message, count });
 
     // ----------
 
@@ -187,18 +182,15 @@ io.on("connection", (socket) => {
 
       let final_array = await notificationLogic(userMessages);
 
-      // -------
-
-      // Here we are sending the last message and the correct total msg count inorder to optimize the client side
-      //  let message_Array=userMessages.slice(-1);
-      //  console.log("test",...message_Array);
-
       const array = final_array.map((item) => ({
         ...item,
         notificationTone: true,
       }));
-     
-      io.to(isUserOnline[0].socketId).emit("sendNotification", {array,tabNotificationCount});
+
+      io.to(isUserOnline[0].socketId).emit("sendNotification", {
+        array,
+        tabNotificationCount,
+      });
     } else {
       // user is offline
     }
@@ -210,7 +202,11 @@ io.on("connection", (socket) => {
     );
     notifications = removeNotification;
 
-    const tabNotificationCount = await updateTabNotifications(message.recipientId,"remove",message.count);
+    const tabNotificationCount = await updateTabNotifications(
+      message.recipientId,
+      "remove",
+      message.count
+    );
     // In this line we check wthere is online or not
     const user = onlineUsers.find(
       (user) => user.userId === message.recipientId
@@ -228,22 +224,25 @@ io.on("connection", (socket) => {
       if (updatedNotification && updatedNotification.length > 0) {
         array = await notificationLogic(notifications);
       }
-    if(array?.length > 0)
-    {
-      let obj = array[0];
-      array[0] = {...obj,removeNotification:true};
-    }
-    else if(updatedNotification?.length > 0)
-    {
-      let obj = updatedNotification[0];
-      updatedNotification[0] = {...obj,removeNotification:true};
-    }
+      if (array?.length > 0) {
+        let obj = array[0];
+        array[0] = { ...obj, removeNotification: true };
+      } else if (updatedNotification?.length > 0) {
+        let obj = updatedNotification[0];
+        updatedNotification[0] = { ...obj, removeNotification: true };
+      }
 
       if (array && array.length > 0) {
-        io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
+        io.to(user.socketId).emit("sendNotification", {
+          array,
+          tabNotificationCount,
+        });
       } else {
         array = updatedNotification;
-        io.to(user.socketId).emit("sendNotification", {array,tabNotificationCount});
+        io.to(user.socketId).emit("sendNotification", {
+          array,
+          tabNotificationCount,
+        });
       }
     }
   });
