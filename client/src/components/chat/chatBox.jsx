@@ -176,13 +176,14 @@ const ChatBox = () => {
   /** By default Emoji button should be disabled it will get enabled when user will focus on input tag where
    * we write our message */
 
-  if (emojiButton) {
-    emojiButton.disabled = true;
-    emojiButton.style.cursor = "not-allowed";
-  }
+
 
   useEffect(() => {
     setTextMessage("");
+    if (emojiButton) {
+      emojiButton.disabled = true;
+      emojiButton.style.cursor = "not-allowed";
+    }
   }, [recipientUser]);
 
   const sendMessage = (value) => {
