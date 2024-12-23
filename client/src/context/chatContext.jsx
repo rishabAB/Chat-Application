@@ -80,18 +80,24 @@ export const ChatContextProvider = ({ children, user }) => {
   // User has logged out so by using socket
 
   const wrapEmojis = (text) => {
-    const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
-    const parts = text.split(emojiRegex);
+    if(text)
+    {
+      const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu;
+      const parts = text?.split(emojiRegex);
+  
+      return parts.map((part, index) =>
+        emojiRegex.test(part) ? (
+          <span key={index} className="emoji">
+            {part}
+          </span>
+        ) : (
+          <span key={index}>{part}</span>
+        )
+      );
 
-    return parts.map((part, index) =>
-      emojiRegex.test(part) ? (
-        <span key={index} className="emoji">
-          {part}
-        </span>
-      ) : (
-        <span key={index}>{part}</span>
-      )
-    );
+    }
+    return null;
+  
   };
 
   useEffect(() => {
